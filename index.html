@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>HIROKO｜生まれてきてよかった、を思い出す旅</title>
+  <meta name="description" content="愛されたかった。認められたかった。何度も傷ついて辿り着いた、"本当の自分"に還る旅の記録。" />
+  <meta property="og:title" content="HIROKO｜生まれてきてよかった、を思い出す旅" />
+  <meta property="og:description" content="Netflixドキュメンタリー × 人生エッセイ × ドキュメンタリー型LP" />
+  <meta property="og:type" content="website" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg-a: #030207;
+      --bg-b: #0b0513;
+      --bg-c: #190821;
+      --glow: rgba(76,35,111,0.28);
+      --ink: #fff8f4;
+      --muted: rgba(255,244,245,0.72);
+      --gold: #ead3a2;
+      --rose: #f0a9bd;
+      --serif: "Yu Mincho","Hiragino Mincho ProN","Noto Serif JP",serif;
+      --sans: "Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; background: #09040c; }
+    body {
+      margin: 0;
+      background: #09040c;
+      color: var(--ink);
+      font-family: var(--serif);
+      overflow-x: hidden;
+    }
+    h1,h2,h3,p { margin: 0; }
+    img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    body::before, body::after {
+      position: fixed; inset: 0; z-index: -3;
+      pointer-events: none; content: "";
+      transition: background 900ms ease, opacity 900ms ease;
+    }
+    body::before {
+      background:
+        radial-gradient(circle at 76% 16%, var(--glow), transparent 27rem),
+        radial-gradient(circle at 20% 84%, rgba(106,33,120,0.34), transparent 21rem),
+        linear-gradient(165deg, var(--bg-a), var(--bg-b) 54%, var(--bg-c));
+    }
+    body::after {
+      z-index: -2; opacity: 0.55;
+      background-image:
+        radial-gradient(circle, rgba(255,239,218,0.38) 0 1px, transparent 1.6px),
+        radial-gradient(circle, rgba(255,142,191,0.18) 0 1px, transparent 1.4px);
+      background-position: 0 0, 42px 76px;
+      background-size: 96px 142px, 128px 188px;
+      animation: particleDrift 24s linear infinite;
+      mix-blend-mode: screen;
+    }
+
+    .stage {
+      width: min(100%, 520px);
+      margin: 0 auto;
+      position: relative;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.05);
+      background: rgba(5,3,8,0.18);
+    }
+
+    /* ===== HERO ===== */
+    .hero-wrap { position: relative; height: 380vh; }
+    .hero-sticky {
+      position: sticky; top: 0;
+      height: 100svh; overflow: hidden;
+      background: #09040c;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      opacity: 0;
+      filter: blur(22px) saturate(0.8) brightness(0.62);
+    }
+    .hero-bg img { object-position: 72% 50%; }
+    .hero-bg::after {
+      content: ""; position: absolute; inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.9) 0%, rgba(9,4,12,0.55) 45%, rgba(9,4,12,0.18) 100%),
+        linear-gradient(180deg, rgba(9,4,12,0.08), rgba(9,4,12,0.88));
+    }
+    .hero-kw-layer {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
+    }
+    .hero-kw {
+      position: absolute;
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: clamp(0.85rem,2.8vw,1.1rem);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s ease;
+      white-space: nowrap;
+    }
+    .hero-content {
+      position: relative; z-index: 2;
+      width: 100%; padding: 0 36px;
+    }
+    .hero-step {
+      position: absolute; top: 50%; left: 36px; right: 36px;
+      transform: translateY(-50%);
+      opacity: 0; will-change: opacity, transform;
+    }
+    #hs1 { opacity: 1; }
+    .ht-main {
+      font-size: clamp(2.1rem,9.5vw,3.2rem);
+      font-weight: 400; line-height: 1.78;
+      animation: breathe 9s ease-in-out infinite;
+    }
+    .ht-sub {
+      font-size: clamp(1rem,4vw,1.25rem);
+      font-weight: 400; line-height: 2.2;
+      color: rgba(255,248,244,0.86);
+    }
+    .ht-large {
+      font-size: clamp(1.55rem,6.5vw,2.3rem);
+      font-weight: 400; line-height: 1.85;
+    }
+    .ht-small {
+      font-size: clamp(0.88rem,3.4vw,1.05rem);
+      color: var(--muted); line-height: 2.1;
+    }
+    .hero-hint {
+      position: absolute; bottom: 30px; left: 50%;
+      transform: translateX(-50%); z-index: 3;
+      color: var(--gold);
+      font-family: Georgia,serif;
+      font-size: 0.66rem; letter-spacing: 0.26em;
+      animation: softBlink 2.8s ease-in-out infinite;
+      text-align: center; white-space: nowrap;
+    }
+    .hero-hint::after {
+      display: block; width: 1px; height: 38px;
+      margin: 10px auto 0; content: "";
+      background: linear-gradient(var(--gold), transparent);
+    }
+
+    /* ===== CHAPTER INDICATOR ===== */
+    #chap {
+      position: fixed; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      z-index: 100; pointer-events: none;
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 3px;
+    }
+    #chapNum {
+      color: var(--gold);
+      font-family: Georgia,serif;
+      font-size: 0.58rem; letter-spacing: 0.2em;
+      opacity: 0.45; transition: opacity 600ms;
+    }
+    #chapName {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.48rem; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.35; transition: opacity 600ms;
+    }
+
+    /* ===== SECTIONS ===== */
+    .section {
+      min-height: 100svh; position: relative;
+      display: grid; align-items: center;
+      padding: 96px 32px; overflow: hidden; isolation: isolate;
+    }
+    .section.compact { min-height: 72svh; }
+    .section.short    { min-height: 60svh; }
+    .section.tall     { min-height: 130svh; }
+
+    .section::before {
+      content: ""; position: absolute; inset: 0; z-index: -1;
+      background:
+        radial-gradient(circle at var(--x,72%) var(--y,20%), rgba(255,204,219,0.14), transparent 19rem),
+        linear-gradient(180deg, rgba(0,0,0,0.18), rgba(0,0,0,0.44));
+      opacity: 0.9;
+    }
+
+    /* themes */
+    [data-theme="void"]   { --bg-a:#030207;--bg-b:#0b0513;--bg-c:#190821;--glow:rgba(76,35,111,0.28); }
+    [data-theme="night"]  { --bg-a:#04030a;--bg-b:#12051f;--bg-c:#251032;--glow:rgba(113,53,150,0.34); }
+    [data-theme="hunger"] { --bg-a:#100511;--bg-b:#2c0d31;--bg-c:#5a182b;--glow:rgba(255,88,137,0.3); }
+    [data-theme="love"]   { --bg-a:#160817;--bg-b:#43203c;--bg-c:#8d3b61;--glow:rgba(255,147,179,0.34); }
+    [data-theme="break"]  { --bg-a:#160609;--bg-b:#48141d;--bg-c:#6b1d35;--glow:rgba(148,35,54,0.24); }
+    [data-theme="awake"]  { --bg-a:#2e1127;--bg-b:#77335c;--bg-c:#d985a1;--glow:rgba(255,208,219,0.46); }
+    [data-theme="dawn"]   { --bg-a:#763353;--bg-b:#d4879f;--bg-c:#ffe1d7;--glow:rgba(255,255,255,0.48); }
+    [data-theme="rose"]   { --bg-a:#7a2c4d;--bg-b:#ca6f91;--bg-c:#f5b4c5;--glow:rgba(255,241,229,0.48); }
+    [data-theme="light"]  {
+      --bg-a:#f4a9bf;--bg-b:#ffd2dc;--bg-c:#fff6f1;--glow:rgba(255,255,255,0.76);
+      color: #4d2230;
+    }
+    [data-theme="light"]::before {
+      background:
+        radial-gradient(circle at 72% 18%, rgba(255,255,255,0.62), transparent 15rem),
+        linear-gradient(180deg, rgba(255,215,226,0.72), rgba(255,247,243,0.92));
+    }
+
+    /* photos */
+    .photo {
+      position: relative; overflow: hidden;
+      border: 1px solid rgba(255,236,229,0.14);
+      box-shadow: 0 28px 80px rgba(0,0,0,0.34);
+    }
+    .photo.round { aspect-ratio: 0.72; border-radius: 999px 999px 34px 34px; }
+    .photo.soft  { border-radius: 44% 56% 54% 46% / 38% 42% 58% 62%; }
+    .photo.full  { aspect-ratio: 0.8; margin: 0 -2px 42px; border-radius: 999px 999px 36px 36px; }
+    .photo.family{ aspect-ratio: 1.52; margin-inline: -8px; border-radius: 42px; }
+    .photo.sm-round {
+      width: 120px; aspect-ratio: 0.78; flex-shrink: 0;
+      border-radius: 999px 999px 30px 30px;
+      opacity: 0.72;
+    }
+    .photo.dark img { filter: grayscale(0.1) saturate(0.76) contrast(1.1) brightness(0.54); }
+    .photo.rose-f img { filter: saturate(0.9) contrast(1.02) brightness(0.9); }
+
+    /* typography */
+    .eyebrow {
+      margin: 0 0 20px;
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
+    }
+    .quote {
+      font-size: clamp(1.8rem,7.8vw,2.5rem);
+      font-weight: 400; line-height: 1.75;
+    }
+    .lead {
+      font-size: clamp(1.9rem,8.4vw,2.85rem);
+      font-weight: 400; line-height: 1.75; text-wrap: balance;
+    }
+    .body-copy {
+      margin-top: 40px;
+      color: rgba(255,250,247,0.86);
+      font-size: 1rem; line-height: 2.28;
+    }
+    .body-copy.sm {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.82rem; line-height: 2.05;
+    }
+
+    /* title + small photo row */
+    .title-photo {
+      display: grid;
+      grid-template-columns: 1fr 120px;
+      gap: 16px; align-items: center;
+    }
+
+    /* one-word */
+    .one-word {
+      display: grid; gap: 11px; margin-bottom: 30px;
+      font-size: clamp(2.1rem,10.5vw,3.1rem); line-height: 1.16;
+    }
+    .one-word span { opacity: 0; transform: translateY(13px); }
+    .section.is-visible .one-word span { animation: wordRise 600ms ease-out forwards; }
+    .section.is-visible .one-word span:nth-child(2) { animation-delay: 100ms; }
+    .section.is-visible .one-word span:nth-child(3) { animation-delay: 200ms; }
+    .section.is-visible .one-word span:nth-child(4) { animation-delay: 300ms; }
+    .section.is-visible .one-word span:nth-child(5) { animation-delay: 400ms; }
+    .section.is-visible .one-word span:nth-child(6) { animation-delay: 500ms; }
+
+    /* reveal */
+    .reveal {
+      opacity: 0; transform: translateY(26px);
+      transition: opacity 900ms ease, transform 900ms ease;
+    }
+    .section.is-visible .reveal                        { opacity: 1; transform: none; }
+    .section.is-visible .reveal:nth-child(2)           { transition-delay: 130ms; }
+    .section.is-visible .reveal:nth-child(3)           { transition-delay: 250ms; }
+    .section.is-visible .reveal:nth-child(4)           { transition-delay: 370ms; }
+    .section.is-visible .reveal:nth-child(5)           { transition-delay: 490ms; }
+    .section.is-visible .reveal.late                   { transition-delay: 640ms; }
+
+    /* marquee */
+    .ribbon {
+      width: calc(100% + 64px); margin: 32px -32px 0;
+      overflow: hidden;
+      color: rgba(237,211,162,0.38);
+      font-family: var(--sans); font-size: 0.68rem; letter-spacing: 0.18em;
+      white-space: nowrap;
+    }
+    .ribbon span { display: inline-block; min-width: 200%; animation: marquee 26s linear infinite; }
+    [data-theme="light"] .ribbon { color: rgba(77,34,48,0.28); }
+
+    /* value cards */
+    .val-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 12px; margin-top: 38px;
+    }
+    .val {
+      min-height: 128px; display: grid; align-content: center;
+      gap: 10px; padding: 20px 16px;
+      border: 1px solid rgba(122,55,86,0.13);
+      border-radius: 22px;
+      background: rgba(255,250,250,0.25);
+      color: #4d2230;
+      box-shadow: 0 20px 48px rgba(180,58,104,0.1);
+      backdrop-filter: blur(14px);
+      opacity: 0; transform: translateY(16px);
+    }
+    .section.is-visible .val                        { animation: cardFloat 760ms ease-out forwards; }
+    .section.is-visible .val:nth-child(2)           { animation-delay: 100ms; }
+    .section.is-visible .val:nth-child(3)           { animation-delay: 200ms; }
+    .section.is-visible .val:nth-child(4)           { animation-delay: 300ms; }
+    .val b   { font-size: 1.55rem; font-weight: 400; }
+    .val span{ color: rgba(77,34,48,0.68); font-family: var(--sans); font-size: 0.73rem; line-height: 1.8; }
+
+    /* tags */
+    .tags { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 30px; }
+    .tag {
+      display: inline-flex; align-items: center;
+      min-height: 36px; padding: 0 14px;
+      border: 1px solid rgba(77,34,48,0.13);
+      border-radius: 999px;
+      background: rgba(255,255,255,0.24);
+      color: rgba(77,34,48,0.72);
+      font-family: var(--sans); font-size: 0.74rem;
+      opacity: 0; transform: translateY(10px);
+    }
+    .section.is-visible .tag                        { animation: wordRise 680ms ease-out forwards; }
+    .section.is-visible .tag:nth-child(2)           { animation-delay:  80ms; }
+    .section.is-visible .tag:nth-child(3)           { animation-delay: 160ms; }
+    .section.is-visible .tag:nth-child(4)           { animation-delay: 240ms; }
+    .section.is-visible .tag:nth-child(5)           { animation-delay: 320ms; }
+    .section.is-visible .tag:nth-child(6)           { animation-delay: 400ms; }
+    .section.is-visible .tag:nth-child(7)           { animation-delay: 480ms; }
+    .section.is-visible .tag:nth-child(8)           { animation-delay: 560ms; }
+
+    /* line button */
+    .line-btn {
+      width: 100%; margin-top: 38px;
+      display: inline-flex; justify-content: center; align-items: center;
+      min-height: 60px; border-radius: 999px;
+      background: #2ec86f; color: #fff;
+      font-family: var(--sans); font-weight: 700; font-size: 1rem;
+      text-decoration: none;
+      box-shadow: 0 18px 40px rgba(46,200,111,0.25);
+      border: none; opacity: 0;
+    }
+    .section.is-visible .line-btn { animation: buttonArrive 900ms ease-out both; }
+
+    /* decorative */
+    .moon {
+      position: absolute; right: 26px; top: 68px;
+      width: 56px; height: 56px; border-radius: 50%;
+      border: 1px solid rgba(239,210,170,0.42);
+      box-shadow: inset -13px 0 0 rgba(239,210,170,0.1), 0 0 30px rgba(239,210,170,0.1);
+    }
+    .earth {
+      position: absolute; right: -32px; bottom: 56px;
+      width: 138px; height: 138px; border-radius: 50%;
+      opacity: 0.32;
+      border: 1px solid rgba(255,255,255,0.18);
+      background:
+        radial-gradient(circle at 30% 28%, rgba(255,255,255,0.38), transparent 14%),
+        linear-gradient(135deg, rgba(255,226,233,0.38), rgba(125,56,129,0.18));
+      box-shadow: 0 0 58px rgba(255,186,204,0.26);
+    }
+    .wave {
+      position: absolute; right: -32px; bottom: 16%;
+      width: 196px; height: 68px; opacity: 0.38;
+      background: repeating-radial-gradient(ellipse at left, transparent 0 8px, rgba(226,171,255,0.68) 9px 10px, transparent 11px 18px);
+      transform: rotate(-12deg); filter: blur(0.3px);
+    }
+    .speed-lines {
+      position: absolute; inset: 0; z-index: -1; opacity: 0.38;
+      background:
+        linear-gradient(118deg, transparent 0 45%, rgba(255,151,194,0.2) 47%, transparent 51%),
+        linear-gradient(132deg, transparent 0 38%, rgba(255,224,198,0.16) 39%, transparent 43%);
+      animation: slideSheen 8s ease-in-out infinite;
+    }
+    .butterfly {
+      position: absolute; left: 26px; top: 20%;
+      width: 50px; height: 30px; opacity: 0.48;
+    }
+    .butterfly::before,.butterfly::after {
+      position: absolute; top: 0; width: 25px; height: 30px;
+      border-radius: 70% 30% 70% 30%;
+      background: linear-gradient(135deg, rgba(255,226,235,0.76), rgba(227,99,149,0.18));
+      content: "";
+    }
+    .butterfly::before { left: 0; transform: rotate(-22deg); }
+    .butterfly::after  { right: 0; transform: rotate(22deg) scaleX(-1); }
+    .heart {
+      position: absolute; width: 168px; height: 168px; opacity: 0.33;
+      background: radial-gradient(circle at 30% 30%, rgba(255,238,245,0.9), rgba(236,83,139,0.44) 30%, transparent 62%);
+      filter: blur(14px); transform: rotate(45deg);
+    }
+    .heart::before,.heart::after {
+      position: absolute; width: 168px; height: 168px;
+      border-radius: 50%; background: inherit; content: "";
+    }
+    .heart::before { left: -68px; }
+    .heart::after  { top:  -68px; }
+    .heart.r { right: -46px; top: 16%; }
+    .heart.c {
+      width: 238px; height: 238px;
+      left: 50%; top: 44%; opacity: 0.42;
+      transform: translate(-50%,-50%) rotate(45deg);
+    }
+    .heart.c::before,.heart.c::after { width: 238px; height: 238px; }
+    .heart.c::before { left: -96px; }
+    .heart.c::after  { top:  -96px; }
+    .section.is-visible .heart.r,
+    .section.is-visible .heart.c { animation: heartPulse 5.2s ease-in-out infinite; }
+
+    /* cta */
+    .cta { color: #492232; }
+    .cta::before {
+      background:
+        radial-gradient(circle at 70% 22%, rgba(255,255,255,0.68), transparent 15rem),
+        linear-gradient(180deg, rgba(255,226,235,0.8), rgba(255,246,241,0.94));
+    }
+    .cta .body-copy.sm { color: rgba(73,34,50,0.7); }
+
+    /* keyframes */
+    @keyframes breathe   { 0%,100%{opacity:.88} 50%{opacity:1} }
+    @keyframes softBlink { 0%,100%{opacity:.38} 50%{opacity:1} }
+    @keyframes particleDrift {
+      from{background-position:0 0,42px 76px}
+      to  {background-position:96px 142px,170px 264px}
+    }
+    @keyframes marquee   { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+    @keyframes wordRise  { from{opacity:0;transform:translateY(13px)} to{opacity:1;transform:none} }
+    @keyframes cardFloat { from{opacity:0;transform:translateY(18px)} to{opacity:1;transform:none} }
+    @keyframes buttonArrive { from{opacity:0;transform:translateY(11px)} to{opacity:1;transform:none} }
+    @keyframes heartPulse { 0%,100%{opacity:.28;filter:blur(14px)} 50%{opacity:.46;filter:blur(18px)} }
+    @keyframes slideSheen { 0%,100%{transform:translateX(-16%);opacity:.26} 50%{transform:translateX(6%);opacity:.46} }
+
+    @media (min-width: 760px) {
+      body { background: radial-gradient(circle at 50% 0, rgba(154,54,101,0.17), transparent 30rem), #07040a; }
+      .stage { margin-block: 24px; border-radius: 34px; overflow: hidden; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *,*::before,*::after { animation: none !important; transition-duration: .01ms !important; }
+      .reveal,.val,.tag,.one-word span { opacity:1; transform:none; }
+      .line-btn { opacity:1; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- chapter indicator -->
+<div id="chap"><span id="chapNum">01</span><span id="chapName">PROLOGUE</span></div>
+
+<main class="stage">
+
+  <!-- ======== HERO ======== -->
+  <div class="hero-wrap" id="heroWrap">
+    <div class="hero-sticky" id="heroSticky">
+      <div class="hero-bg" id="heroBg">
+        <img src="assets/hero.png" alt="" />
+      </div>
+      <div class="hero-kw-layer" id="heroKw"></div>
+      <div class="hero-content">
+        <div class="hero-step" id="hs1">
+          <p class="ht-main">わたしは、<br />生まれてきて<br />よかった。</p>
+        </div>
+        <div class="hero-step" id="hs2">
+          <p class="ht-sub">そう思えなかった私が、<br />人生をかけて、<br />探し続けたもの。</p>
+        </div>
+        <div class="hero-step" id="hs3">
+          <p class="ht-sub">愛されること。<br />認められること。</p>
+        </div>
+        <div class="hero-step" id="hs4">
+          <p class="ht-sub">何度も傷ついて、<br />何度も迷って、<br />そして辿り着いた。</p>
+        </div>
+        <div class="hero-step" id="hs5">
+          <p class="ht-large">"本当の自分"に<br />還ること。</p>
+        </div>
+        <div class="hero-step" id="hs6">
+          <p class="ht-small">これは、<br />私の人生の記録。</p>
+        </div>
+      </div>
+      <div class="hero-hint" id="heroHint">scroll to read</div>
+    </div>
+  </div>
+
+  <!-- ======== S2: PROLOGUE ======== -->
+  <section class="section tall" data-theme="void" data-ch="01" data-ch-name="PROLOGUE">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.1rem;line-height:2.5">
+        私は思う。<br /><br />
+        人は変わる必要なんてない。<br /><br />
+        思い出すだけでいい。<br /><br />
+        自分の好きだったもの。<br /><br />
+        本当にやりたかったこと。<br /><br />
+        安心して笑えた感覚。
+      </p>
+      <p class="body-copy reveal" style="margin-top:58px;font-size:1.1rem;line-height:2.5">
+        でも私は、<br /><br />
+        そこにたどり着くまで、<br /><br />
+        ものすごく遠回りをした。<br /><br />
+        愛されたかった。<br /><br />
+        認められたかった。<br /><br />
+        ずっと、<br /><br />
+        「私は生まれてきてよかったの？」<br /><br />
+        を探していた。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S3: 幼少期 ======== -->
+  <section class="section compact" data-theme="void" data-ch="02" data-ch-name="MEMORY">
+    <div class="moon"></div>
+    <div>
+      <p class="eyebrow reveal">01 / childhood</p>
+      <h2 class="quote reveal">小学校1年生。<br /><br />親が離婚した。<br /><br />安心が、壊れた。</h2>
+    </div>
+  </section>
+
+  <!-- ======== S4: 家の空気 ======== -->
+  <section class="section short" data-theme="void">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.08rem;line-height:2.8">
+        祖母と母。<br /><br />
+        悪口。怒り。争い。<br /><br />
+        怖かった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S5: 忘れられない言葉 ======== -->
+  <section class="section compact" data-theme="void">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;line-height:2.4">母の言葉。</p>
+      <h2 class="quote reveal" style="margin-top:32px">「あなたを産む前に、<br />下ろした子がいる」</h2>
+      <p class="body-copy reveal" style="line-height:2.5">
+        私は思った。<br /><br />
+        「私は生まれてきてよかったの？」
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S6: 本当の気持ち ======== -->
+  <section class="section short" data-theme="void">
+    <div>
+      <h2 class="lead reveal" style="opacity:.82">
+        愛されたかった。<br /><br />
+        甘えたかった。<br /><br />
+        抱きしめてほしかった。
+      </h2>
+    </div>
+  </section>
+
+  <!-- ======== S7: 幼少期 写真 ======== -->
+  <section class="section compact" data-theme="void" style="--x:18%;--y:72%">
+    <div class="title-photo reveal">
+      <h2 class="quote">「私は、<br />生まれてきて<br />よかったの？」</h2>
+      <figure class="photo sm-round dark">
+        <img src="assets/baby-child-center.jpg" alt="" />
+      </figure>
+    </div>
+  </section>
+
+  <!-- ======== S8: 10代・いじめ ======== -->
+  <section class="section compact" data-theme="night" data-ch="03" data-ch-name="WOUND">
+    <div class="wave"></div>
+    <figure class="photo soft dark reveal">
+      <img src="assets/after-divorce-1.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">02 / teenage</p>
+      <h2 class="quote reveal">小5で、いじめ。<br /><br />なんで人は、<br />傷つけ合うんだろう。</h2>
+      <p class="body-copy sm reveal">違和感。孤独。</p>
+    </div>
+  </section>
+
+  <!-- ======== S9: 音楽 ======== -->
+  <section class="section compact" data-theme="night">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.1rem;line-height:2.9">
+        夜。<br /><br />
+        自転車。<br /><br />
+        イヤホン。<br /><br />
+        世界から浮いている感覚。<br /><br />
+        音楽だけが、<br /><br />
+        安心だった。
+      </p>
+      <div class="ribbon reveal" aria-hidden="true">
+        <span>PIANO / VOCAL / NIGHT SONG / MEMORY / PIANO / VOCAL / NIGHT SONG / MEMORY / </span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== S10: 高校受験 ======== -->
+  <section class="section compact" data-theme="night">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1rem;line-height:2.5">
+        公立、不合格。<br /><br />
+        親の落胆。<br /><br />
+        「お金がないと、迷惑をかける」<br /><br />
+        「頼れない。自分で生きるしかない」<br /><br />
+        そう刻まれた。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S11: 10代の問い ======== -->
+  <section class="section short" data-theme="night">
+    <div>
+      <h2 class="lead reveal">
+        なぜ私は、<br /><br />
+        認められたいんだろう？
+      </h2>
+    </div>
+  </section>
+
+  <!-- ======== S12: 20代 ======== -->
+  <section class="section" data-theme="hunger" data-ch="04" data-ch-name="SEARCH">
+    <div class="speed-lines"></div>
+    <figure class="photo full dark reveal">
+      <img src="assets/twenties-2.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">03 / twenties</p>
+      <h2 class="quote reveal">"欠乏を埋める人生"<br />だった。</h2>
+      <div class="one-word reveal">
+        <span>愛。</span><span>承認。</span><span>お金。</span>
+        <span>自由。</span><span>学歴。</span><span>価値。</span>
+      </div>
+      <p class="body-copy reveal">
+        すべてが、<br />「自分には価値がある」<br />を証明する試みだった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S13: 恋愛・風俗 ======== -->
+  <section class="section compact" data-theme="hunger">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.06rem;line-height:2.7">
+        恋愛。<br /><br />
+        風俗。<br /><br />
+        人気商売。<br /><br />
+        勉強。<br /><br />
+        すべてが、<br /><br />
+        「私は価値がある」を<br /><br />
+        探す旅だった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S14: 慶應 ======== -->
+  <section class="section compact" data-theme="hunger">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.04rem;line-height:2.6">
+        慶應通信に入った。<br /><br />
+        税理士を目指した。<br /><br />
+        でも本当は、<br /><br />
+        「学歴があれば、<br />認めてもらえると思った」
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S15: 20代の問い ======== -->
+  <section class="section short" data-theme="hunger">
+    <div>
+      <h2 class="lead reveal">何を手に入れても、<br /><br />満たされない。</h2>
+      <p class="body-copy reveal" style="margin-top:40px;font-size:1.2rem">
+        「私はまだ、<br />足りていないのか。」
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S16: 結婚・出産 ======== -->
+  <section class="section tall" data-theme="love" data-ch="05" data-ch-name="MOTHER" style="--x:76%;--y:18%">
+    <div class="heart r"></div>
+    <figure class="photo family rose-f reveal">
+      <img src="assets/mother-1.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">04 / mother</p>
+      <h2 class="lead reveal">「私はこの子を守る」</h2>
+      <p class="body-copy reveal">
+        妊娠。出産。<br /><br />
+        母と姉から、中絶を勧められた。<br /><br />
+        怒った。悲しかった。<br /><br />
+        でも決めた。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S17: 戦闘モード ======== -->
+  <section class="section compact" data-theme="love">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.05rem;line-height:2.7">
+        生後2ヶ月半で、仕事復帰。<br /><br />
+        強くならなきゃ。<br /><br />
+        頑張らなきゃ。<br /><br />
+        誰も助けてくれない。<br /><br />
+        でも本当は、<br /><br />
+        怖かった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S18: 離婚後 ======== -->
+  <section class="section compact" data-theme="love">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1rem;line-height:2.5">
+        個人鑑定。<br />
+        コーチング。<br />
+        オンラインサロン。<br />
+        母親の自立支援。<br /><br />
+        売上も上がった。<br />
+        結果も出た。<br /><br />
+        でも苦しかった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S19: 行き詰まり ======== -->
+  <section class="section tall" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
+    <figure class="photo soft dark reveal">
+      <img src="assets/after-divorce-3.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">05 / stillness</p>
+      <h2 class="quote reveal">「なんで人は<br />変われないんだろう？」</h2>
+      <p class="body-copy sm reveal">
+        知っても変わらない。<br />
+        行動しない。<br />
+        戻ってしまう。<br /><br />
+        私は向いてないのかな。<br />
+        もっとできたんじゃないか。<br /><br />
+        言葉では限界がある。<br />
+        願望は嘘をつく。<br />
+        足りないものを<br />
+        埋めようとしているだけ。<br />
+        本当にやりたいことじゃない。
+      </p>
+      <h2 class="quote reveal" style="margin-top:56px">
+        人は、<br />
+        "変わる"んじゃない。<br /><br />
+        "思い出す"。
+      </h2>
+    </div>
+  </section>
+
+  <!-- ======== S20: 気づき ======== -->
+  <section class="section" data-theme="awake" data-ch="07" data-ch-name="REMEMBER">
+    <div class="butterfly"></div>
+    <figure class="photo round rose-f">
+      <img src="assets/meditation.jpg" alt="" />
+    </figure>
+    <div style="text-align:center;padding-top:44px">
+      <p class="eyebrow reveal">06 / remember</p>
+      <h2 class="lead reveal">「人は変わるんじゃない。」</h2>
+      <p class="body-copy reveal" style="font-size:1.48rem;color:#fff">思い出すんだ。</p>
+    </div>
+  </section>
+
+  <!-- ======== S21: 海外 ======== -->
+  <section class="section tall" data-theme="dawn" data-ch="08" data-ch-name="JOURNEY">
+    <div class="earth"></div>
+    <figure class="photo soft rose-f reveal">
+      <img src="assets/travel-1.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">07 / world</p>
+      <h2 class="quote reveal">海外移住｜<br />「豊かさって何？」</h2>
+      <p class="body-copy sm reveal">
+        Malaysia へ。<br /><br />
+        子どもと海外生活。<br /><br />
+        クラファン。批判。挑戦。<br /><br />
+        でも疲れた。<br /><br />
+        ふと思った。
+      </p>
+      <h2 class="quote reveal" style="margin-top:52px">「私は何のために<br />働いてる？」</h2>
+    </div>
+  </section>
+
+  <!-- ======== S22: 今 ======== -->
+  <section class="section tall" data-theme="rose" data-ch="09" data-ch-name="RETURN">
+    <figure class="photo full rose-f reveal">
+      <img src="assets/now-1.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal">08 / now</p>
+      <h2 class="quote reveal">今｜「自分に還る」</h2>
+      <p class="body-copy sm reveal">
+        ヒーリング。<br /><br />
+        DNAアクティベーション。<br /><br />
+        答えを教えるんじゃない。<br /><br />
+        思い出すサポート。<br /><br /><br />
+        "生まれてきてよかった"<br /><br />
+        を思い出す旅の伴走。
+      </p>
+      <h2 class="lead reveal" style="margin-top:52px">それが今の私。</h2>
+    </div>
+  </section>
+
+  <!-- ======== S23: VALUES ======== -->
+  <section class="section" data-theme="light" data-ch="10" data-ch-name="VALUES">
+    <div>
+      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">09 / values</p>
+      <h2 class="quote reveal">大切にしていること。</h2>
+      <div class="val-grid reveal">
+        <div class="val"><b>♡ 愛</b><span>守ること。<br />抱きしめること。</span></div>
+        <div class="val"><b>✧ 自由</b><span>誰かの正解から、<br />離れること。</span></div>
+        <div class="val"><b>○ 平和</b><span>争いの奥にある、<br />願いを見ること。</span></div>
+        <div class="val"><b>△ 挑戦</b><span>こわくても、<br />人生を選ぶこと。</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== S24: LIKES ======== -->
+  <section class="section" data-theme="light">
+    <div>
+      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">10 / likes</p>
+      <h2 class="quote reveal">好きなものが、<br />私をほどいていく。</h2>
+      <div class="ribbon reveal" aria-hidden="true">
+        <span>MUSIC / JOURNEY / FLOWERS / WORDS / ART / FAMILY / MUSIC / JOURNEY / FLOWERS / WORDS / ART / FAMILY / </span>
+      </div>
+      <div class="tags">
+        <span class="tag">音楽</span><span class="tag">旅</span>
+        <span class="tag">花</span><span class="tag">言葉</span>
+        <span class="tag">アート</span><span class="tag">家族</span>
+        <span class="tag">世界</span><span class="tag">静かな時間</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== S25: MANIFESTO ======== -->
+  <section class="section" data-theme="light">
+    <div class="heart c"></div>
+    <div>
+      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Manifesto</p>
+      <h2 class="lead reveal">「人は変わる必要はない。」</h2>
+      <p class="body-copy reveal late" style="color:rgba(77,34,48,.82);font-size:1.14rem">思い出すだけでいい。</p>
+    </div>
+  </section>
+
+  <!-- ======== S26: 過去の自分へ ======== -->
+  <section class="section" data-theme="light">
+    <div style="text-align:center">
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.28rem;line-height:3.2;color:rgba(77,34,48,.88)">
+        あなたは大丈夫。<br /><br />
+        愛されている。<br /><br />
+        生まれてきてよかった。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== S27: CTA ======== -->
+  <section class="section cta" data-theme="light" data-ch="11" data-ch-name="JOURNEY">
+    <div class="earth"></div>
+    <figure class="photo soft rose-f reveal">
+      <img src="assets/world-1.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Journey</p>
+      <h2 class="lead reveal">"自分に還る旅"<br />を始めませんか？</h2>
+      <a class="line-btn reveal" href="#" aria-label="LINEで相談する">LINEで話してみる</a>
+      <p class="body-copy sm reveal" style="color:rgba(73,34,50,.7);margin-top:22px">
+        まずは、<br />
+        あなたの人生の話を<br />
+        聞かせてください。<br /><br />
+        DNAアクティベーション / セッション<br />
+        人生探求 / 親子支援 / 女性支援
+      </p>
+    </div>
+  </section>
+
+</main>
+
+<script>
+  gsap.registerPlugin(ScrollTrigger);
+
+  // ---- HERO SCROLL ----
+  const heroBg  = document.getElementById('heroBg');
+  const steps   = ['hs1','hs2','hs3','hs4','hs5','hs6'].map(id => document.getElementById(id));
+  const heroHint= document.getElementById('heroHint');
+
+  // CSS sticky handles pinning; GSAP scrubs animations
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '#heroWrap',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 1.4,
+    }
+  });
+
+  tl
+    // step1 out
+    .to(steps[0], { opacity:0, y:-18, duration:.1 }, .07)
+    // hint out
+    .to(heroHint, { opacity:0, duration:.08 }, .05)
+    // photo in (blur clears)
+    .to(heroBg, { opacity:.72, duration:.35 }, .12)
+    .to(heroBg, { filter:'blur(0px) saturate(0.88) brightness(0.62)', duration:.45 }, .12)
+    // step2
+    .fromTo(steps[1], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .07)
+    .to(steps[1],     { opacity:0, y:-18, duration:.08 }, .21)
+    // step3
+    .fromTo(steps[2], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .22)
+    .to(steps[2],     { opacity:0, y:-18, duration:.08 }, .36)
+    // step4
+    .fromTo(steps[3], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .38)
+    .to(steps[3],     { opacity:0, y:-18, duration:.08 }, .52)
+    // step5
+    .fromTo(steps[4], { opacity:0, y:20 }, { opacity:1, y:0, duration:.13 }, .54)
+    .to(steps[4],     { opacity:0, y:-18, duration:.08 }, .70)
+    // step6 stays
+    .fromTo(steps[5], { opacity:0, y:20 }, { opacity:1, y:0, duration:.13 }, .72);
+
+  // ---- KEYWORDS ----
+  const words = ['親の離婚','孤独','承認欲求','恋愛','結婚','離婚','子育て','旅','ヒーリング','自分に還る'];
+  const kwLayer = document.getElementById('heroKw');
+  const kwEls = words.map(w => {
+    const el = document.createElement('span');
+    el.className = 'hero-kw';
+    el.textContent = w;
+    el.style.left = (6 + Math.random() * 74) + '%';
+    el.style.top  = (8 + Math.random() * 74) + '%';
+    kwLayer.appendChild(el);
+    return el;
+  });
+  let ki = 0;
+  (function cycle() {
+    const el = kwEls[ki % kwEls.length]; ki++;
+    el.style.opacity = '0.06';
+    setTimeout(() => { el.style.opacity = '0'; }, 1500);
+    setTimeout(cycle, 1900 + Math.random() * 1100);
+  })();
+
+  // ---- CHAPTER INDICATOR ----
+  const chapNum  = document.getElementById('chapNum');
+  const chapName = document.getElementById('chapName');
+  document.querySelectorAll('[data-ch]').forEach(sec => {
+    ScrollTrigger.create({
+      trigger: sec,
+      start: 'top 58%',
+      onEnter:     () => { chapNum.textContent = sec.dataset.ch; chapName.textContent = sec.dataset.chName; },
+      onEnterBack: () => { chapNum.textContent = sec.dataset.ch; chapName.textContent = sec.dataset.chName; },
+    });
+  });
+
+  // ---- GLOBAL THEME + REVEAL ----
+  const root = document.documentElement;
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (!e.isIntersecting) return;
+      e.target.classList.add('is-visible');
+      const cs = getComputedStyle(e.target);
+      ['--bg-a','--bg-b','--bg-c','--glow'].forEach(p => {
+        root.style.setProperty(p, cs.getPropertyValue(p));
+      });
+    });
+  }, { threshold: 0.16, rootMargin: '0px 0px -10% 0px' });
+
+  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+  // init theme
+  const firstSection = document.querySelector('.section');
+  if (firstSection) {
+    const cs = getComputedStyle(firstSection);
+    ['--bg-a','--bg-b','--bg-c','--glow'].forEach(p => root.style.setProperty(p, cs.getPropertyValue(p)));
+  }
+</script>
+</body>
+</html>
