@@ -62,7 +62,7 @@
     }
 
     /* ===== HERO ===== */
-    .hero-wrap { position: relative; height: 380vh; }
+    .hero-wrap { position: relative; height: 520vh; }
     .hero-sticky {
       position: sticky; top: 0;
       height: 100svh; overflow: hidden;
@@ -72,14 +72,40 @@
     .hero-bg {
       position: absolute; inset: 0; z-index: 0;
       opacity: 0;
-      filter: blur(22px) saturate(0.8) brightness(0.62);
+      filter: blur(18px) saturate(0.72) brightness(0.5);
     }
-    .hero-bg img { object-position: 20% 18%; }
+    .hero-bg img { object-position: 62% center; }
     .hero-bg::after {
       content: ""; position: absolute; inset: 0;
       background:
-        linear-gradient(90deg, rgba(9,4,12,0.9) 0%, rgba(9,4,12,0.55) 45%, rgba(9,4,12,0.18) 100%),
-        linear-gradient(180deg, rgba(9,4,12,0.08), rgba(9,4,12,0.88));
+        linear-gradient(90deg, rgba(9,4,12,0.94) 0%, rgba(9,4,12,0.62) 52%, rgba(9,4,12,0.22) 100%),
+        linear-gradient(180deg, rgba(9,4,12,0.22), rgba(9,4,12,0.9));
+    }
+    .hero-portrait {
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      top: 50%;
+      width: min(48vw, 290px);
+      height: min(72svh, 560px);
+      transform: translate(16%, -48%) scale(1.04);
+      opacity: 0;
+      overflow: hidden;
+      border-radius: 999px 0 0 999px;
+      filter: saturate(0.82) brightness(0.72);
+      box-shadow: -28px 0 80px rgba(234,211,162,0.08);
+      pointer-events: none;
+    }
+    .hero-portrait img {
+      object-position: 57% center;
+    }
+    .hero-portrait::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.62), rgba(9,4,12,0.08) 52%, rgba(9,4,12,0.18)),
+        linear-gradient(180deg, rgba(9,4,12,0.08), rgba(9,4,12,0.72));
     }
     .hero-kw-layer {
       position: absolute; inset: 0; z-index: 1; pointer-events: none; overflow: hidden;
@@ -91,48 +117,66 @@
       font-size: clamp(0.85rem,2.8vw,1.1rem);
       opacity: 0;
       pointer-events: none;
-      transition: opacity 1s ease;
+      transition: opacity 1.2s ease;
       white-space: nowrap;
     }
     .hero-content {
       position: relative; z-index: 2;
-      width: 100%; padding: 0 36px;
+      width: 100%; padding: 0 38px;
     }
     .hero-step {
-      position: absolute; top: 50%; left: 36px; right: 36px;
+      position: absolute; top: 50%; left: 38px; right: 38px;
       transform: translateY(-50%);
       opacity: 0; will-change: opacity, transform;
     }
+    .hero-step.photo-copy {
+      right: 42%;
+    }
     #hs1 { opacity: 1; }
+    .hero-line {
+      display: block;
+      opacity: 0;
+      transform: translateY(18px);
+      filter: blur(8px);
+      will-change: opacity, transform, filter;
+    }
+    #hs1 .hero-line {
+      opacity: 1;
+      transform: none;
+      filter: none;
+    }
+    .hero-pause {
+      margin-top: 0.52em;
+    }
     .ht-main {
-      font-size: clamp(2.1rem,9.5vw,3.2rem);
-      font-weight: 400; line-height: 1.78;
+      font-size: clamp(2.05rem,9.4vw,3.28rem);
+      font-weight: 400; line-height: 1.75;
       animation: breathe 9s ease-in-out infinite;
     }
     .ht-sub {
-      font-size: clamp(1rem,4vw,1.25rem);
-      font-weight: 400; line-height: 2.2;
-      color: rgba(255,248,244,0.86);
+      font-size: clamp(1.05rem,4.2vw,1.3rem);
+      font-weight: 400; line-height: 2.3;
+      color: rgba(255,248,244,0.88);
     }
     .ht-large {
-      font-size: clamp(1.55rem,6.5vw,2.3rem);
+      font-size: clamp(1.78rem,7.4vw,2.62rem);
       font-weight: 400; line-height: 1.85;
     }
     .ht-small {
-      font-size: clamp(0.88rem,3.4vw,1.05rem);
-      color: var(--muted); line-height: 2.1;
+      font-size: clamp(0.9rem,3.5vw,1.1rem);
+      color: var(--muted); line-height: 2.2;
     }
     .hero-hint {
-      position: absolute; bottom: 30px; left: 50%;
+      position: absolute; bottom: 32px; left: 50%;
       transform: translateX(-50%); z-index: 3;
       color: var(--gold);
       font-family: Georgia,serif;
-      font-size: 0.66rem; letter-spacing: 0.26em;
+      font-size: 0.62rem; letter-spacing: 0.3em;
       animation: softBlink 2.8s ease-in-out infinite;
       text-align: center; white-space: nowrap;
     }
     .hero-hint::after {
-      display: block; width: 1px; height: 38px;
+      display: block; width: 1px; height: 40px;
       margin: 10px auto 0; content: "";
       background: linear-gradient(var(--gold), transparent);
     }
@@ -176,6 +220,211 @@
     [data-theme="light"] { color: #4d2230; }
     [data-theme="light"] .eyebrow { color: rgba(77,34,48,0.6); }
     [data-theme="light"] .ribbon  { color: rgba(77,34,48,0.28); }
+
+    .prologue-moon {
+      min-height: 190svh;
+      color: rgba(255,248,244,0.94);
+      display: block;
+      padding: 0;
+      overflow: visible;
+    }
+    .prologue-moon > div:not(.prologue-moon-bg) {
+      position: relative;
+      z-index: 2;
+      max-width: 28em;
+      min-height: 190svh;
+      padding: 112px 32px;
+    }
+    .prologue-moon .body-copy {
+      text-shadow: 0 2px 20px rgba(0,0,0,0.58);
+    }
+    .prologue-moon-bg {
+      position: sticky;
+      top: 0;
+      height: 100svh;
+      margin-bottom: -100svh;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0;
+      filter: saturate(0.72) brightness(0.7) contrast(1.1);
+      overflow: hidden;
+    }
+    .prologue-moon-bg video {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 68% 58%;
+      opacity: 0.2;
+      mix-blend-mode: screen;
+      filter: blur(2px) saturate(0.82) brightness(1.22);
+    }
+    .prologue-moon-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      background:
+        radial-gradient(circle at 70% 26%, rgba(255,236,205,0.12), transparent 34%),
+        linear-gradient(90deg, rgba(9,4,12,0.72) 0%, rgba(9,4,12,0.48) 52%, rgba(9,4,12,0.28) 100%),
+        linear-gradient(180deg, rgba(9,4,12,0.25), rgba(9,4,12,0.9));
+    }
+    .prologue-moon-orb {
+      --phase-x: -48%;
+      --phase-scale: 1.08;
+      position: absolute;
+      z-index: 2;
+      right: clamp(28px, 11vw, 96px);
+      top: clamp(72px, 18vh, 150px);
+      width: clamp(126px, 34vw, 230px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+      opacity: 0.86;
+      background:
+        radial-gradient(circle at 36% 32%, rgba(255,255,255,0.95), rgba(245,226,184,0.88) 34%, rgba(170,132,90,0.55) 70%, rgba(76,45,60,0.2));
+      box-shadow:
+        0 0 46px rgba(245,220,173,0.2),
+        0 0 100px rgba(177,116,180,0.16);
+      mix-blend-mode: screen;
+    }
+    .prologue-moon-orb::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 42% 34%, rgba(255,255,255,0.16), transparent 8%, rgba(97,55,80,0.34) 64%, transparent 72%);
+      opacity: 0.48;
+    }
+    .prologue-moon-orb::after {
+      content: "";
+      position: absolute;
+      inset: -5%;
+      border-radius: 50%;
+      background: #08040d;
+      transform: translateX(var(--phase-x)) scale(var(--phase-scale));
+      box-shadow: 0 0 34px rgba(8,4,13,0.72);
+      transition: transform 120ms linear;
+    }
+
+    .chapter-nav {
+      display: block;
+      min-height: 100svh;
+      padding-top: 104px;
+      padding-bottom: 104px;
+    }
+    .chapter-nav > div {
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
+    }
+    .chapter-nav .quote {
+      font-size: clamp(1.9rem, 8vw, 2.65rem);
+    }
+    .chapter-nav .body-copy {
+      max-width: 24em;
+    }
+    .chapter-cards {
+      display: flex;
+      gap: 14px;
+      margin: 42px -32px 0;
+      padding: 0 32px 18px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .chapter-cards::-webkit-scrollbar {
+      display: none;
+    }
+    .chapter-card {
+      position: relative;
+      min-width: 76%;
+      min-height: 214px;
+      scroll-snap-align: center;
+      padding: 24px 22px;
+      border-radius: 28px;
+      border: 1px solid rgba(234,211,162,0.18);
+      background:
+        radial-gradient(circle at 82% 16%, rgba(240,169,189,0.16), transparent 42%),
+        linear-gradient(145deg, rgba(255,255,255,0.08), rgba(255,255,255,0.035)),
+        rgba(255,255,255,0.055);
+      color: var(--ink);
+      text-decoration: none;
+      box-shadow: 0 24px 70px rgba(0,0,0,0.24);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      transition: transform 0.35s ease, border-color 0.35s ease, background 0.35s ease;
+    }
+    .chapter-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(234,211,162,0.38);
+      background:
+        radial-gradient(circle at 82% 16%, rgba(240,169,189,0.24), transparent 42%),
+        linear-gradient(145deg, rgba(255,255,255,0.11), rgba(255,255,255,0.045)),
+        rgba(255,255,255,0.08);
+    }
+    .chapter-card:active {
+      transform: scale(0.97);
+    }
+    .chapter-card::before {
+      content: "";
+      position: absolute;
+      left: 22px;
+      top: 58px;
+      width: 38px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+      opacity: 0.55;
+    }
+    .chapter-card::after {
+      content: "";
+      position: absolute;
+      right: 22px;
+      top: 26px;
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 18px rgba(234,211,162,0.58);
+      opacity: 0.82;
+    }
+    .chapter-no {
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.22em;
+    }
+    .chapter-card strong {
+      margin-top: 34px;
+      display: block;
+      font-family: var(--serif);
+      font-size: 1.42rem;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+    }
+    .chapter-card em {
+      margin-top: 12px;
+      display: block;
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.78rem;
+      line-height: 1.8;
+      font-style: normal;
+    }
+    .chapter-arrow {
+      position: absolute;
+      right: 22px;
+      bottom: 20px;
+      color: var(--gold);
+      font-size: 1.2rem;
+    }
 
     /* ===== AMBIENT GLOW LAYER ===== */
     #ambientLayer {
@@ -315,6 +564,11 @@
       font-size: clamp(1.8rem,7.8vw,2.5rem);
       font-weight: 400; line-height: 1.75;
     }
+    .chapter-nav .quote {
+      font-size: clamp(1.72rem, 7vw, 2.18rem);
+      line-height: 1.68;
+      overflow-wrap: anywhere;
+    }
     .question-reveal {
       display: grid;
       gap: 0.18em;
@@ -379,6 +633,125 @@
       font-family: var(--sans);
       font-size: 0.82rem; line-height: 2.05;
     }
+    .story-line {
+      display: inline-block;
+      opacity: 0;
+      transform: translateY(16px);
+      filter: blur(7px);
+      transition:
+        opacity 1.15s cubic-bezier(.2,.8,.2,1),
+        transform 1.15s cubic-bezier(.2,.8,.2,1),
+        filter 1.15s cubic-bezier(.2,.8,.2,1);
+      transition-delay: calc(var(--line-index, 0) * 92ms);
+    }
+    .section.is-visible .story-line {
+      opacity: 1;
+      transform: none;
+      filter: blur(0);
+    }
+    .section-reflection {
+      min-height: 92svh;
+      display: grid;
+      align-items: center;
+      padding-block: 118px;
+    }
+    .reflection-card {
+      position: relative;
+      padding: 30px 26px 32px;
+      border: 1px solid rgba(234,211,162,0.2);
+      border-radius: 30px 30px 30px 8px;
+      background:
+        linear-gradient(145deg, rgba(255,248,244,0.1), rgba(255,248,244,0.035)),
+        rgba(10,5,15,0.24);
+      box-shadow: 0 30px 86px rgba(0,0,0,0.24);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+    .reflection-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(234,211,162,0.16), transparent 12rem),
+        linear-gradient(180deg, rgba(255,255,255,0.06), transparent);
+      opacity: 0.72;
+      pointer-events: none;
+    }
+    .reflection-card > * {
+      position: relative;
+      z-index: 1;
+    }
+    .reflection-kicker {
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.68rem;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+    }
+    .reflection-card h3 {
+      margin-top: 22px;
+      font-size: clamp(1.52rem, 7.2vw, 2.16rem);
+      font-weight: 400;
+      line-height: 1.72;
+      text-wrap: balance;
+    }
+    .reflection-card p {
+      margin-top: 20px;
+      color: rgba(255,250,247,0.78);
+      font-family: var(--sans);
+      font-size: 0.86rem;
+      line-height: 2.1;
+    }
+    [data-theme="light"] .reflection-card,
+    [data-theme="rose"] .reflection-card,
+    [data-theme="dawn"] .reflection-card {
+      border-color: rgba(77,34,48,0.12);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.38), rgba(255,255,255,0.16)),
+        rgba(255,250,250,0.22);
+      color: #4d2230;
+      box-shadow: 0 28px 70px rgba(180,58,104,0.12);
+    }
+    [data-theme="light"] .reflection-card p,
+    [data-theme="rose"] .reflection-card p,
+    [data-theme="dawn"] .reflection-card p {
+      color: rgba(77,34,48,0.72);
+    }
+    [data-theme="light"] .reflection-kicker,
+    [data-theme="rose"] .reflection-kicker,
+    [data-theme="dawn"] .reflection-kicker {
+      color: rgba(77,34,48,0.62);
+    }
+    .memory-fragment {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      opacity: 0;
+      transform: scale(1.07);
+      transition: opacity 1.5s ease, transform 2.4s ease;
+      pointer-events: none;
+    }
+    .section-reflection > :not(.memory-fragment) {
+      position: relative;
+      z-index: 2;
+    }
+    .memory-fragment img {
+      object-position: var(--photo-pos, center);
+      filter: saturate(var(--photo-sat, .74)) brightness(var(--photo-bright, .48)) blur(var(--photo-blur, 1px));
+    }
+    .memory-fragment::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.72), rgba(9,4,12,0.36), rgba(9,4,12,0.72)),
+        linear-gradient(180deg, rgba(9,4,12,0.2), rgba(9,4,12,0.88));
+    }
+    .section.is-visible .memory-fragment {
+      opacity: var(--fragment-opacity, .24);
+      transform: scale(1.01);
+    }
     .whisper {
       font-size: .86rem;
       line-height: 2.1;
@@ -413,12 +786,20 @@
       text-wrap: balance;
       text-shadow: 0 0 34px rgba(234,211,162,0.16);
     }
+    .longing-text {
+      font-size: clamp(1.65rem, 7vw, 2.24rem);
+      line-height: 2.2;
+      white-space: nowrap;
+    }
 
     /* title + small photo row */
     .title-photo {
       display: grid;
       grid-template-columns: 1fr 120px;
       gap: 16px; align-items: center;
+    }
+    .title-photo.no-photo {
+      grid-template-columns: 1fr;
     }
 
     /* one-word */
@@ -454,6 +835,43 @@
       opacity: 1;
       transform: none;
       filter: blur(0);
+    }
+    .section.memory-photo-scene {
+      overflow: hidden;
+      isolation: isolate;
+      padding-bottom: 0;
+    }
+    .section.memory-photo-scene + .section.memory-continuation-scene {
+      padding-top: 0;
+    }
+    .memory-photo-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0;
+      transform: scale(1.08) translateY(18px);
+      filter: blur(5px) saturate(0.9) brightness(0.72);
+      will-change: opacity, transform, filter;
+      pointer-events: none;
+    }
+    .memory-photo-scene > div:not(.memory-photo-bg) {
+      position: relative;
+      z-index: 3;
+    }
+    .memory-photo-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 42%;
+    }
+    .memory-photo-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 38%, rgba(9,4,12,0), rgba(9,4,12,0.12) 52%, rgba(9,4,12,0.42)),
+        linear-gradient(90deg, rgba(9,4,12,0.34), rgba(9,4,12,0.04), rgba(9,4,12,0.42)),
+        linear-gradient(180deg, rgba(9,4,12,0), rgba(9,4,12,0.38));
     }
     .teenage .reveal {
       transform: translateX(-18px);
@@ -710,9 +1128,346 @@
       100% { opacity:0; transform:rotateY(-92deg) translateX(-13%); }
     }
 
+    /* ===== PHOTO STRIP (horizontal auto-scroll) ===== */
+    .pstrip {
+      overflow: hidden;
+      margin: 36px -32px 0;
+      position: relative;
+    }
+    .pstrip::before, .pstrip::after {
+      content: ""; position: absolute; top: 0; bottom: 0;
+      width: 36px; z-index: 1; pointer-events: none;
+    }
+    .pstrip::before { left: 0; background: linear-gradient(to right, rgba(9,4,12,0.9), transparent); }
+    .pstrip::after  { right: 0; background: linear-gradient(to left, rgba(9,4,12,0.9), transparent); }
+    .pstrip-track {
+      display: flex; gap: 7px;
+      animation: stripScroll 32s linear infinite;
+      width: max-content;
+    }
+    .pstrip:hover .pstrip-track { animation-play-state: paused; }
+    .pstrip-track img {
+      width: 152px; height: 102px;
+      object-fit: cover; flex-shrink: 0;
+      border-radius: 6px; opacity: 0.84;
+      transition: opacity 0.3s ease;
+    }
+    .pstrip-track img:hover { opacity: 1; }
+    @keyframes stripScroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ===== PHOTO MOSAIC (now section) ===== */
+    .pmosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px; margin: 34px 0 0;
+    }
+    .pmosaic img {
+      width: 100%; object-fit: cover;
+      border-radius: 10px; display: block;
+    }
+    .pmosaic img:nth-child(1) { grid-column: 1 / -1; aspect-ratio: 16/9; }
+    .pmosaic img:nth-child(2),
+    .pmosaic img:nth-child(3) { aspect-ratio: 1; }
+    .pmosaic img:nth-child(4) { grid-column: 1 / -1; aspect-ratio: 3/1; }
+
     @media (min-width: 760px) {
       body { background: radial-gradient(circle at 50% 0, rgba(154,54,101,0.17), transparent 30rem), #07040a; }
-      .stage { margin-block: 24px; border-radius: 34px; overflow: hidden; }
+      .stage { margin-block: 24px; border-radius: 34px; overflow: visible; }
+      .hero-sticky { border-radius: 34px; }
+      .chapter-cards {
+        margin-inline: -20px;
+        padding-inline: 20px;
+      }
+      .chapter-card {
+        min-width: 46%;
+      }
+    }
+    @media (max-width: 520px) {
+      .stage {
+        width: 100%;
+      }
+      .hero-content {
+        padding: 0 26px;
+      }
+      .hero-step {
+        left: 26px;
+        right: 26px;
+      }
+      .hero-step.photo-copy {
+        right: 26px;
+      }
+      .hero-portrait {
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        transform: translateY(0) scale(1.08);
+        border-radius: 0;
+        filter: saturate(0.7) brightness(0.5);
+      }
+      .hero-portrait img {
+        object-position: 58% center;
+      }
+      .hero-portrait::after {
+        background:
+          linear-gradient(90deg, rgba(9,4,12,0.88), rgba(9,4,12,0.58), rgba(9,4,12,0.62)),
+          linear-gradient(180deg, rgba(9,4,12,0.24), rgba(9,4,12,0.88));
+      }
+      .ht-main {
+        font-size: clamp(2rem, 12vw, 2.75rem);
+        line-height: 1.68;
+      }
+      .ht-sub,
+      .ht-small {
+        line-height: 2;
+      }
+      .ht-large {
+        font-size: clamp(1.5rem, 8.2vw, 2rem);
+      }
+      .hero-hint {
+        bottom: max(22px, env(safe-area-inset-bottom));
+      }
+      #chap {
+        right: 8px;
+        gap: 2px;
+        opacity: 0.58;
+      }
+      #chapNum {
+        font-size: 0.5rem;
+        letter-spacing: 0.14em;
+      }
+      #chapName {
+        max-width: 54px;
+        overflow: hidden;
+        font-size: 0.42rem;
+        letter-spacing: 0.13em;
+        text-overflow: ellipsis;
+      }
+      .section {
+        min-height: auto;
+        padding: 88px 26px;
+      }
+      .chapter-nav {
+        min-height: 100svh;
+        padding-top: 96px;
+        padding-bottom: 96px;
+      }
+      .chapter-cards {
+        margin-inline: -26px;
+        padding-inline: 26px;
+      }
+      .prologue-moon {
+        min-height: 210svh;
+        padding: 0;
+      }
+      .prologue-moon > div:not(.prologue-moon-bg) {
+        min-height: 210svh;
+        padding: 112px 26px;
+      }
+      .prologue-moon-bg {
+        opacity: 0.82;
+        filter: saturate(0.64) brightness(0.6) contrast(1.08);
+      }
+      .prologue-moon-bg video {
+        object-position: 72% 60%;
+        opacity: 0.18;
+      }
+      .prologue-moon-bg::after {
+        background:
+          radial-gradient(circle at 64% 20%, rgba(255,236,205,0.12), transparent 34%),
+          linear-gradient(90deg, rgba(9,4,12,0.82), rgba(9,4,12,0.56), rgba(9,4,12,0.5)),
+          linear-gradient(180deg, rgba(9,4,12,0.24), rgba(9,4,12,0.92));
+      }
+      .prologue-moon-orb {
+        right: -18px;
+        top: 54px;
+        width: min(48vw, 178px);
+        opacity: 0.72;
+      }
+      .section.compact,
+      .section.short,
+      .section.tall {
+        min-height: auto;
+      }
+      .section-reflection {
+        min-height: 86svh;
+        padding-block: 96px;
+      }
+      .reflection-card {
+        padding: 26px 22px 28px;
+        border-radius: 26px 26px 26px 8px;
+      }
+      .reflection-card h3 {
+        font-size: clamp(1.46rem, 7.8vw, 1.94rem);
+        line-height: 1.68;
+      }
+      .reflection-card p {
+        font-size: 0.8rem;
+        line-height: 2;
+      }
+      .center-message {
+        min-height: 78svh;
+        padding-block: 104px;
+      }
+      .quote {
+        font-size: clamp(1.58rem, 8.3vw, 2.12rem);
+        line-height: 1.68;
+        overflow-wrap: anywhere;
+      }
+      .quote[style*="white-space:nowrap"] {
+        white-space: normal !important;
+      }
+      .lead {
+        font-size: clamp(1.68rem, 8.7vw, 2.35rem);
+        line-height: 1.68;
+        overflow-wrap: anywhere;
+      }
+      .impact-text {
+        font-size: clamp(1.9rem, 10.2vw, 2.85rem);
+        line-height: 1.48;
+      }
+      .longing-text {
+        font-size: clamp(1.65rem, 7vw, 2.24rem);
+        line-height: 2.2;
+      }
+      .emotional-copy {
+        font-size: clamp(1.74rem, 9.2vw, 2.48rem);
+        line-height: 1.62;
+      }
+      .big-question {
+        font-size: clamp(2rem, 10.5vw, 2.9rem);
+        line-height: 1.42;
+        overflow-wrap: anywhere;
+      }
+      .question-reveal .q-large {
+        font-size: clamp(2.15rem, 12vw, 3rem);
+      }
+      .body-copy {
+        margin-top: 34px;
+        font-size: 0.96rem;
+        line-height: 2.18;
+      }
+      .body-copy.sm {
+        font-size: 0.78rem;
+        line-height: 1.96;
+      }
+      .scene-label,
+      .eyebrow {
+        letter-spacing: 0.16em;
+      }
+      .title-photo {
+        grid-template-columns: 1fr 92px;
+        gap: 14px;
+      }
+      .photo {
+        max-height: 56svh;
+      }
+      .photo.full {
+        aspect-ratio: 0.86;
+        margin: 0 0 34px;
+      }
+      .photo.soft {
+        aspect-ratio: 0.86;
+      }
+      .photo.family {
+        aspect-ratio: 1.28;
+        margin-inline: 0;
+        border-radius: 28px;
+      }
+      .photo.round {
+        width: min(78vw, 300px);
+        margin-inline: auto;
+        aspect-ratio: 0.82;
+      }
+      .photo.sm-round {
+        width: 92px;
+      }
+      .val-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .val {
+        min-height: 102px;
+        padding: 18px 16px;
+        border-radius: 18px;
+      }
+      .val b {
+        font-size: 1.36rem;
+      }
+      .tags {
+        gap: 8px;
+      }
+      .tag {
+        min-height: 34px;
+        padding: 0 12px;
+      }
+      .ribbon {
+        width: calc(100% + 52px);
+        margin-inline: -26px;
+      }
+      .line-btn {
+        min-height: 58px;
+        margin-top: 32px;
+        font-size: 0.96rem;
+      }
+      .earth {
+        right: -54px;
+        bottom: 34px;
+        width: 118px;
+        height: 118px;
+      }
+      .moon {
+        right: 22px;
+        top: 56px;
+        width: 46px;
+        height: 46px;
+      }
+      .heart {
+        transform: scale(0.78) rotate(45deg);
+      }
+      .heart.c {
+        transform: translate(-50%,-50%) scale(0.78) rotate(45deg);
+      }
+    }
+    @media (max-width: 360px) {
+      .hero-content {
+        padding: 0 22px;
+      }
+      .hero-step {
+        left: 22px;
+        right: 22px;
+      }
+      .section {
+        padding-inline: 22px;
+      }
+      .chapter-cards {
+        margin-inline: -22px;
+        padding-inline: 22px;
+      }
+      .chapter-card {
+        min-width: 82%;
+      }
+      .quote {
+        font-size: clamp(1.48rem, 8.8vw, 1.9rem);
+      }
+      .lead {
+        font-size: clamp(1.56rem, 9vw, 2.08rem);
+      }
+      .longing-text {
+        font-size: clamp(1.55rem, 7vw, 1.9rem);
+      }
+      .body-copy {
+        font-size: 0.92rem;
+      }
+      .title-photo {
+        grid-template-columns: 1fr;
+      }
+      .photo.sm-round {
+        width: 118px;
+        margin-top: 18px;
+      }
     }
     @media (prefers-reduced-motion: reduce) {
       *,*::before,*::after { animation: none !important; transition-duration: .01ms !important; }
@@ -748,33 +1503,123 @@
       <div class="hero-bg" id="heroBg">
         <img src="assets/hero.png" alt="" />
       </div>
+      <div class="hero-portrait" id="heroPortrait" aria-hidden="true">
+        <img src="assets/hero.png" alt="" />
+      </div>
       <div class="hero-kw-layer" id="heroKw"></div>
       <div class="hero-content">
         <div class="hero-step" id="hs1">
-          <p class="ht-main">わたしは、<br />生まれてきて<br />よかった。</p>
+          <p class="ht-main">
+            <span class="hero-line">わたしは、</span>
+            <span class="hero-line">生まれてきて</span>
+            <span class="hero-line">よかった。</span>
+          </p>
         </div>
         <div class="hero-step" id="hs2">
-          <p class="ht-sub">そう思えなかった私が、<br />人生をかけて、<br />探し続けたもの。</p>
+          <p class="ht-sub">
+            <span class="hero-line">そう思えなかった私が、</span>
+            <span class="hero-line">人生をかけて、</span>
+            <span class="hero-line">探し続けたもの。</span>
+          </p>
         </div>
-        <div class="hero-step" id="hs3">
-          <p class="ht-sub">愛されること。<br />認められること。</p>
+        <div class="hero-step photo-copy" id="hs3">
+          <p class="ht-sub">
+            <span class="hero-line">愛されること。</span>
+            <span class="hero-line">認められること。</span>
+          </p>
         </div>
         <div class="hero-step" id="hs4">
-          <p class="ht-sub">何度も傷ついて、<br />何度も迷って、<br />そして辿り着いた。</p>
+          <p class="ht-sub">
+            <span class="hero-line">何度も傷ついて、</span>
+            <span class="hero-line">何度も迷って、</span>
+            <span class="hero-line">そして辿り着いた。</span>
+          </p>
         </div>
         <div class="hero-step" id="hs5">
-          <p class="ht-large">"本当の自分"に<br />還ること。</p>
+          <p class="ht-large">
+            <span class="hero-line">“本当の自分”に</span>
+            <span class="hero-line">還ること。</span>
+          </p>
         </div>
         <div class="hero-step" id="hs6">
-          <p class="ht-small">これは、<br />私の人生の記録。</p>
+          <p class="ht-small">
+            <span class="hero-line">これは、</span>
+            <span class="hero-line">私の人生の記録。</span>
+          </p>
         </div>
       </div>
       <div class="hero-hint" id="heroHint">scroll to read</div>
     </div>
   </div>
 
+  <!-- ======== CHAPTER NAVIGATION ======== -->
+  <section class="section chapter-nav" id="chapterNav" data-theme="void" data-ch="00" data-ch-name="CHAPTERS">
+    <div>
+      <p class="eyebrow reveal">chapters</p>
+      <h2 class="quote reveal">
+        この物語は、<br />
+        いくつかの記憶で<br />
+        できている。
+      </h2>
+      <p class="body-copy sm reveal">
+        最後は繋がる<br />
+        “私”という物語
+      </p>
+
+      <div class="chapter-cards reveal" aria-label="章一覧">
+        <a class="chapter-card" href="#prologueMoon">
+          <span class="chapter-no">01</span>
+          <strong>PROLOGUE</strong>
+          <em>探していたもの</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="#memory">
+          <span class="chapter-no">02</span>
+          <strong>MEMORY</strong>
+          <em>幼少期</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="#wound">
+          <span class="chapter-no">03</span>
+          <strong>WOUND</strong>
+          <em>傷と孤独</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="#love">
+          <span class="chapter-no">04</span>
+          <strong>LOVE</strong>
+          <em>愛されたい私</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="#break">
+          <span class="chapter-no">05</span>
+          <strong>BREAK</strong>
+          <em>壊れた日々</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+
+        <a class="chapter-card" href="#return">
+          <span class="chapter-no">06</span>
+          <strong>RETURN</strong>
+          <em>自分に還る</em>
+          <span class="chapter-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- ======== S2: PROLOGUE ======== -->
-  <section class="section tall" data-theme="void" data-ch="01" data-ch-name="PROLOGUE">
+  <section class="section tall prologue-moon" id="prologueMoon" data-theme="void" data-ch="01" data-ch-name="PROLOGUE">
+    <div class="prologue-moon-bg" aria-hidden="true">
+      <video id="prologueMoonVideo" muted playsinline preload="auto" poster="assets/hero.png">
+        <source src="assets/hero-scroll-fast.mp4" type="video/mp4" />
+      </video>
+      <div class="prologue-moon-orb" id="prologueMoonOrb"></div>
+    </div>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.1rem;line-height:2.5">
         私は思う。<br /><br />
@@ -799,18 +1644,29 @@
   <section class="section short center-message" data-theme="void">
     <div>
       <p class="scene-label reveal">what I was looking for</p>
-      <h2 class="impact-text reveal slow-text">
-        愛されたかった。<br /><br />
+      <h2 class="impact-text longing-text reveal slow-text">
+        愛されたかった。<br />
         認められたかった。
       </h2>
     </div>
   </section>
 
+  <section class="section section-reflection" data-theme="void">
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">prologue / what remains</p>
+      <h3>今なら、こう思う。</h3>
+      <p>
+        人生は、足りないものを足して完成するものではなかった。<br />
+        置き去りにした自分の声を、もう一度迎えに行く旅だった。
+      </p>
+    </div>
+  </section>
+
   <!-- ======== S3: 幼少期 ======== -->
-  <section class="section compact childhood" data-theme="void" data-ch="02" data-ch-name="MEMORY">
+  <section class="section compact childhood" id="memory" data-theme="void" data-ch="02" data-ch-name="MEMORY">
     <div class="moon"></div>
     <div>
-      <p class="eyebrow reveal">01 / childhood</p>
+      <p class="eyebrow reveal">1章｜幼少期</p>
       <h2 class="quote reveal question-reveal" aria-label="幼少期。私は、生まれてきてよかったの？">
         <span class="q-small">私は、</span>
         <span class="q-mid">生まれてきて</span>
@@ -821,52 +1677,48 @@
   </section>
 
   <!-- ======== S4: 家の空気 ======== -->
-  <section class="section compact childhood" data-theme="void">
+  <section class="section compact childhood memory-photo-scene" id="memoryPhotoScene" data-theme="void">
+    <div class="memory-photo-bg" id="memoryPhotoBg" aria-hidden="true">
+      <img src="assets/childhood-rope.jpg" alt="" />
+    </div>
     <div>
-      <h2 class="quote reveal">小学校1年生の頃、<br /><br />父が、<br />家からいなくなった。</h2>
+      <h2 class="quote reveal">小学校1年生頃、<br />親が離婚。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
-        親が離婚した。<br /><br />
-        家には、争いがあった。<br /><br />
+        父がある日、<br />
+        家からいなくなった。<br /><br />
+        家には争いがあった。<br /><br />
         父方の祖母と母の衝突。<br />
         家族間の悪口。<br />
-        大人はみんな、<br />誰かの悪口を言ってた。<br /><br />
-        怒り。恐れ。<br />
-        包丁が出るほどの緊張。<br /><br />
-        そこは、<br />
-        「安心」が存在しない環境だった。
+        大人はみんな誰かの悪口を言ってた。<br />
+        怒り。<br />
+        恐れ。<br />
+        包丁を持ち出すほどの家庭内の緊張。
       </p>
     </div>
   </section>
 
   <!-- ======== S5: 怪我の日 ======== -->
-  <section class="section compact childhood" data-theme="void">
+  <section class="section compact childhood memory-continuation-scene" data-theme="void">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.08rem;line-height:2.65">
-        大怪我をした日。<br /><br />
-        母は、<br />
-        私の怪我を隠した。<br /><br />
-        祖母に、<br />
-        自分が怒られないように。<br /><br />
-        私を守ることより、<br />
-        自分を守ることが優先された。
+        母は私を守ることより自分を守ることを優先した。<br /><br />
+        大怪我した日、母は私の怪我を隠した。<br />
+        祖母に自分が怒られないように。
       </p>
     </div>
   </section>
 
   <!-- ======== S6: 父の記憶 ======== -->
   <section class="section compact childhood" data-theme="void" style="--x:18%;--y:72%">
-    <div class="title-photo reveal">
+    <div class="title-photo no-photo reveal">
       <div>
-        <h2 class="quote">でも、<br />父は助けてくれた。</h2>
+        <h2 class="quote">父は助けてくれた。</h2>
         <p class="body-copy sm" style="margin-top:24px">
-          離婚後の定期面会の日。<br /><br />
-          「女の子なんだから、身体にあとが残ったらどうすんだ」<br /><br />
-          電話帳で病院を探し、連れて行ってくれた。
+          離婚後、定期面会の時<br /><br />
+          女の子なんだから、身体にあとが残ったらどうすんだ。<br /><br />
+          電話帳で病院を探して連れて行ってくれた。
         </p>
       </div>
-      <figure class="photo sm-round dark">
-        <img src="assets/baby-child-center.jpg" alt="" />
-      </figure>
     </div>
   </section>
 
@@ -876,27 +1728,25 @@
       <h2 class="lead reveal" style="opacity:.82">
         結果的に、<br />
         痕は残った。<br /><br />
-        身体にも。<br />
-        私の心にも。
+        私の心にも<br />
+        痕が残った。
       </h2>
+      <p class="body-copy sm reveal">「安心」が存在しない環境。</p>
     </div>
   </section>
 
   <!-- ======== S8: 忘れられない言葉 ======== -->
   <section class="section compact childhood" data-theme="void">
     <div>
-      <p class="scene-label reveal">幼い頃、母から聞いた一言。</p>
+      <p class="scene-label reveal">さらに幼少期に母から聞いた一言。</p>
       <h2 class="emotional-copy reveal">
-        「あなたを産む前に、<br />
+        「あなたを産む前に<br />
         下ろした子がいる」
       </h2>
       <p class="body-copy reveal" style="line-height:2.55">
-        その言葉は、<br />
-        無意識の深い場所に<br />
-        問いを残した。<br /><br />
-        「私は、生まれてきてよかった命だったのか？」<br /><br />
-        この問いは、<br />
-        人生全体の根源となる。
+        この言葉が、無意識の深い場所に問いを残した。<br /><br />
+        「私は生まれてきてよかった命だったのか？」<br /><br />
+        この問いは人生全体の根源となる。
       </p>
     </div>
   </section>
@@ -904,17 +1754,17 @@
   <!-- ======== S9: 正しさと成果 ======== -->
   <section class="section compact childhood" data-theme="void">
     <div>
-      <h2 class="quote reveal">母は厳格だった。</h2>
+      <h2 class="quote reveal">さらに母は厳格だった。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         教師家系。<br />
         成果主義。<br />
         正しさ重視。<br /><br />
-        褒められた記憶は、少ない。<br /><br />
+        褒められた記憶が少ない。<br /><br />
         「できたら認められる」<br />
         「正しくなければ価値がない」<br />
-        「常に、兄弟との比較」<br />
+        「常に兄弟との比較」<br />
         「成績、数字、成果が価値基準」<br /><br />
-        そんな空気の中で、育った。
+        そんな空気の中で育つ。
       </p>
     </div>
   </section>
@@ -924,14 +1774,12 @@
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.08rem;line-height:2.65">
         一方で父は、憧れだった。<br /><br />
-        賢くて、ユーモアがあって、<br />
-        おもしろかった。<br /><br />
+        賢くユーモアがありおもしろかった。<br /><br />
         広い世界を教えてくれた。<br />
-        海外が、いつも近くにあった。<br /><br />
+        常に海外が近くにあった。<br /><br />
         守ってくれる存在。<br />
         愛されたかった存在。<br />
-        お父さんみたいな人と<br />
-        結婚したかった。<br />
+        お父さんみたいな人と結婚したかった。<br />
         理想像。
       </p>
     </div>
@@ -940,23 +1788,41 @@
   <!-- ======== S11: 幼少期の結論 ======== -->
   <section class="section compact childhood" data-theme="void">
     <div>
-      <p class="body-copy sm reveal" style="margin-top:0">
-        つまり、彼女の幼少期は、
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.08rem;line-height:2.65">
+        しかし同時に、<br /><br />
+        もっと甘えたかった<br />
+        もっと愛されたかった<br /><br />
+        という欠乏感も残る。
+      </p>
+      <p class="body-copy sm reveal">
+        つまり彼女の幼少期は、
       </p>
       <h2 class="lead reveal">
         愛を求めながら、<br /><br />
-        安心を失っていた時代だった。
+        安心を失っていた時代
       </h2>
       <p class="body-copy sm reveal">
-        もっと甘えたかった。<br />
-        もっと愛されたかった。<br /><br />
-        その欠乏感が、人生の根に残った。
+        だった。
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-reflection childhood" data-theme="void">
+    <div class="memory-fragment" style="--fragment-opacity:.2;--photo-pos:50% 38%;--photo-bright:.42">
+      <img src="assets/baby-childhood.jpg" alt="" />
+    </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">memory / what I learned</p>
+      <h3>この記憶が、今の私をつくった。</h3>
+      <p>
+        安心を知らなかったから、安心を探し続けた。<br />
+        愛を疑ったから、愛を見つけたときのあたたかさを忘れない。
       </p>
     </div>
   </section>
 
   <!-- ======== S12: 10代・いじめ ======== -->
-  <section class="section compact teenage" data-theme="night" data-ch="03" data-ch-name="WOUND">
+  <section class="section compact teenage" id="wound" data-theme="night" data-ch="03" data-ch-name="WOUND">
     <div class="wave"></div>
     <figure class="photo soft dark reveal">
       <img src="assets/after-divorce-1.jpg" alt="" />
@@ -1146,8 +2012,22 @@
     </div>
   </section>
 
+  <section class="section section-reflection teenage" data-theme="night">
+    <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:48% 34%;--photo-bright:.4">
+      <img src="assets/twenties-1.jpg" alt="" />
+    </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">wound / what I received</p>
+      <h3>この経験から、私は知った。</h3>
+      <p>
+        違和感は、間違いではなかった。<br />
+        狭い世界で息ができない感覚は、広い世界へ向かう合図だった。
+      </p>
+    </div>
+  </section>
+
   <!-- ======== S23: 20代 ======== -->
-  <section class="section" data-theme="hunger" data-ch="04" data-ch-name="SEARCH">
+  <section class="section" id="love" data-theme="hunger" data-ch="04" data-ch-name="LOVE">
     <div class="speed-lines"></div>
     <figure class="photo full dark reveal">
       <img src="assets/twenties-2.jpg" alt="" />
@@ -1312,6 +2192,20 @@
         循環させていくのか。<br /><br />
         その問いは、<br />
         後の人生そのものになる。
+      </p>
+    </div>
+  </section>
+
+  <section class="section section-reflection" data-theme="hunger">
+    <div class="memory-fragment" style="--fragment-opacity:.22;--photo-pos:50% 34%;--photo-bright:.46">
+      <img src="assets/twenties-2.jpg" alt="" />
+    </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">love / what was underneath</p>
+      <h3>愛されたい、の奥にあったもの。</h3>
+      <p>
+        証明したかったのは価値ではなく、存在していいという許可だった。<br />
+        人の弱さを見てきたから、人を役割だけで見なくなった。
       </p>
     </div>
   </section>
@@ -1528,8 +2422,22 @@
     </div>
   </section>
 
+  <section class="section section-reflection" data-theme="love">
+    <div class="memory-fragment" style="--fragment-opacity:.16;--photo-pos:50% 42%;--photo-bright:.62;--photo-sat:.9">
+      <img src="assets/mother-2.jpg" alt="" />
+    </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">mother / what changed</p>
+      <h3>守ることは、縛ることではなかった。</h3>
+      <p>
+        子どもの命を守りながら、私自身の命も消してはいけなかった。<br />
+        正解よりも、その子の奥にある可能性を見たいと思った。
+      </p>
+    </div>
+  </section>
+
   <!-- ======== S19: 行き詰まり ======== -->
-  <section class="section tall" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
+  <section class="section tall" id="break" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
     <figure class="photo soft dark reveal">
       <img src="assets/after-divorce-3.jpg" alt="" />
     </figure>
@@ -1569,6 +2477,17 @@
     </div>
   </section>
 
+  <section class="section section-reflection" data-theme="awake">
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">break / what I found</p>
+      <h3>この崩壊が、入口だった。</h3>
+      <p>
+        変われない自分を責めるのをやめたとき、別の道が見えた。<br />
+        本当の変化は、足すことではなく、思い出すことから始まった。
+      </p>
+    </div>
+  </section>
+
   <!-- ======== S21: 海外 ======== -->
   <section class="section tall" data-theme="dawn" data-ch="08" data-ch-name="JOURNEY">
     <div class="earth"></div>
@@ -1586,11 +2505,32 @@
         ふと思った。
       </p>
       <h2 class="quote reveal" style="margin-top:52px;font-size:clamp(1.3rem,5.8vw,1.9rem);white-space:nowrap">「私は何のために働いてる？」</h2>
+      <div class="pstrip reveal">
+        <div class="pstrip-track">
+          <img src="assets/travel-1.jpg" alt="旅">
+          <img src="assets/travel-2.jpg" alt="旅">
+          <img src="assets/travel-3.jpg" alt="旅">
+          <img src="assets/travel-4.jpg" alt="旅">
+          <img src="assets/travel-5.jpg" alt="旅">
+          <img src="assets/travel-6.jpg" alt="旅">
+          <img src="assets/travel-7.jpg" alt="旅">
+          <img src="assets/world-1.jpg"  alt="世界">
+          <!-- loop -->
+          <img src="assets/travel-1.jpg" alt="旅">
+          <img src="assets/travel-2.jpg" alt="旅">
+          <img src="assets/travel-3.jpg" alt="旅">
+          <img src="assets/travel-4.jpg" alt="旅">
+          <img src="assets/travel-5.jpg" alt="旅">
+          <img src="assets/travel-6.jpg" alt="旅">
+          <img src="assets/travel-7.jpg" alt="旅">
+          <img src="assets/world-1.jpg"  alt="世界">
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- ======== S22: 今 ======== -->
-  <section class="section tall rose" data-theme="rose" data-ch="09" data-ch-name="RETURN">
+  <section class="section tall rose" id="return" data-theme="rose" data-ch="09" data-ch-name="RETURN">
     <figure class="photo full rose-f reveal">
       <img src="assets/now-1.jpg" alt="" />
     </figure>
@@ -1606,6 +2546,26 @@
         を思い出す旅の伴走。
       </p>
       <h2 class="lead reveal" style="margin-top:52px">それが今の私。</h2>
+      <div class="pmosaic reveal">
+        <img src="assets/now-2.jpg" alt="今">
+        <img src="assets/now-3.jpg" alt="今">
+        <img src="assets/now-4.jpg" alt="今">
+        <img src="assets/now-5.jpg" alt="今">
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-reflection" data-theme="rose">
+    <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:50% 30%;--photo-bright:.78;--photo-sat:1">
+      <img src="assets/now-6.jpg" alt="" />
+    </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">return / message</p>
+      <h3>この人生の答えは、今の私の中にある。</h3>
+      <p>
+        遠回りした時間も、傷ついた記憶も、全部がここへつながっていた。<br />
+        あなたの人生にも、まだ言葉になっていない光がある。
+      </p>
     </div>
   </section>
 
@@ -1665,18 +2625,17 @@
   <section class="section cta light" data-theme="light" data-ch="11" data-ch-name="JOURNEY">
     <div class="earth"></div>
     <figure class="photo soft rose-f reveal">
-      <img src="assets/world-1.jpg" alt="" />
+      <img src="assets/hero.png" alt="" style="object-position:52% 38%" />
     </figure>
     <div>
       <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Journey</p>
-      <h2 class="lead reveal slow-text">"自分に還る旅"<br />を始めませんか？</h2>
-      <a class="line-btn reveal" href="#" aria-label="LINEで相談する">LINEで話してみる</a>
+      <h2 class="lead reveal slow-text">もっと話してみたい方へ。</h2>
+      <a class="line-btn reveal" href="#" aria-label="LINEでつながる">LINEでつながる</a>
       <p class="body-copy sm reveal" style="color:rgba(73,34,50,.7);margin-top:22px">
-        まずは、<br />
-        あなたの人生の話を<br />
-        聞かせてください。<br /><br />
-        DNAアクティベーション / セッション<br />
-        人生探求 / 親子支援 / 女性支援
+        あなたの人生を思い出す時間を、<br />
+        一緒に。<br /><br />
+        うまく言葉にできなくても大丈夫。<br />
+        まずは、静かにつながるところから。
       </p>
     </div>
   </section>
@@ -1686,52 +2645,132 @@
 <script>
   gsap.registerPlugin(ScrollTrigger);
 
-  // ---- HERO SCROLL ----
-  const heroBg  = document.getElementById('heroBg');
-  const steps   = ['hs1','hs2','hs3','hs4','hs5','hs6'].map(id => document.getElementById(id));
-  const heroHint= document.getElementById('heroHint');
+  // ---- HERO SCROLL (GSAP ScrollTrigger) ----
+  const heroBg       = document.getElementById('heroBg');
+  const heroPortrait = document.getElementById('heroPortrait');
+  const steps        = ['hs1','hs2','hs3','hs4','hs5','hs6'].map(id => document.getElementById(id));
+  const heroHint     = document.getElementById('heroHint');
+  const stepLines    = steps.map(step => [...step.querySelectorAll('.hero-line')]);
 
-  // CSS sticky handles pinning; GSAP scrubs animations
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: '#heroWrap',
       start: 'top top',
       end: 'bottom bottom',
-      scrub: 1.4,
+      scrub: 2.2,
     }
   });
 
-  tl
-    // step1 out
-    .to(steps[0], { opacity:0, y:-18, duration:.1 }, .07)
-    // hint out
-    .to(heroHint, { opacity:0, duration:.08 }, .05)
-    // photo in (blur clears)
-    .to(heroBg, { opacity:.72, duration:.35 }, .12)
-    .to(heroBg, { filter:'blur(0px) saturate(0.88) brightness(0.62)', duration:.45 }, .12)
-    // step2
-    .fromTo(steps[1], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .07)
-    .to(steps[1],     { opacity:0, y:-18, duration:.08 }, .21)
-    // step3
-    .fromTo(steps[2], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .22)
-    .to(steps[2],     { opacity:0, y:-18, duration:.08 }, .36)
-    // step4
-    .fromTo(steps[3], { opacity:0, y:20 }, { opacity:1, y:0, duration:.12 }, .38)
-    .to(steps[3],     { opacity:0, y:-18, duration:.08 }, .52)
-    // step5
-    .fromTo(steps[4], { opacity:0, y:20 }, { opacity:1, y:0, duration:.13 }, .54)
-    .to(steps[4],     { opacity:0, y:-18, duration:.08 }, .70)
-    // step6 stays
-    .fromTo(steps[5], { opacity:0, y:20 }, { opacity:1, y:0, duration:.13 }, .72);
+  function lineIn(index, at, duration = .12) {
+    tl.to(steps[index], { opacity:1, duration:.01 }, at)
+      .to(stepLines[index], {
+        opacity:1,
+        y:0,
+        filter:'blur(0px)',
+        duration,
+        stagger:.045,
+        ease:'power2.out'
+      }, at);
+  }
 
-  // ---- KEYWORDS ----
+  function stepOut(index, at, duration = .08) {
+    tl.to(steps[index], { opacity:0, y:-18, duration, ease:'power1.inOut' }, at);
+  }
+
+  tl
+    // STEP1: quiet confession, held with a longer silence after "よかった。"
+    .to(heroHint, { autoAlpha:0, duration:.08 }, .04);
+
+  stepOut(0, .17, .1);
+  lineIn(1, .23, .16);
+  stepOut(1, .42, .09);
+
+  tl
+    // STEP3: the portrait rises gradually, then the longing words arrive.
+    .to(heroBg, { opacity:.46, duration:.28, ease:'power1.out' }, .31)
+    .to(heroBg, { filter:'blur(7px) saturate(0.72) brightness(0.45)', duration:.34 }, .31)
+    .to(heroPortrait, {
+      opacity:.72,
+      filter:'saturate(0.86) brightness(0.72)',
+      duration:.24,
+      ease:'power2.out'
+    }, .43);
+
+  lineIn(2, .49, .14);
+  stepOut(2, .63, .08);
+  lineIn(3, .67, .15);
+  stepOut(3, .8, .08);
+  lineIn(4, .84, .16);
+  stepOut(4, .93, .06);
+  lineIn(5, .96, .12);
+
+  // ---- PROLOGUE MOON VIDEO (scroll-synced) ----
+  const prologueMoonVideo = document.getElementById('prologueMoonVideo');
+  const prologueMoonBg = document.querySelector('.prologue-moon-bg');
+  const prologueMoonOrb = document.getElementById('prologueMoonOrb');
+  let prologueMoonDuration = 0;
+  let prologueMoonReady = false;
+
+  function syncPrologueMoon(progress) {
+    const phaseX = Math.sin(progress * Math.PI) * 118;
+    const phaseScale = 1.04 + Math.sin(progress * Math.PI) * 0.04;
+    prologueMoonOrb.style.setProperty('--phase-x', `${phaseX.toFixed(2)}%`);
+    prologueMoonOrb.style.setProperty('--phase-scale', phaseScale.toFixed(3));
+    if (!prologueMoonReady || !prologueMoonDuration) return;
+    const targetTime = Math.min(prologueMoonDuration - 0.04, Math.max(0, progress * prologueMoonDuration));
+    if (Math.abs(prologueMoonVideo.currentTime - targetTime) > 0.045) {
+      prologueMoonVideo.currentTime = targetTime;
+    }
+  }
+
+  prologueMoonVideo.addEventListener('loadedmetadata', () => {
+    prologueMoonDuration = prologueMoonVideo.duration || 0;
+    prologueMoonReady = Number.isFinite(prologueMoonDuration) && prologueMoonDuration > 0;
+    prologueMoonVideo.pause();
+    syncPrologueMoon(0);
+  });
+
+  ScrollTrigger.create({
+    trigger: '#prologueMoon',
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: 1.4,
+    onUpdate: self => syncPrologueMoon(self.progress),
+  });
+
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#prologueMoon',
+      start: 'top 76%',
+      end: 'bottom 20%',
+      scrub: 1.4,
+    }
+  })
+    .fromTo(prologueMoonBg, { opacity:.34, scale:1.08 }, { opacity:.86, scale:1.01, ease:'none' }, 0)
+    .to(prologueMoonBg, { filter:'saturate(0.82) brightness(0.76) contrast(1.12)', ease:'none' }, 0);
+
+  // ---- CHILDHOOD PHOTO BACKGROUND ----
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#memoryPhotoScene',
+      start: 'top 94%',
+      end: 'center 42%',
+      scrub: 0.9,
+    }
+  })
+    .fromTo('#memoryPhotoBg',
+      { opacity:0, scale:1.1, y:28, filter:'blur(10px) saturate(0.68) brightness(0.42)' },
+      { opacity:.94, scale:1.01, y:0, filter:'blur(0.8px) saturate(1) brightness(0.88)', ease:'none' }
+    );
+
+  // ---- 背景キーワード（薄く・一瞬）----
   const words = ['親の離婚','孤独','承認欲求','恋愛','結婚','離婚','子育て','旅','ヒーリング','自分に還る'];
   const kwLayer = document.getElementById('heroKw');
   const kwEls = words.map(w => {
     const el = document.createElement('span');
     el.className = 'hero-kw';
     el.textContent = w;
-    el.style.left = (6 + Math.random() * 74) + '%';
+    el.style.left = (6 + Math.random() * 62) + '%';
     el.style.top  = (8 + Math.random() * 74) + '%';
     kwLayer.appendChild(el);
     return el;
@@ -1743,6 +2782,24 @@
     setTimeout(() => { el.style.opacity = '0'; }, 1500);
     setTimeout(cycle, 1900 + Math.random() * 1100);
   })();
+
+  // ---- STORY LINE REVEAL ----
+  // Long copy is rebuilt into quiet, subtitle-like lines so mobile readers meet one breath at a time.
+  document.querySelectorAll('.body-copy.reveal, .quote.reveal, .lead.reveal, .impact-text.reveal').forEach(el => {
+    const html = el.innerHTML;
+    if (el.classList.contains('question-reveal')) return;
+    if (/<(span|a|img|figure|div|strong|em|b)\b/i.test(html)) return;
+    const parts = html.split(/<br\s*\/?>/i);
+    if (parts.length < 2) return;
+    let lineIndex = 0;
+    el.innerHTML = parts.map(part => {
+      const text = part.replace(/\s+/g, ' ').trim();
+      if (!text) return '<br />';
+      const line = `<span class="story-line" style="--line-index:${lineIndex}">${text}</span>`;
+      lineIndex += 1;
+      return line;
+    }).join('<br />');
+  });
 
   // ---- REVEAL (IntersectionObserver) ----
   const root = document.documentElement;
