@@ -217,9 +217,15 @@
     .section::before { display: none; }
 
     /* 後半セクションのテキスト色（背景が明るくなるため） */
-    [data-theme="light"] { color: #4d2230; }
-    [data-theme="light"] .eyebrow { color: rgba(77,34,48,0.6); }
-    [data-theme="light"] .ribbon  { color: rgba(77,34,48,0.28); }
+    [data-theme="light"],
+    [data-theme="dawn"],
+    [data-theme="rose"] { color: #4d2230; }
+    [data-theme="light"] .eyebrow,
+    [data-theme="dawn"] .eyebrow,
+    [data-theme="rose"] .eyebrow { color: rgba(77,34,48,0.6); }
+    [data-theme="light"] .ribbon,
+    [data-theme="dawn"] .ribbon,
+    [data-theme="rose"] .ribbon  { color: rgba(77,34,48,0.28); }
 
     .prologue-moon {
       min-height: 190svh;
@@ -552,20 +558,6 @@
     }
     .photo.dark img { filter: grayscale(0.1) saturate(0.76) contrast(1.1) brightness(0.54); }
     .photo.rose-f img { filter: saturate(0.9) contrast(1.02) brightness(0.9); }
-    .photo.blur-right-face::after {
-      content: "";
-      position: absolute;
-      left: 61%;
-      top: 12%;
-      width: 32%;
-      height: 35%;
-      border-radius: 48%;
-      background: rgba(255,236,232,0.12);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 0 18px rgba(255,236,232,0.16);
-      pointer-events: none;
-    }
 
     /* typography */
     .eyebrow {
@@ -647,6 +639,29 @@
       font-family: var(--sans);
       font-size: 0.82rem; line-height: 2.05;
     }
+    [data-theme="dawn"] .quote,
+    [data-theme="dawn"] .lead,
+    [data-theme="dawn"] .impact-text,
+    [data-theme="rose"] .quote,
+    [data-theme="rose"] .lead,
+    [data-theme="rose"] .impact-text {
+      color: #5a2638;
+      text-shadow:
+        0 1px 18px rgba(255,248,244,0.48),
+        0 1px 1px rgba(255,248,244,0.34);
+    }
+    [data-theme="dawn"] .body-copy,
+    [data-theme="dawn"] .body-copy.sm,
+    [data-theme="rose"] .body-copy,
+    [data-theme="rose"] .body-copy.sm {
+      color: rgba(77,34,48,0.8);
+      text-shadow: 0 1px 10px rgba(255,248,244,0.36);
+      font-weight: 600;
+    }
+    [data-theme="dawn"] .scene-label,
+    [data-theme="rose"] .scene-label {
+      color: rgba(77,34,48,0.58);
+    }
     .story-line {
       display: inline-block;
       opacity: 0;
@@ -662,6 +677,16 @@
       opacity: 1;
       transform: none;
       filter: blur(0);
+    }
+    .story-line.story-emphasis {
+      margin: 0.32em 0;
+      color: var(--ink);
+      font-size: clamp(1.42rem, 6.3vw, 2.12rem);
+      line-height: 1.72;
+      text-shadow:
+        0 0 24px rgba(234,211,162,0.16),
+        0 2px 18px rgba(0,0,0,0.34);
+      text-wrap: balance;
     }
     .section-reflection {
       min-height: 92svh;
@@ -765,6 +790,192 @@
     .section.is-visible .memory-fragment {
       opacity: var(--fragment-opacity, .24);
       transform: scale(1.01);
+    }
+    .teenage-scroll-photo {
+      position: absolute;
+      right: -72px;
+      bottom: -2svh;
+      z-index: 0;
+      width: min(70vw, 320px);
+      aspect-ratio: 0.74;
+      border-radius: 999px 999px 34px 34px;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateY(58px) scale(0.92);
+      filter: blur(10px) saturate(0.66) brightness(0.44);
+      border: 1px solid rgba(255,236,229,0.12);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.36);
+      pointer-events: none;
+      will-change: opacity, transform, filter;
+    }
+    .teenage-scroll-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 35% 36%;
+    }
+    .teenage-scroll-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.34), rgba(9,4,12,0.08) 52%, rgba(9,4,12,0.38)),
+        linear-gradient(180deg, rgba(9,4,12,0.1), rgba(9,4,12,0.58));
+    }
+    .has-scroll-photo > div:not(.teenage-scroll-photo) {
+      position: relative;
+      z-index: 2;
+    }
+    .hometown-landscape {
+      position: absolute;
+      inset: -4%;
+      z-index: 0;
+      opacity: 0;
+      transform: scale(1.08) translateY(38px);
+      filter: grayscale(1) blur(7px) brightness(0.46) contrast(1.08);
+      pointer-events: none;
+      will-change: opacity, transform, filter;
+    }
+    .hometown-landscape img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 52% 48%;
+    }
+    .hometown-landscape::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 48%, rgba(9,4,12,0.18), rgba(9,4,12,0.64) 62%, rgba(9,4,12,0.9)),
+        linear-gradient(180deg, rgba(9,4,12,0.72), rgba(9,4,12,0.34) 42%, rgba(9,4,12,0.84));
+    }
+    .has-landscape-memory > div:not(.hometown-landscape) {
+      position: relative;
+      z-index: 2;
+    }
+    .music-memory-bg {
+      position: absolute;
+      inset: -6%;
+      z-index: 0;
+      opacity: 0;
+      transform: scale(1.08) rotate(-2deg);
+      filter: blur(8px) saturate(0.76) brightness(0.42);
+      pointer-events: none;
+      will-change: opacity, transform, filter;
+    }
+    .music-memory-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 54% 48%;
+    }
+    .music-memory-bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 54% 48%, rgba(9,4,12,0.2), rgba(9,4,12,0.66) 58%, rgba(9,4,12,0.92)),
+        linear-gradient(90deg, rgba(9,4,12,0.72), rgba(9,4,12,0.32), rgba(9,4,12,0.78));
+    }
+    .has-music-memory > div:not(.music-memory-bg) {
+      position: relative;
+      z-index: 2;
+    }
+    .wide-world-gif {
+      position: absolute;
+      inset: -5%;
+      z-index: 0;
+      opacity: 0.58;
+      filter: grayscale(0.06) saturate(0.92) brightness(0.82) blur(0.4px);
+      pointer-events: none;
+      overflow: hidden;
+    }
+    .wide-world-gif img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 50% 50%;
+    }
+    .wide-world-gif::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 48% 44%, rgba(9,4,12,0.02), rgba(9,4,12,0.28) 58%, rgba(9,4,12,0.62)),
+        linear-gradient(180deg, rgba(9,4,12,0.46), rgba(9,4,12,0.1) 46%, rgba(9,4,12,0.58));
+    }
+    .has-wide-world-gif > div:not(.wide-world-gif) {
+      position: relative;
+      z-index: 2;
+    }
+    .rocker-photo {
+      position: absolute;
+      right: -34px;
+      bottom: 6svh;
+      z-index: 0;
+      width: min(58vw, 260px);
+      aspect-ratio: 0.72;
+      border-radius: 999px 999px 32px 32px;
+      overflow: hidden;
+      opacity: 0.46;
+      transform: rotate(2deg);
+      filter: saturate(0.78) brightness(0.68) blur(0.6px);
+      border: 1px solid rgba(255,236,229,0.12);
+      box-shadow: 0 30px 86px rgba(0,0,0,0.38);
+      pointer-events: none;
+    }
+    .rocker-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 47% 24%;
+    }
+    .rocker-photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.38), rgba(9,4,12,0.1) 54%, rgba(9,4,12,0.5)),
+        linear-gradient(180deg, rgba(9,4,12,0.1), rgba(9,4,12,0.72));
+    }
+    .has-rocker-photo > div:not(.rocker-photo) {
+      position: relative;
+      z-index: 2;
+    }
+    .proof-portrait {
+      position: absolute;
+      right: -58px;
+      top: 10svh;
+      z-index: 0;
+      width: min(62vw, 285px);
+      aspect-ratio: 0.78;
+      border-radius: 999px 999px 34px 34px;
+      overflow: hidden;
+      opacity: 0.52;
+      transform: rotate(-2deg);
+      filter: saturate(0.88) brightness(0.86) blur(0.3px);
+      border: 1px solid rgba(255,236,229,0.1);
+      box-shadow: 0 30px 86px rgba(0,0,0,0.34);
+      pointer-events: none;
+    }
+    .proof-portrait img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: 42% 34%;
+    }
+    .proof-portrait::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(9,4,12,0.52), rgba(9,4,12,0.14) 52%, rgba(9,4,12,0.5)),
+        linear-gradient(180deg, rgba(9,4,12,0.08), rgba(9,4,12,0.72));
+    }
+    .has-proof-portrait > div:not(.proof-portrait) {
+      position: relative;
+      z-index: 2;
     }
     .whisper {
       font-size: .86rem;
@@ -876,7 +1087,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: 50% 42%;
+      object-position: var(--memory-photo-pos, 50% 42%);
     }
     .memory-photo-bg::after {
       content: "";
@@ -1167,6 +1378,25 @@
       transition: opacity 0.3s ease;
     }
     .pstrip-track img:hover { opacity: 1; }
+    .music-strip {
+      margin-top: 28px;
+      opacity: 0.86;
+    }
+    .music-strip .pstrip-track {
+      gap: 10px;
+      animation-duration: 24s;
+      animation-direction: normal;
+    }
+    .music-strip .pstrip-track img {
+      width: 86px;
+      height: 86px;
+      border-radius: 10px;
+      opacity: 0.78;
+      filter: saturate(0.82) brightness(0.76);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.26);
+    }
+    .music-strip::before { background: linear-gradient(to right, rgba(9,4,12,0.96), transparent); }
+    .music-strip::after  { background: linear-gradient(to left, rgba(9,4,12,0.96), transparent); }
     @keyframes stripScroll {
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
@@ -1693,7 +1923,7 @@
   <!-- ======== S4: 家の空気 ======== -->
   <section class="section compact childhood memory-photo-scene" id="memoryPhotoScene" data-theme="void">
     <div class="memory-photo-bg" id="memoryPhotoBg" aria-hidden="true">
-      <img src="assets/childhood-rope.jpg" alt="" />
+      <img src="assets/childhood-bus-girls.jpg" alt="" style="--memory-photo-pos:58% 46%" />
     </div>
     <div>
       <h2 class="quote reveal">小学校1年生頃、<br />親が離婚。</h2>
@@ -1755,7 +1985,7 @@
       <p class="scene-label reveal">さらに幼少期に母から聞いた一言。</p>
       <h2 class="emotional-copy reveal">
         「あなたを産む前に<br />
-        下ろした子がいる」
+        堕ろした子がいる」
       </h2>
       <p class="body-copy reveal" style="line-height:2.55">
         この言葉が、無意識の深い場所に問いを残した。<br /><br />
@@ -1839,7 +2069,7 @@
   <section class="section compact teenage" id="wound" data-theme="night" data-ch="03" data-ch-name="WOUND">
     <div class="wave"></div>
     <figure class="photo soft dark reveal">
-      <img src="assets/after-divorce-1.jpg" alt="" />
+      <img src="assets/teenage-tug.jpg" alt="" style="object-position:52% 28%" />
     </figure>
     <div>
       <p class="eyebrow reveal">02 / teenage</p>
@@ -1875,7 +2105,10 @@
   </section>
 
   <!-- ======== S14: 狭い世界 ======== -->
-  <section class="section compact teenage" data-theme="night">
+  <section class="section compact teenage has-scroll-photo" id="teenageUniformScene" data-theme="night">
+    <div class="teenage-scroll-photo" id="teenageUniformPhoto" aria-hidden="true">
+      <img src="assets/teenage-uniform-girl.png" alt="" />
+    </div>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.55">
         中学入学式の次の日。<br /><br />
@@ -1894,7 +2127,10 @@
   </section>
 
   <!-- ======== S15: 地元への違和感 ======== -->
-  <section class="section compact teenage" data-theme="night">
+  <section class="section compact teenage has-landscape-memory" id="hometownScene" data-theme="night">
+    <div class="hometown-landscape" id="hometownLandscape" aria-hidden="true">
+      <img src="assets/hometown-street.png" alt="" />
+    </div>
     <div>
       <h2 class="quote reveal">ヒトと違う、<br />孤独。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
@@ -1923,6 +2159,22 @@
       </p>
       <div class="ribbon reveal" aria-hidden="true">
         <span>UTADA / RINGO / JUDY AND MARY / HI-STANDARD / HAWAIIAN6 / LIVE HOUSE / ROCK / </span>
+      </div>
+      <div class="pstrip music-strip reveal" aria-label="音楽の記憶">
+        <div class="pstrip-track">
+          <img src="assets/music-utada.jpg" alt="宇多田ヒカル">
+          <img src="assets/music-ringo-1.jpg" alt="椎名林檎">
+          <img src="assets/music-ringo-2.jpg" alt="椎名林檎">
+          <img src="assets/music-judy-mary.jpg" alt="JUDY AND MARY">
+          <img src="assets/music-histandard.jpg" alt="Hi-STANDARD">
+          <img src="assets/music-hawaiian6.jpg" alt="HAWAIIAN6">
+          <img src="assets/music-utada.jpg" alt="宇多田ヒカル">
+          <img src="assets/music-ringo-1.jpg" alt="椎名林檎">
+          <img src="assets/music-ringo-2.jpg" alt="椎名林檎">
+          <img src="assets/music-judy-mary.jpg" alt="JUDY AND MARY">
+          <img src="assets/music-histandard.jpg" alt="Hi-STANDARD">
+          <img src="assets/music-hawaiian6.jpg" alt="HAWAIIAN6">
+        </div>
       </div>
     </div>
   </section>
@@ -1974,7 +2226,10 @@
   </section>
 
   <!-- ======== S20: 音楽が教えたもの ======== -->
-  <section class="section compact teenage" data-theme="night">
+  <section class="section compact teenage has-music-memory" id="musicMemoryScene" data-theme="night">
+    <div class="music-memory-bg" id="musicMemoryBg" aria-hidden="true">
+      <img src="assets/IMG_3016.JPG" alt="" />
+    </div>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.55">
         同時に、音楽に救われる。<br /><br />
@@ -1992,7 +2247,10 @@
   </section>
 
   <!-- ======== S21: 自分を貫く ======== -->
-  <section class="section compact teenage" data-theme="night">
+  <section class="section compact teenage has-rocker-photo" id="rockerMindScene" data-theme="night">
+    <div class="rocker-photo" aria-hidden="true">
+      <img src="assets/rocker-twenties.jpg" alt="" />
+    </div>
     <div>
       <h2 class="quote reveal">自分を、<br />貫く。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
@@ -2009,7 +2267,10 @@
   </section>
 
   <!-- ======== S22: 広い世界へ ======== -->
-  <section class="section short teenage" data-theme="night">
+  <section class="section short teenage has-wide-world-gif" id="wideWorldScene" data-theme="night">
+    <div class="wide-world-gif" aria-hidden="true">
+      <img src="assets/wide-world-memory.gif" alt="" />
+    </div>
     <div>
       <h2 class="lead reveal">
         もっと広い世界で、<br /><br />
@@ -2018,7 +2279,6 @@
       <p class="body-copy sm reveal">
         世界中にファンがたくさんいる海外バンドなのに、<br />
         私の周りには、誰も好きな人がいない。<br /><br />
-        音楽は彼女に教えた。<br /><br />
         “違っていい”<br />
         “自分でいていい”<br />
         “自分の好きを貫いて良い”
@@ -2044,7 +2304,7 @@
   <section class="section" id="love" data-theme="hunger" data-ch="04" data-ch-name="LOVE">
     <div class="speed-lines"></div>
     <figure class="photo full dark reveal">
-      <img src="assets/twenties-2.jpg" alt="" />
+      <img src="assets/twenties-mirror-style.jpg" alt="" style="object-position:50% 54%" />
     </figure>
     <div>
       <p class="eyebrow reveal">03 / twenties</p>
@@ -2062,7 +2322,6 @@
   <!-- ======== S23b: 20代の空洞 ======== -->
   <section class="section short center-message" data-theme="hunger">
     <div>
-      <p class="scene-label reveal">the empty center</p>
       <h2 class="impact-text reveal">
         何を手に入れても、<br /><br />
         満たされない。
@@ -2071,7 +2330,10 @@
   </section>
 
   <!-- ======== S24: 証明する時代 ======== -->
-  <section class="section compact" data-theme="hunger">
+  <section class="section compact has-proof-portrait" id="proofEraScene" data-theme="hunger">
+    <div class="proof-portrait" aria-hidden="true">
+      <img src="assets/twenties-proof-portrait.jpg" alt="" />
+    </div>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.06rem;line-height:2.7">
         高級風俗嬢。<br />
@@ -2098,10 +2360,10 @@
         日経新聞を読み、<br />
         学び、挑戦し、<br />
         独自のものの見方で話す。<br /><br />
-        けれど彼女は、<br />
+        私は、<br />
         その経験を恥ではなく、<br /><br />
         ある意味で、<br />
-        人間探求として経験している。
+        人間探求として経験した。
       </p>
     </div>
   </section>
@@ -2126,7 +2388,10 @@
   </section>
 
   <!-- ======== S27: 役割を脱ぐ ======== -->
-  <section class="section compact" data-theme="hunger">
+  <section class="section compact memory-photo-scene" id="roleSceneSection" data-theme="hunger">
+    <div class="memory-photo-bg" id="roleSceneBg" aria-hidden="true">
+      <img src="assets/ChatGPT Image 2026年6月18日 16_31_16.png" alt="" style="--memory-photo-pos:50% 30%" />
+    </div>
     <div>
       <h2 class="quote reveal">人は、<br />どこまででも<br />人であった。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
@@ -2375,7 +2640,7 @@
         旦那さんは単身赴任になった。<br /><br />
         姉が妊娠した。<br />
         里帰り出産の面倒は、私がみた。<br /><br />
-        子どもを降ろせと言われたことは、<br />
+        子どもを堕ろせと言われたことは、<br />
         正直ずっと恨んでた。<br />
         許せなかった。<br /><br />
         でも、生まれてくる子どもは、<br />
@@ -2470,11 +2735,6 @@
         埋めようとしているだけ。<br />
         本当にやりたいことじゃない。
       </p>
-      <h2 class="quote reveal big-question" style="margin-top:56px">
-        人は、<br />
-        "変わる"んじゃない。<br /><br />
-        "思い出す"。
-      </h2>
     </div>
   </section>
 
@@ -2545,8 +2805,8 @@
 
   <!-- ======== S22: 今 ======== -->
   <section class="section tall rose" id="return" data-theme="rose" data-ch="09" data-ch-name="RETURN">
-    <figure class="photo full rose-f reveal blur-right-face">
-      <img src="assets/now-1.jpg" alt="" />
+    <figure class="photo full rose-f reveal">
+      <img src="assets/now-1-face-blur.jpg" alt="" />
     </figure>
     <div>
       <p class="eyebrow reveal">08 / now</p>
@@ -2774,7 +3034,75 @@
   })
     .fromTo('#memoryPhotoBg',
       { opacity:0, scale:1.1, y:28, filter:'blur(10px) saturate(0.68) brightness(0.42)' },
-      { opacity:.94, scale:1.01, y:0, filter:'blur(0.8px) saturate(1) brightness(0.88)', ease:'none' }
+      { opacity:.98, scale:1.01, y:0, filter:'blur(0.2px) saturate(1.04) brightness(0.98)', ease:'none' }
+    );
+
+  // ---- ROLE SCENE PHOTO BACKGROUND ----
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#roleSceneSection',
+      start: 'top 94%',
+      end: 'center 42%',
+      scrub: 0.9,
+    }
+  })
+    .fromTo('#roleSceneBg',
+      { opacity:0, scale:1.1, y:28, filter:'blur(10px) saturate(0.6) brightness(0.4)' },
+      { opacity:.6, scale:1.01, y:0, filter:'blur(1px) saturate(0.9) brightness(0.7)', ease:'none' }
+    );
+
+  // ---- TEENAGE MEMORY PHOTO ----
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#teenageUniformScene',
+      start: 'top 82%',
+      end: 'bottom 24%',
+      scrub: 1.2,
+    }
+  })
+    .fromTo('#teenageUniformPhoto',
+      { opacity:0, y:62, scale:0.92, filter:'blur(12px) saturate(0.64) brightness(0.42)' },
+      { opacity:0.62, y:0, scale:1.02, filter:'blur(0.4px) saturate(0.88) brightness(0.72)', ease:'none' }
+    )
+    .to('#teenageUniformPhoto',
+      { opacity:0.34, y:-18, scale:1.05, filter:'blur(2px) saturate(0.76) brightness(0.58)', ease:'none' },
+      0.78
+    );
+
+  // ---- HOMETOWN LANDSCAPE MEMORY ----
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#hometownScene',
+      start: 'top 86%',
+      end: 'bottom 18%',
+      scrub: 1.4,
+    }
+  })
+    .fromTo('#hometownLandscape',
+      { opacity:0, y:44, scale:1.1, filter:'grayscale(1) blur(9px) brightness(0.38) contrast(1.05)' },
+      { opacity:0.38, y:0, scale:1.02, filter:'grayscale(1) blur(2px) brightness(0.58) contrast(1.08)', ease:'none' }
+    )
+    .to('#hometownLandscape',
+      { opacity:0.18, y:-18, scale:1.04, filter:'grayscale(1) blur(4px) brightness(0.46) contrast(1.08)', ease:'none' },
+      0.78
+    );
+
+  // ---- MUSIC MEMORY BACKGROUND ----
+  gsap.timeline({
+    scrollTrigger: {
+      trigger: '#musicMemoryScene',
+      start: 'top 84%',
+      end: 'bottom 22%',
+      scrub: 1.3,
+    }
+  })
+    .fromTo('#musicMemoryBg',
+      { opacity:0, scale:1.1, rotate:-3, filter:'blur(10px) saturate(0.58) brightness(0.34)' },
+      { opacity:0.62, scale:1.015, rotate:-0.5, filter:'blur(1px) saturate(0.95) brightness(0.82)', ease:'none' }
+    )
+    .to('#musicMemoryBg',
+      { opacity:0.16, scale:1.05, rotate:1, filter:'blur(5px) saturate(0.68) brightness(0.4)', ease:'none' },
+      0.76
     );
 
   // ---- 背景キーワード（薄く・一瞬）----
@@ -2809,7 +3137,8 @@
     el.innerHTML = parts.map(part => {
       const text = part.replace(/\s+/g, ' ').trim();
       if (!text) return '<br />';
-      const line = `<span class="story-line" style="--line-index:${lineIndex}">${text}</span>`;
+      const emphasis = text.includes('お金がかかると迷惑をかける') ? ' story-emphasis' : '';
+      const line = `<span class="story-line${emphasis}" style="--line-index:${lineIndex}">${text}</span>`;
       lineIndex += 1;
       return line;
     }).join('<br />');
