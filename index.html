@@ -182,7 +182,26 @@
     }
 
     /* ===== CHAPTER INDICATOR ===== */
-    /* 古い #chap CSS は削除済み（.chapter-jumper に統一） */
+    #chap {
+      position: fixed; right: 14px; top: 50%;
+      transform: translateY(-50%);
+      z-index: 100; pointer-events: none;
+      display: flex; flex-direction: column;
+      align-items: flex-end; gap: 3px;
+    }
+    #chapNum {
+      color: var(--gold);
+      font-family: Georgia,serif;
+      font-size: 0.58rem; letter-spacing: 0.2em;
+      opacity: 0.45; transition: opacity 600ms;
+    }
+    #chapName {
+      color: var(--muted);
+      font-family: var(--sans);
+      font-size: 0.48rem; letter-spacing: 0.22em;
+      text-transform: uppercase;
+      opacity: 0.35; transition: opacity 600ms;
+    }
 
     /* ===== SECTIONS ===== */
     .section {
@@ -1709,427 +1728,242 @@
       #pageTurn { display:none; }
     }
     
-    /* ======== 章ナビゲーション（Chapter Jumper） ======== */
-    .chapter-jumper {
+    /* ======== 固定インジケーター ======== */
+    .chapter-indicator {
       position: fixed;
-      left: 16px;
-      bottom: calc(20px + env(safe-area-inset-bottom));
+      right: max(18px, env(safe-area-inset-right));
+      bottom: max(24px, env(safe-area-inset-bottom));
       z-index: 999;
       pointer-events: auto;
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
+      opacity: 1;
+      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+      width: min(210px, calc(100vw - 36px));
+      font-family: var(--sans);
     }
-
-    .chapter-toggle {
-      min-width: 118px;
-      padding: 10px 12px;
-      border: 1px solid rgba(234, 211, 162, 0.22);
+    .chapter-jump-toggle {
+      width: 100%;
+      padding: 14px 16px 13px;
+      border: 1px solid rgba(234,211,162,0.28);
       border-radius: 999px;
       background:
-        linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035)),
-        rgba(10, 5, 15, 0.42);
-      color: var(--ink);
-      box-shadow: 0 14px 44px rgba(0,0,0,0.24);
+        radial-gradient(circle at 88% 12%, rgba(240,169,189,0.18), transparent 44%),
+        linear-gradient(145deg, rgba(255,255,255,0.13), rgba(255,255,255,0.055)),
+        rgba(9,4,12,0.62);
+      color: inherit;
+      box-shadow: 0 18px 54px rgba(0,0,0,0.28);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
-      font-family: var(--sans);
-      text-align: right;
       cursor: pointer;
-      touch-action: manipulation;
-      border: none;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: transform 0.28s ease, border-color 0.28s ease, background 0.28s ease;
     }
-
-    .chapter-toggle-label {
-      display: block;
-      color: var(--gold);
-      font-size: 0.48rem;
-      letter-spacing: 0.22em;
-      line-height: 1.2;
-      opacity: 0.72;
+    .chapter-jump-toggle:hover,
+    .chapter-jump-toggle:focus-visible {
+      transform: translateY(-2px);
+      border-color: rgba(234,211,162,0.48);
+      outline: none;
     }
-
-    #chapNum {
-      display: block;
-      margin-top: 3px;
-      color: var(--gold);
+    .chapter-jump-toggle:active {
+      transform: scale(0.98);
+    }
+    .chapter-indicator-content {
+      display: grid;
+      gap: 5px;
+      min-width: 0;
+    }
+    .chapter-indicator-number {
+      font-size: 0.62rem;
+      line-height: 1.3;
+      letter-spacing: 0.08em;
+      color: rgba(255,248,244,0.64);
+      font-weight: 400;
+    }
+    .chapter-indicator-number span {
+      display: inline;
+      font-size: 1.05rem;
+      font-weight: 400;
+      color: rgba(234,211,162,0.8);
       font-family: Georgia, serif;
-      font-size: 0.64rem;
-      letter-spacing: 0.16em;
-      opacity: 0.9;
     }
-
-    #chapName {
-      display: block;
-      margin-top: 2px;
-      color: rgba(255, 248, 244, 0.74);
-      font-size: 0.5rem;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      opacity: 0.78;
+    .chapter-indicator-title {
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      line-height: 1.5;
+      color: rgba(255,248,244,0.76);
+      font-weight: 400;
+      transition: color 0.3s ease;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-
+    .chapter-indicator-icon {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(234,211,162,0.28);
+      display: grid;
+      place-items: center;
+      color: rgba(234,211,162,0.86);
+      font-family: Georgia, serif;
+      font-size: 1rem;
+      line-height: 1;
+      transition: transform 0.28s ease;
+    }
+    .chapter-indicator.is-open .chapter-indicator-icon {
+      transform: rotate(180deg);
+    }
+    .chapter-indicator-progress {
+      grid-column: 1 / -1;
+      width: calc(100% - 26px);
+      margin: 8px 13px 0;
+      height: 1px;
+      background: rgba(255,248,244,0.18);
+      border-radius: 1px;
+      overflow: hidden;
+    }
+    .chapter-indicator-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, rgba(234,211,162,0.4), rgba(234,211,162,0.8));
+      border-radius: 1px;
+      transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+      width: 12.5%;
+    }
     .chapter-jump-menu {
-      width: min(78vw, 280px);
-      max-height: min(62vh, 430px);
-      overflow-y: auto;
-      padding: 14px;
-      border: 1px solid rgba(234, 211, 162, 0.20);
-      border-radius: 26px 26px 8px 26px;
+      position: absolute;
+      right: 0;
+      bottom: calc(100% + 12px);
+      width: min(248px, calc(100vw - 36px));
+      padding: 10px;
+      border: 1px solid rgba(234,211,162,0.22);
+      border-radius: 22px;
       background:
-        radial-gradient(circle at 82% 12%, rgba(234, 211, 162, 0.12), transparent 12rem),
-        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
-        rgba(10, 5, 15, 0.72);
-      box-shadow: 0 24px 80px rgba(0,0,0,0.34);
+        radial-gradient(circle at 88% 6%, rgba(240,169,189,0.18), transparent 44%),
+        rgba(9,4,12,0.82);
+      box-shadow: 0 26px 72px rgba(0,0,0,0.36);
       backdrop-filter: blur(22px);
       -webkit-backdrop-filter: blur(22px);
       opacity: 0;
-      transform: translateY(12px) scale(0.96);
-      pointer-events: none;
-      transition:
-        opacity 320ms ease,
-        transform 320ms ease;
+      visibility: hidden;
+      transform: translateY(12px) scale(0.98);
+      transform-origin: right bottom;
+      transition: opacity 0.28s ease, visibility 0.28s ease, transform 0.28s ease;
     }
-
-    .chapter-jumper.is-open .chapter-jump-menu {
+    .chapter-indicator.is-open .chapter-jump-menu {
       opacity: 1;
-      transform: translateY(0) scale(1);
-      pointer-events: auto;
+      visibility: visible;
+      transform: none;
     }
-
-    .chapter-menu-title {
-      margin: 2px 4px 12px;
-      color: var(--gold);
-      font-family: var(--sans);
-      font-size: 0.58rem;
-      letter-spacing: 0.22em;
-      opacity: 0.74;
-    }
-
-    .chapter-jump-item {
-      width: 100%;
+    .chapter-jump-list {
       display: grid;
-      grid-template-columns: 34px 1fr;
-      column-gap: 10px;
-      row-gap: 2px;
-      align-items: center;
-      padding: 11px 10px;
-      border: 1px solid transparent;
-      border-radius: 16px;
-      background: transparent;
-      color: var(--ink);
-      font-family: var(--sans);
-      text-align: left;
-      cursor: pointer;
-      touch-action: manipulation;
-      border: none;
+      gap: 3px;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
-
-    .chapter-jump-item span {
-      grid-row: span 2;
-      color: var(--gold);
+    .chapter-jump-link {
+      display: grid;
+      grid-template-columns: 42px 1fr;
+      gap: 10px;
+      align-items: center;
+      min-height: 42px;
+      padding: 8px 10px;
+      border-radius: 14px;
+      color: rgba(255,248,244,0.74);
+      text-decoration: none;
+      transition: background 0.24s ease, color 0.24s ease, transform 0.24s ease;
+    }
+    .chapter-jump-link:hover,
+    .chapter-jump-link:focus-visible {
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,248,244,0.96);
+      outline: none;
+      transform: translateX(-2px);
+    }
+    .chapter-jump-link.is-active {
+      background: rgba(234,211,162,0.12);
+      color: rgba(255,248,244,0.98);
+    }
+    .chapter-jump-no {
+      color: rgba(234,211,162,0.82);
       font-family: Georgia, serif;
       font-size: 0.72rem;
-      letter-spacing: 0.08em;
-    }
-
-    .chapter-jump-item strong {
-      color: rgba(255,248,244,0.9);
-      font-size: 0.74rem;
       letter-spacing: 0.12em;
-      font-weight: 500;
     }
-
-    .chapter-jump-item em {
-      color: rgba(255,248,244,0.58);
-      font-size: 0.68rem;
-      line-height: 1.55;
-      font-style: normal;
-    }
-
-    .chapter-jump-item.is-active {
-      border-color: rgba(234, 211, 162, 0.26);
-      background: rgba(234, 211, 162, 0.08);
-    }
-
-    .chapter-jump-item:active {
-      transform: scale(0.98);
-    }
-
-    /* 明るい背景でも視認性を保つ */
-    body.is-light-chapter .chapter-toggle,
-    body.is-light-chapter .chapter-jump-menu {
-      border-color: rgba(77, 34, 48, 0.14);
-      background:
-        linear-gradient(145deg, rgba(255,255,255,0.58), rgba(255,255,255,0.24)),
-        rgba(255, 250, 250, 0.58);
-      color: #4d2230;
-    }
-
-    body.is-light-chapter #chapName,
-    body.is-light-chapter .chapter-jump-item strong {
-      color: rgba(77, 34, 48, 0.82);
-    }
-
-    body.is-light-chapter .chapter-jump-item em {
-      color: rgba(77, 34, 48, 0.62);
-    }
-    
-    /* モバイル対応 */
-    @media (max-width: 520px) {
-      .chapter-jumper {
-        right: 10px;
-        bottom: calc(14px + env(safe-area-inset-bottom));
-      }
-
-      .chapter-toggle {
-        min-width: 108px;
-        padding: 9px 10px;
-      }
-
-      .chapter-jump-menu {
-        width: min(84vw, 286px);
-        max-height: 58vh;
-      }
-    }
-    
-    /* ======== 学び枠（Learning Card） ======== */
-    .learning-card {
-      position: relative;
-      margin-top: 56px;
-      padding: 30px 26px 32px;
-      border: 1px solid rgba(234, 211, 162, 0.22);
-      border-radius: 30px 30px 30px 10px;
-      background:
-        radial-gradient(circle at 82% 12%, rgba(234, 211, 162, 0.13), transparent 12rem),
-        linear-gradient(145deg, rgba(255, 248, 244, 0.10), rgba(255, 248, 244, 0.035)),
-        rgba(10, 5, 15, 0.30);
-      box-shadow: 0 30px 86px rgba(0, 0, 0, 0.26);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      overflow: hidden;
-    }
-
-    .learning-card::before {
-      content: "";
-      position: absolute;
-      left: 26px;
-      top: 58px;
-      width: 44px;
-      height: 1px;
-      background: linear-gradient(90deg, var(--gold), transparent);
-      opacity: 0.55;
-    }
-
-    .learning-label {
-      margin: 0 0 30px;
-      color: var(--gold);
-      font-family: var(--sans);
-      font-size: 0.66rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-    }
-
-    .learning-card h3 {
-      margin: 0;
-      font-size: clamp(1.35rem, 6.2vw, 2rem);
-      font-weight: 400;
-      line-height: 1.7;
-      color: var(--ink);
-      text-wrap: balance;
-    }
-
-    .learning-card p:not(.learning-label) {
-      margin-top: 22px;
-      color: rgba(255, 250, 247, 0.80);
-      font-family: var(--sans);
-      font-size: 0.88rem;
-      line-height: 2.15;
-    }
-
-    /* 明るい背景の章でも読みやすくする */
-    [data-theme="light"] .learning-card,
-    [data-theme="rose"] .learning-card,
-    [data-theme="dawn"] .learning-card {
-      border-color: rgba(77, 34, 48, 0.14);
-      background:
-        radial-gradient(circle at 82% 12%, rgba(180, 58, 104, 0.10), transparent 12rem),
-        linear-gradient(145deg, rgba(255, 255, 255, 0.42), rgba(255, 255, 255, 0.18)),
-        rgba(255, 250, 250, 0.26);
-      color: #4d2230;
-      box-shadow: 0 28px 70px rgba(180, 58, 104, 0.13);
-    }
-
-    [data-theme="light"] .learning-label,
-    [data-theme="rose"] .learning-label,
-    [data-theme="dawn"] .learning-label {
-      color: rgba(77, 34, 48, 0.62);
-    }
-
-    [data-theme="light"] .learning-card h3,
-    [data-theme="rose"] .learning-card h3,
-    [data-theme="dawn"] .learning-card h3 {
-      color: #4d2230;
-    }
-
-    [data-theme="light"] .learning-card p:not(.learning-label),
-    [data-theme="rose"] .learning-card p:not(.learning-label),
-    [data-theme="dawn"] .learning-card p:not(.learning-label) {
-      color: rgba(77, 34, 48, 0.74);
-    }
-
-    /* ======== ビジョンセクション（Vision Section） ======== */
-    .vision-section {
-      position: relative;
-      overflow: hidden;
-    }
-
-    .vision-section::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      z-index: -2;
-      background:
-        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.34), transparent 18rem),
-        radial-gradient(circle at 80% 12%, rgba(234, 211, 162, 0.24), transparent 16rem),
-        radial-gradient(circle at 18% 70%, rgba(240, 169, 189, 0.22), transparent 18rem),
-        linear-gradient(180deg, rgba(255, 235, 229, 0.18), rgba(255, 248, 244, 0.72));
-      opacity: 0.9;
-    }
-
-    .vision-section::after {
-      content: "";
-      position: absolute;
-      right: -90px;
-      top: 80px;
-      width: 240px;
-      height: 240px;
-      border-radius: 50%;
-      z-index: -1;
-      background:
-        radial-gradient(circle at 32% 28%, rgba(255,255,255,0.88), rgba(234,211,162,0.42) 32%, rgba(240,169,189,0.16) 64%, transparent 72%);
-      box-shadow:
-        0 0 60px rgba(234, 211, 162, 0.22),
-        0 0 120px rgba(240, 169, 189, 0.18);
-      opacity: 0.7;
-      filter: blur(0.2px);
-    }
-
-    .vision-copy {
-      margin-top: 42px;
+    .chapter-jump-name {
       display: grid;
-      gap: 28px;
-      color: rgba(77, 34, 48, 0.82);
-      font-family: var(--serif);
-      font-size: clamp(1rem, 4.2vw, 1.18rem);
-      line-height: 2.15;
-      text-shadow: 0 1px 14px rgba(255,248,244,0.42);
+      gap: 1px;
+      min-width: 0;
     }
-
-    .vision-copy p {
-      margin: 0;
-    }
-
-    .vision-emphasis {
-      color: #4d2230 !important;
-      font-size: clamp(1.42rem, 6.4vw, 2.08rem) !important;
-      line-height: 1.85;
-      text-wrap: balance;
-    }
-
-    .vision-card {
-      position: relative;
-      margin-top: 64px;
-      padding: 34px 28px 36px;
-      border: 1px solid rgba(77, 34, 48, 0.14);
-      border-radius: 34px 34px 34px 10px;
-      background:
-        radial-gradient(circle at 82% 12%, rgba(234, 211, 162, 0.18), transparent 12rem),
-        linear-gradient(145deg, rgba(255,255,255,0.54), rgba(255,255,255,0.22)),
-        rgba(255,250,250,0.28);
-      color: #4d2230;
-      box-shadow: 0 30px 86px rgba(180, 58, 104, 0.14);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      overflow: hidden;
-    }
-
-    .vision-card::before {
-      content: "";
-      position: absolute;
-      left: 28px;
-      top: 62px;
-      width: 48px;
-      height: 1px;
-      background: linear-gradient(90deg, rgba(77,34,48,0.5), transparent);
-      opacity: 0.55;
-    }
-
-    .vision-card-label {
-      margin: 0 0 34px;
-      color: rgba(77, 34, 48, 0.58);
-      font-family: var(--sans);
-      font-size: 0.66rem;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-    }
-
-    .vision-card h3 {
-      margin: 0;
-      color: #4d2230;
-      font-size: clamp(1.55rem, 7vw, 2.25rem);
+    .chapter-jump-name strong {
+      font-size: 0.78rem;
       font-weight: 400;
-      line-height: 1.75;
-      text-wrap: balance;
+      letter-spacing: 0.08em;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-
-    .vision-card p:not(.vision-card-label) {
-      margin-top: 24px;
-      color: rgba(77, 34, 48, 0.74);
-      font-family: var(--sans);
-      font-size: 0.9rem;
-      line-height: 2.1;
+    .chapter-jump-name span {
+      color: rgba(255,248,244,0.52);
+      font-size: 0.66rem;
+      line-height: 1.35;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-
+    
+    /* テーマ別カラー調整 */
+    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-title,
+    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-title {
+      color: rgba(90,38,56,0.72);
+    }
+    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-number,
+    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number {
+      color: rgba(90,38,56,0.62);
+    }
+    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-number span,
+    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number span {
+      color: rgba(90,38,56,0.82);
+    }
+    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-progress,
+    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-progress {
+      background: rgba(90,38,56,0.15);
+    }
+    
     /* モバイル対応 */
     @media (max-width: 520px) {
-      .vision-section::after {
-        right: -112px;
-        top: 54px;
-        width: 220px;
-        height: 220px;
-        opacity: 0.58;
+      .chapter-indicator {
+        right: max(12px, env(safe-area-inset-right));
+        bottom: max(16px, env(safe-area-inset-bottom));
+        width: min(188px, calc(100vw - 24px));
       }
-
-      .vision-copy {
-        gap: 26px;
-        line-height: 2.05;
+      .chapter-jump-toggle {
+        padding: 12px 13px 11px;
+        gap: 9px;
       }
-
-      .vision-card {
-        margin-top: 56px;
-        padding: 30px 24px 32px;
+      .chapter-indicator-number {
+        font-size: 0.56rem;
       }
-    }
-      .learning-card {
-        margin-top: 40px;
-        padding: 24px 20px 28px;
-        border-radius: 24px 24px 24px 8px;
+      .chapter-indicator-title {
+        font-size: 0.72rem;
       }
-
-      .learning-label {
-        font-size: 0.62rem;
-        margin-bottom: 24px;
+      .chapter-indicator-icon {
+        width: 27px;
+        height: 27px;
       }
-
-      .learning-card h3 {
-        font-size: clamp(1.15rem, 5.8vw, 1.6rem);
+      .chapter-jump-menu {
+        width: min(230px, calc(100vw - 24px));
+        max-height: min(62svh, 438px);
+        overflow-y: auto;
+        border-radius: 18px;
       }
-
-      .learning-card p:not(.learning-label) {
-        font-size: 0.82rem;
-        line-height: 2;
+      .chapter-jump-link {
+        min-height: 40px;
+        grid-template-columns: 38px 1fr;
+        padding: 7px 9px;
       }
     }
   </style>
@@ -2330,16 +2164,6 @@
         人生は、足りないものを足して完成するものではなかった。<br />
         置き去りにした自分の声を、もう一度迎えに行く旅だった。
       </p>
-
-      <div class="learning-card reveal">
-        <p class="learning-label">WHAT REMAINS</p>
-        <h3>人生は、思い出すための旅だった。</h3>
-        <p>足りないものを足すのではなく、<br />
-        置き去りにした自分の声を<br />
-        もう一度、迎えに行く。<br />
-        <br />
-        そこに、人生の本当の意味があった。</p>
-      </div>
     </div>
   </section>
 
@@ -2499,16 +2323,6 @@
         安心を知らなかったから、安心を探し続けた。<br />
         愛を疑ったから、愛を見つけたときのあたたかさを忘れない。
       </p>
-
-      <div class="learning-card reveal">
-        <p class="learning-label">WHAT I LEARNED</p>
-        <h3>欠乏が、選択を教えてくれた。</h3>
-        <p>安心を知らなかったから、<br />
-        安心を探す力を持った。<br />
-        <br />
-        不足を感じたから、<br />
-        それを見分ける目を持った。</p>
-      </div>
     </div>
   </section>
 
@@ -2737,13 +2551,13 @@
     <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:48% 34%;--photo-bright:.4">
       <img src="assets/twenties-1.jpg" alt="" />
     </div>
-    <div class="learning-card reveal">
-      <p class="learning-label">WHAT I RECEIVED</p>
-      <h3>違和感は、自分を守るためのサインだった。</h3>
-      <p>合わせることもできた。<br />
-        馴染むこともできた。<br /><br />
-        けれど、自分の声を選んだ。<br />
-        その違和感は、間違いではなかった。</p>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">wound / what I received</p>
+      <h3>この経験から、私は知った。</h3>
+      <p>
+        違和感は、間違いではなかった。<br />
+        狭い世界で息ができない感覚は、広い世界へ向かう合図だった。
+      </p>
     </div>
   </section>
 
@@ -2926,13 +2740,13 @@
     <div class="memory-fragment" style="--fragment-opacity:.22;--photo-pos:50% 34%;--photo-bright:.46">
       <img src="assets/twenties-2.jpg" alt="" />
     </div>
-    <div class="learning-card reveal">
-      <p class="learning-label">WHAT WAS UNDERNEATH</p>
-      <h3>本当に欲しかったのは、<br />承認ではなく許可だった。</h3>
-      <p>人の弱さを見てきたから、<br />
-        人を役割で判断しなくなった。<br /><br />
-        探し続ける限り、埋まらないものがある。<br />
-        その問いが、次のステージへ導いた。</p>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">love / what was underneath</p>
+      <h3>愛されたい、の奥にあったもの。</h3>
+      <p>
+        証明したかったのは価値ではなく、存在していいという許可だった。<br />
+        人の弱さを見てきたから、人を役割だけで見なくなった。
+      </p>
     </div>
   </section>
 
@@ -3427,17 +3241,6 @@
         </p>
       </div>
     </div>
-
-    <div class="learning-card reveal" style="margin-top:80px">
-      <p class="learning-label">WHAT CHANGED</p>
-      <h3>守ることは、縛ることではなかった。</h3>
-      <p>子どもの命を守りながら、<br />
-        自分の命の炎までも<br />
-        消してはいけなかった。<br /><br />
-        役割に生きるのではなく、<br />
-        自分を生きること。<br />
-        その大切さを、彼が教えてくれた。</p>
-    </div>
   </section>
 
   <!-- ======== S63: 次章への橋渡し ======== -->
@@ -3473,16 +3276,6 @@
         埋めようとしているだけ。<br />
         本当にやりたいことじゃない。
       </p>
-    </div>
-
-    <div class="learning-card reveal" style="margin-top:60px">
-      <p class="learning-label">WHAT I FOUND</p>
-      <h3>本当の変化は、<br />思い出すことだった。</h3>
-      <p>足すのではなく、<br />
-        修正するのでもなく。<br /><br />
-        本来の自分を<br />
-        思い出すこと。<br />
-        そこに、次の扉があった。</p>
     </div>
   </section>
 
@@ -4102,18 +3895,6 @@
         歩み始めている。
       </h2>
     </div>
-
-    <div class="learning-card reveal" style="margin-top:60px">
-      <p class="learning-label">WHAT I REMEMBERED</p>
-      <h3>人は変わるんじゃない。<br />思い出すんだ。</h3>
-      <p>本来の自分を思い出したとき、<br />
-        人生はもう一度、<br />
-        自分のものになっていった。<br /><br />
-        安心していた感覚。<br />
-        好きだったもの。<br />
-        本当にやりたかったこと。<br />
-        すべてが戻ってきた。</p>
-    </div>
   </section>
 
   <!-- ======== Epilogue: 今・大切なこと・好きなもの・宣言 ======== -->
@@ -4146,108 +3927,13 @@
     <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:50% 30%;--photo-bright:.78;--photo-sat:1">
       <img src="assets/now-6.jpg" alt="" />
     </div>
-    <div class="learning-card reveal">
-      <p class="learning-label">MESSAGE</p>
-      <h3>私の人生の答えは、<br />私の中にある。</h3>
-      <p>遠回りした時間も、<br />
-        傷ついた記憶も、<br />
-        喜びも悲しみも、<br />
-        全部がここへつながっていた。<br /><br />
-        あなたの人生の答えも、<br />
-        あなたの中にある。</p>
-    </div>
-  </section>
-
-  <!-- ======== Chapter 8 (Vision): 私が目指す世界平和のかたち ======== -->
-  <section class="section vision-section tall" id="vision" data-theme="dawn" data-ch="08" data-ch-name="RETURN">
-    <div>
-      <p class="eyebrow reveal">VISION / WORLD I SEE</p>
-
-      <h2 class="quote reveal">
-        私が目指す、<br />
-        世界平和のかたち。
-      </h2>
-
-      <div class="vision-copy reveal">
-        <p class="vision-emphasis">
-          私が見たいのは、<br />
-          世界が愛にあふれる世界。
-        </p>
-
-        <p>
-          愛と光に満たされた世界。
-        </p>
-
-        <p>
-          すでに地球にある恵みに気づき、<br />
-          日々の豊かさを受け取り、<br />
-          地球環境を守り、育み、<br />
-          次の世代へ残していくこと。
-        </p>
-
-        <p>
-          私にとって、<br />
-          一番身近な世界平和は、
-        </p>
-
-        <p class="vision-emphasis">
-          子どもたちが今日も笑って、<br />
-          温かいご飯を食べて、<br />
-          安心して眠れること。
-        </p>
-
-        <p>
-          それが、当たり前にある世界。
-        </p>
-
-        <p>
-          争いそのものが悪いのではなく、<br />
-          人と人とが傷つけ合い、<br />
-          奪い合うことではなく、
-        </p>
-
-        <p>
-          否定せず、<br />
-          お互いを知り合い、<br />
-          言葉を介さずとも伝わる愛を感じ、<br />
-          尊重し合うこと。
-        </p>
-
-        <p>
-          それぞれの才能が巡り、<br />
-          織り成されていく世界。
-        </p>
-
-        <p>
-          本当にやりたいことを生きること。<br />
-          自分の喜びに生きること。<br />
-          自分の美学を追求すること。
-        </p>
-
-        <p>
-          そして、人生の終わりに、
-        </p>
-
-        <p class="vision-emphasis">
-          「自分に生まれてきてよかった」<br />
-          「あー楽しかった、幸せだった」
-        </p>
-
-        <p>
-          そう思える人を増やしたい。
-        </p>
-      </div>
-
-      <div class="vision-card reveal">
-        <p class="vision-card-label">MY VISION</p>
-        <h3>
-          たった一度の人生を、<br />
-          喜びに生きる人を増やしたい。
-        </h3>
-        <p>
-          それが、私が目指す世界平和のかたち。
-        </p>
-      </div>
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">return / message</p>
+      <h3>この人生の答えは、今の私の中にある。</h3>
+      <p>
+        遠回りした時間も、傷ついた記憶も、全部がここへつながっていた。<br />
+        あなたの人生にも、まだ言葉になっていない光がある。
+      </p>
     </div>
   </section>
 
@@ -4842,237 +4528,159 @@
 </script>
 
 <!-- ======== 固定インジケーター ======== -->
-<div id="chap" class="chapter-jumper" aria-label="章ナビゲーション">
-  <button
-    id="chapterToggle"
-    class="chapter-toggle"
-    type="button"
-    aria-expanded="false"
-    aria-controls="chapterJumpMenu"
-  >
-    <span class="chapter-toggle-label">CHAPTER</span>
-    <span id="chapNum">01 / 08</span>
-    <span id="chapName">PROLOGUE</span>
+<div id="chapterIndicator" class="chapter-indicator" aria-label="チャプター移動">
+  <button class="chapter-jump-toggle" id="chapterJumpToggle" type="button" aria-expanded="false" aria-controls="chapterJumpMenu">
+    <span class="chapter-indicator-content">
+      <span class="chapter-indicator-number">CHAPTER <span id="indicatorChNo">01</span> / 08</span>
+      <span class="chapter-indicator-title" id="indicatorChTitle">PROLOGUE</span>
+    </span>
+    <span class="chapter-indicator-icon" aria-hidden="true">⌃</span>
   </button>
-
-  <div id="chapterJumpMenu" class="chapter-jump-menu" aria-hidden="true">
-    <p class="chapter-menu-title">CHAPTERS</p>
-
-    <button class="chapter-jump-item" type="button" data-target="#prologueMoon" data-ch="01">
-      <span>01</span>
-      <strong>PROLOGUE</strong>
-      <em>探していたもの</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#memory" data-ch="02">
-      <span>02</span>
-      <strong>MEMORY</strong>
-      <em>幼少期</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#wound" data-ch="03">
-      <span>03</span>
-      <strong>WOUND</strong>
-      <em>傷と孤独</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#love" data-ch="04">
-      <span>04</span>
-      <strong>LOVE</strong>
-      <em>愛されたい私</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#mother" data-ch="05">
-      <span>05</span>
-      <strong>MOTHER</strong>
-      <em>守ること、自由でいること</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#break" data-ch="06">
-      <span>06</span>
-      <strong>STILLNESS</strong>
-      <em>変われない日々</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#remember" data-ch="07">
-      <span>07</span>
-      <strong>REMEMBER</strong>
-      <em>自分を思い出す</em>
-    </button>
-
-    <button class="chapter-jump-item" type="button" data-target="#return" data-ch="08">
-      <span>08</span>
-      <strong>RETURN</strong>
-      <em>自分に還る</em>
-    </button>
+  <div class="chapter-indicator-progress" aria-hidden="true">
+    <div class="chapter-indicator-progress-bar" id="indicatorProgressBar"></div>
+  </div>
+  <div class="chapter-jump-menu" id="chapterJumpMenu">
+    <ul class="chapter-jump-list" aria-label="章一覧">
+      <li><a class="chapter-jump-link" href="#prologueMoon" data-jump-ch="01"><span class="chapter-jump-no">01</span><span class="chapter-jump-name"><strong>PROLOGUE</strong><span>探していたもの</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#memory" data-jump-ch="02"><span class="chapter-jump-no">02</span><span class="chapter-jump-name"><strong>MEMORY</strong><span>幼少期</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#wound" data-jump-ch="03"><span class="chapter-jump-no">03</span><span class="chapter-jump-name"><strong>WOUND</strong><span>傷と孤独</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#love" data-jump-ch="04"><span class="chapter-jump-no">04</span><span class="chapter-jump-name"><strong>LOVE</strong><span>愛されたい私</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#mother" data-jump-ch="05"><span class="chapter-jump-no">05</span><span class="chapter-jump-name"><strong>MOTHER</strong><span>守ること、自由でいること</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#break" data-jump-ch="06"><span class="chapter-jump-no">06</span><span class="chapter-jump-name"><strong>STILLNESS</strong><span>変われない日々</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#remember" data-jump-ch="07"><span class="chapter-jump-no">07</span><span class="chapter-jump-name"><strong>REMEMBER</strong><span>自分を思い出す</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#return" data-jump-ch="08"><span class="chapter-jump-no">08</span><span class="chapter-jump-name"><strong>RETURN</strong><span>生まれてきてよかった</span></span></a></li>
+    </ul>
   </div>
 </div>
 
 <script>
-// 章インジケーター管理（画面中央判定版）
+// 章インジケーター管理
 (function() {
-  const chapterSections = [...document.querySelectorAll('[data-ch]')]
-    .filter(section => {
-      const ch = section.getAttribute('data-ch');
-      const n = Number(ch);
-      return n >= 1 && n <= 8;
-    });
+  const indicator = document.getElementById('chapterIndicator');
+  const toggle = document.getElementById('chapterJumpToggle');
+  const chNoEl = document.getElementById('indicatorChNo');
+  const chTitleEl = document.getElementById('indicatorChTitle');
+  const progressBarEl = document.getElementById('indicatorProgressBar');
+  const jumpLinks = [...document.querySelectorAll('.chapter-jump-link')];
   
-  const chapterNames = {
-    '01': 'PROLOGUE',
-    '02': 'MEMORY',
-    '03': 'WOUND',
-    '04': 'LOVE',
-    '05': 'MOTHER',
-    '06': 'STILLNESS',
-    '07': 'REMEMBER',
-    '08': 'RETURN',
-  };
+  // 第1～8章のセクション
+  const chapters = [
+    { ch: '01', name: 'PROLOGUE', el: document.getElementById('prologueMoon') },
+    { ch: '02', name: 'MEMORY', el: document.getElementById('memory') },
+    { ch: '03', name: 'WOUND', el: document.getElementById('wound') },
+    { ch: '04', name: 'LOVE', el: document.getElementById('love') },
+    { ch: '05', name: 'MOTHER', el: document.getElementById('mother') },
+    { ch: '06', name: 'STILLNESS', el: document.getElementById('break') },
+    { ch: '07', name: 'REMEMBER', el: document.getElementById('remember') },
+    { ch: '08', name: 'RETURN', el: document.getElementById('return') },
+  ];
   
   let currentChapter = '01';
-  const indicator = document.getElementById('chapterIndicator');
-  const heroEl = document.getElementById('chapterNav');
   let isHero = true;
+  let fadeTimer;
 
-  function getCurrentChapterByCenter() {
-    const viewportCenter = window.innerHeight * 0.5;
-    let closest = null;
-    let closestDistance = Infinity;
-    
-    chapterSections.forEach(section => {
-      const rect = section.getBoundingClientRect();
-      if (rect.bottom < 0 || rect.top > window.innerHeight) return;
-      
-      const sectionCenter = rect.top + rect.height * 0.5;
-      const distance = Math.abs(sectionCenter - viewportCenter);
-      
-      if (distance < closestDistance) {
-        closestDistance = distance;
-        closest = section;
+  // IntersectionObserver で現在の章を追跡
+  const observerOptions = {
+    threshold: 0.35,
+    rootMargin: '0px',
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const dataChName = entry.target.getAttribute('data-ch-name');
+        const dataCh = entry.target.getAttribute('data-ch');
+        
+        // 第1～8章のみを対象
+        if (dataCh && parseInt(dataCh) >= 1 && parseInt(dataCh) <= 8) {
+          if (currentChapter !== dataCh) {
+            currentChapter = dataCh;
+            updateIndicator();
+          }
+        }
       }
     });
-    
-    if (!closest) return;
-    
-    const nextChapter = closest.getAttribute('data-ch');
-    if (!nextChapter || nextChapter === currentChapter) return;
-    
-    currentChapter = nextChapter;
-    updateIndicator();
+  }, observerOptions);
+
+  // 各セクションを観察
+  chapters.forEach((ch) => {
+    if (ch.el) observer.observe(ch.el);
+  });
+
+  // ヒーロー（chapterNav）を観察
+  const heroEl = document.getElementById('chapterNav');
+  if (heroEl) {
+    observer.observe(heroEl);
   }
 
   function updateIndicator() {
-    const chNumEl = document.getElementById('chapNum');
-    const chNameEl = document.getElementById('chapName');
+    const ch = chapters.find(c => c.ch === currentChapter);
+    if (!ch) return;
+
+    // フェードアウト
+    clearTimeout(fadeTimer);
+    indicator.style.opacity = '0';
     
-    if (!chNumEl || !chNameEl) return;
-    
-    chNumEl.textContent = `${currentChapter} / 08`;
-    chNameEl.textContent = chapterNames[currentChapter] || '';
-    
-    // 章メニュー内の active 状態を更新
-    updateChapterMenuActive(currentChapter);
-    
-    // 明るい背景判定
-    const activeSection = document.querySelector(`[data-ch="${currentChapter}"]`);
-    const theme = activeSection?.getAttribute('data-theme');
-    
-    document.body.classList.toggle(
-      'is-light-chapter',
-      ['light', 'rose', 'dawn'].includes(theme)
-    );
+    fadeTimer = setTimeout(() => {
+      chNoEl.textContent = currentChapter;
+      chTitleEl.textContent = ch.name;
+      
+      // プログレスバーを更新
+      const progress = (parseInt(currentChapter) / 8) * 100;
+      progressBarEl.style.width = progress + '%';
+      jumpLinks.forEach((link) => {
+        link.classList.toggle('is-active', link.dataset.jumpCh === currentChapter);
+      });
+      
+      // フェードイン
+      indicator.style.opacity = '1';
+    }, 200);
   }
 
-  // スクロール時に章更新
-  window.addEventListener('scroll', () => {
-    // 画面中央の章を更新
-    getCurrentChapterByCenter();
-  }, { passive: true });
-
-  // リサイズ時も更新
-  window.addEventListener('resize', getCurrentChapterByCenter);
-
-  // 初期化
-  getCurrentChapterByCenter();
-  updateIndicator();
-})();
-
-// 章ナビゲーション機能（タップで移動）
-(function() {
-  const chapterToggle = document.getElementById('chapterToggle');
-  const chapterJumper = document.getElementById('chap');
-  const chapterJumpMenu = document.getElementById('chapterJumpMenu');
-  const chapterJumpItems = [...document.querySelectorAll('.chapter-jump-item')];
-
-  function openChapterMenu() {
-    if (!chapterJumper || !chapterToggle || !chapterJumpMenu) return;
-
-    chapterJumper.classList.add('is-open');
-    chapterToggle.setAttribute('aria-expanded', 'true');
-    chapterJumpMenu.setAttribute('aria-hidden', 'false');
+  function setMenuOpen(open) {
+    indicator.classList.toggle('is-open', open);
+    toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
 
-  function closeChapterMenu() {
-    if (!chapterJumper || !chapterToggle || !chapterJumpMenu) return;
-
-    chapterJumper.classList.remove('is-open');
-    chapterToggle.setAttribute('aria-expanded', 'false');
-    chapterJumpMenu.setAttribute('aria-hidden', 'true');
-  }
-
-  function toggleChapterMenu() {
-    if (!chapterJumper) return;
-
-    if (chapterJumper.classList.contains('is-open')) {
-      closeChapterMenu();
-    } else {
-      openChapterMenu();
-    }
-  }
-
-  function updateChapterMenuActive(chapter) {
-    chapterJumpItems.forEach(item => {
-      const isActive = item.dataset.ch === chapter;
-      item.classList.toggle('is-active', isActive);
-    });
-  }
-
-  // グローバルに updateChapterMenuActive を公開（既存の章更新処理から呼び出せるように）
-  window.updateChapterMenuActive = updateChapterMenuActive;
-
-  chapterToggle?.addEventListener('click', (event) => {
-    event.stopPropagation();
-    toggleChapterMenu();
+  toggle.addEventListener('click', () => {
+    setMenuOpen(!indicator.classList.contains('is-open'));
   });
 
-  chapterJumpItems.forEach(item => {
-    item.addEventListener('click', () => {
-      const targetSelector = item.dataset.target;
-      const target = document.querySelector(targetSelector);
-
+  jumpLinks.forEach((link) => {
+    link.addEventListener('click', (event) => {
+      const target = document.querySelector(link.getAttribute('href'));
       if (!target) return;
-
-      target.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
-      });
-
-      closeChapterMenu();
+      event.preventDefault();
+      currentChapter = link.dataset.jumpCh;
+      updateIndicator();
+      setMenuOpen(false);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      history.replaceState(null, '', link.getAttribute('href'));
     });
   });
 
   document.addEventListener('click', (event) => {
-    if (!chapterJumper) return;
-    if (!chapterJumper.contains(event.target)) {
-      closeChapterMenu();
-    }
+    if (!indicator.contains(event.target)) setMenuOpen(false);
   });
 
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape') {
-      closeChapterMenu();
-    }
+    if (event.key === 'Escape') setMenuOpen(false);
   });
+
+  // スクロール時にヒーロー判定
+  window.addEventListener('scroll', () => {
+    const heroPos = heroEl ? heroEl.getBoundingClientRect().bottom : 0;
+    const newIsHero = heroPos > window.innerHeight * 0.5;
+    
+    if (newIsHero !== isHero) {
+      isHero = newIsHero;
+      indicator.style.opacity = isHero ? '0.2' : '1';
+    }
+  }, { passive: true });
+
+  // 初期化
+  updateIndicator();
+  indicator.style.opacity = '0.2'; // ヒーロー時は薄く
 })();
 </script>
 
