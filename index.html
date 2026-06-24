@@ -1903,8 +1903,139 @@
       color: rgba(77, 34, 48, 0.74);
     }
 
+    /* ======== ビジョンセクション（Vision Section） ======== */
+    .vision-section {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .vision-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255, 255, 255, 0.34), transparent 18rem),
+        radial-gradient(circle at 80% 12%, rgba(234, 211, 162, 0.24), transparent 16rem),
+        radial-gradient(circle at 18% 70%, rgba(240, 169, 189, 0.22), transparent 18rem),
+        linear-gradient(180deg, rgba(255, 235, 229, 0.18), rgba(255, 248, 244, 0.72));
+      opacity: 0.9;
+    }
+
+    .vision-section::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: 80px;
+      width: 240px;
+      height: 240px;
+      border-radius: 50%;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 32% 28%, rgba(255,255,255,0.88), rgba(234,211,162,0.42) 32%, rgba(240,169,189,0.16) 64%, transparent 72%);
+      box-shadow:
+        0 0 60px rgba(234, 211, 162, 0.22),
+        0 0 120px rgba(240, 169, 189, 0.18);
+      opacity: 0.7;
+      filter: blur(0.2px);
+    }
+
+    .vision-copy {
+      margin-top: 42px;
+      display: grid;
+      gap: 28px;
+      color: rgba(77, 34, 48, 0.82);
+      font-family: var(--serif);
+      font-size: clamp(1rem, 4.2vw, 1.18rem);
+      line-height: 2.15;
+      text-shadow: 0 1px 14px rgba(255,248,244,0.42);
+    }
+
+    .vision-copy p {
+      margin: 0;
+    }
+
+    .vision-emphasis {
+      color: #4d2230 !important;
+      font-size: clamp(1.42rem, 6.4vw, 2.08rem) !important;
+      line-height: 1.85;
+      text-wrap: balance;
+    }
+
+    .vision-card {
+      position: relative;
+      margin-top: 64px;
+      padding: 34px 28px 36px;
+      border: 1px solid rgba(77, 34, 48, 0.14);
+      border-radius: 34px 34px 34px 10px;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(234, 211, 162, 0.18), transparent 12rem),
+        linear-gradient(145deg, rgba(255,255,255,0.54), rgba(255,255,255,0.22)),
+        rgba(255,250,250,0.28);
+      color: #4d2230;
+      box-shadow: 0 30px 86px rgba(180, 58, 104, 0.14);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      overflow: hidden;
+    }
+
+    .vision-card::before {
+      content: "";
+      position: absolute;
+      left: 28px;
+      top: 62px;
+      width: 48px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(77,34,48,0.5), transparent);
+      opacity: 0.55;
+    }
+
+    .vision-card-label {
+      margin: 0 0 34px;
+      color: rgba(77, 34, 48, 0.58);
+      font-family: var(--sans);
+      font-size: 0.66rem;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+    }
+
+    .vision-card h3 {
+      margin: 0;
+      color: #4d2230;
+      font-size: clamp(1.55rem, 7vw, 2.25rem);
+      font-weight: 400;
+      line-height: 1.75;
+      text-wrap: balance;
+    }
+
+    .vision-card p:not(.vision-card-label) {
+      margin-top: 24px;
+      color: rgba(77, 34, 48, 0.74);
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      line-height: 2.1;
+    }
+
     /* モバイル対応 */
     @media (max-width: 520px) {
+      .vision-section::after {
+        right: -112px;
+        top: 54px;
+        width: 220px;
+        height: 220px;
+        opacity: 0.58;
+      }
+
+      .vision-copy {
+        gap: 26px;
+        line-height: 2.05;
+      }
+
+      .vision-card {
+        margin-top: 56px;
+        padding: 30px 24px 32px;
+      }
+    }
       .learning-card {
         margin-top: 40px;
         padding: 24px 20px 28px;
@@ -3948,6 +4079,99 @@
         全部がここへつながっていた。<br /><br />
         あなたの人生の答えも、<br />
         あなたの中にある。</p>
+    </div>
+  </section>
+
+  <!-- ======== Chapter 8 (Vision): 私が目指す世界平和のかたち ======== -->
+  <section class="section vision-section tall" id="vision" data-theme="dawn" data-ch="08" data-ch-name="RETURN">
+    <div>
+      <p class="eyebrow reveal">VISION / WORLD I SEE</p>
+
+      <h2 class="quote reveal">
+        私が目指す、<br />
+        世界平和のかたち。
+      </h2>
+
+      <div class="vision-copy reveal">
+        <p class="vision-emphasis">
+          私が見たいのは、<br />
+          世界が愛にあふれる世界。
+        </p>
+
+        <p>
+          愛と光に満たされた世界。
+        </p>
+
+        <p>
+          すでに地球にある恵みに気づき、<br />
+          日々の豊かさを受け取り、<br />
+          地球環境を守り、育み、<br />
+          次の世代へ残していくこと。
+        </p>
+
+        <p>
+          私にとって、<br />
+          一番身近な世界平和は、
+        </p>
+
+        <p class="vision-emphasis">
+          子どもたちが今日も笑って、<br />
+          温かいご飯を食べて、<br />
+          安心して眠れること。
+        </p>
+
+        <p>
+          それが、当たり前にある世界。
+        </p>
+
+        <p>
+          争いそのものが悪いのではなく、<br />
+          人と人とが傷つけ合い、<br />
+          奪い合うことではなく、
+        </p>
+
+        <p>
+          否定せず、<br />
+          お互いを知り合い、<br />
+          言葉を介さずとも伝わる愛を感じ、<br />
+          尊重し合うこと。
+        </p>
+
+        <p>
+          それぞれの才能が巡り、<br />
+          織り成されていく世界。
+        </p>
+
+        <p>
+          本当にやりたいことを生きること。<br />
+          自分の喜びに生きること。<br />
+          自分の美学を追求すること。
+        </p>
+
+        <p>
+          そして、人生の終わりに、
+        </p>
+
+        <p class="vision-emphasis">
+          「自分に生まれてきてよかった」<br />
+          「あー楽しかった、幸せだった」
+        </p>
+
+        <p>
+          そう思える人を増やしたい。
+        </p>
+      </div>
+
+      <div class="vision-card reveal">
+        <p class="vision-card-label">MY VISION</p>
+        <h3>
+          たった一度の人生を、<br />
+          喜びに生きる人を増やしたい。
+        </h3>
+        <p>
+          それが、私が目指す世界平和のかたち。
+        </p>
+      </div>
     </div>
   </section>
 
