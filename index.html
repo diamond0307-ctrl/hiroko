@@ -1728,93 +1728,188 @@
       #pageTurn { display:none; }
     }
     
-    /* ======== 固定インジケーター ======== */
-    .chapter-indicator {
+    /* ======== 章ナビゲーション（Chapter Jumper） ======== */
+    .chapter-jumper {
       position: fixed;
-      right: 24px;
-      bottom: 32px;
-      z-index: 999;
-      pointer-events: none;
-      opacity: 1;
-      transition: opacity 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
-      width: 140px;
+      right: 14px;
+      bottom: calc(18px + env(safe-area-inset-bottom));
+      z-index: 120;
+      pointer-events: auto;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 10px;
     }
-    .chapter-indicator-content {
-      display: grid;
-      gap: 16px;
-      text-align: right;
+
+    .chapter-toggle {
+      min-width: 118px;
+      padding: 10px 12px;
+      border: 1px solid rgba(234, 211, 162, 0.22);
+      border-radius: 999px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.10), rgba(255,255,255,0.035)),
+        rgba(10, 5, 15, 0.42);
+      color: var(--ink);
+      box-shadow: 0 14px 44px rgba(0,0,0,0.24);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       font-family: var(--sans);
+      text-align: right;
+      cursor: pointer;
+      touch-action: manipulation;
+      border: none;
     }
-    .chapter-indicator-number {
-      font-size: clamp(0.65rem, 2.5vw, 0.78rem);
-      line-height: 1.3;
-      letter-spacing: 0.08em;
-      color: rgba(255,248,244,0.64);
-      font-weight: 400;
+
+    .chapter-toggle-label {
+      display: block;
+      color: var(--gold);
+      font-size: 0.48rem;
+      letter-spacing: 0.22em;
+      line-height: 1.2;
+      opacity: 0.72;
     }
-    .chapter-indicator-number span {
-      display: inline;
-      font-size: clamp(1.1rem, 4.2vw, 1.4rem);
-      font-weight: 400;
-      color: rgba(234,211,162,0.8);
+
+    #chapNum {
+      display: block;
+      margin-top: 3px;
+      color: var(--gold);
       font-family: Georgia, serif;
+      font-size: 0.64rem;
+      letter-spacing: 0.16em;
+      opacity: 0.9;
     }
-    .chapter-indicator-title {
-      font-size: clamp(0.82rem, 3vw, 1rem);
-      letter-spacing: 0.06em;
-      line-height: 1.5;
-      color: rgba(255,248,244,0.76);
-      font-weight: 400;
-      transition: color 0.3s ease;
+
+    #chapName {
+      display: block;
+      margin-top: 2px;
+      color: rgba(255, 248, 244, 0.74);
+      font-size: 0.5rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      opacity: 0.78;
     }
-    .chapter-indicator-progress {
+
+    .chapter-jump-menu {
+      width: min(78vw, 280px);
+      max-height: min(62vh, 430px);
+      overflow-y: auto;
+      padding: 14px;
+      border: 1px solid rgba(234, 211, 162, 0.20);
+      border-radius: 26px 26px 8px 26px;
+      background:
+        radial-gradient(circle at 82% 12%, rgba(234, 211, 162, 0.12), transparent 12rem),
+        linear-gradient(145deg, rgba(255,255,255,0.12), rgba(255,255,255,0.04)),
+        rgba(10, 5, 15, 0.72);
+      box-shadow: 0 24px 80px rgba(0,0,0,0.34);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+      opacity: 0;
+      transform: translateY(12px) scale(0.96);
+      pointer-events: none;
+      transition:
+        opacity 320ms ease,
+        transform 320ms ease;
+    }
+
+    .chapter-jumper.is-open .chapter-jump-menu {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+      pointer-events: auto;
+    }
+
+    .chapter-menu-title {
+      margin: 2px 4px 12px;
+      color: var(--gold);
+      font-family: var(--sans);
+      font-size: 0.58rem;
+      letter-spacing: 0.22em;
+      opacity: 0.74;
+    }
+
+    .chapter-jump-item {
       width: 100%;
-      height: 1px;
-      background: rgba(255,248,244,0.18);
-      border-radius: 1px;
-      overflow: hidden;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      column-gap: 10px;
+      row-gap: 2px;
+      align-items: center;
+      padding: 11px 10px;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--sans);
+      text-align: left;
+      cursor: pointer;
+      touch-action: manipulation;
+      border: none;
     }
-    .chapter-indicator-progress-bar {
-      height: 100%;
-      background: linear-gradient(90deg, rgba(234,211,162,0.4), rgba(234,211,162,0.8));
-      border-radius: 1px;
-      transition: width 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-      width: 12.5%;
+
+    .chapter-jump-item span {
+      grid-row: span 2;
+      color: var(--gold);
+      font-family: Georgia, serif;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
     }
-    
-    /* テーマ別カラー調整 */
-    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-title,
-    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-title {
-      color: rgba(90,38,56,0.72);
+
+    .chapter-jump-item strong {
+      color: rgba(255,248,244,0.9);
+      font-size: 0.74rem;
+      letter-spacing: 0.12em;
+      font-weight: 500;
     }
-    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-number,
-    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number {
-      color: rgba(90,38,56,0.62);
+
+    .chapter-jump-item em {
+      color: rgba(255,248,244,0.58);
+      font-size: 0.68rem;
+      line-height: 1.55;
+      font-style: normal;
     }
-    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-number span,
-    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number span {
-      color: rgba(90,38,56,0.82);
+
+    .chapter-jump-item.is-active {
+      border-color: rgba(234, 211, 162, 0.26);
+      background: rgba(234, 211, 162, 0.08);
     }
-    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-progress,
-    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-progress {
-      background: rgba(90,38,56,0.15);
+
+    .chapter-jump-item:active {
+      transform: scale(0.98);
+    }
+
+    /* 明るい背景でも視認性を保つ */
+    body.is-light-chapter .chapter-toggle,
+    body.is-light-chapter .chapter-jump-menu {
+      border-color: rgba(77, 34, 48, 0.14);
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.58), rgba(255,255,255,0.24)),
+        rgba(255, 250, 250, 0.58);
+      color: #4d2230;
+    }
+
+    body.is-light-chapter #chapName,
+    body.is-light-chapter .chapter-jump-item strong {
+      color: rgba(77, 34, 48, 0.82);
+    }
+
+    body.is-light-chapter .chapter-jump-item em {
+      color: rgba(77, 34, 48, 0.62);
     }
     
     /* モバイル対応 */
     @media (max-width: 520px) {
-      .chapter-indicator {
-        right: 16px;
-        bottom: 24px;
-        width: 120px;
+      .chapter-jumper {
+        right: 10px;
+        bottom: calc(14px + env(safe-area-inset-bottom));
       }
-      .chapter-indicator-content {
-        gap: 12px;
+
+      .chapter-toggle {
+        min-width: 108px;
+        padding: 9px 10px;
       }
-      .chapter-indicator-number {
-        font-size: 0.62rem;
-      }
-      .chapter-indicator-title {
-        font-size: 0.78rem;
+
+      .chapter-jump-menu {
+        width: min(84vw, 286px);
+        max-height: 58vh;
       }
     }
     
@@ -4766,13 +4861,69 @@
 </script>
 
 <!-- ======== 固定インジケーター ======== -->
-<div id="chapterIndicator" class="chapter-indicator" aria-label="現在の章">
-  <div class="chapter-indicator-content">
-    <div class="chapter-indicator-number">CHAPTER<br /><span id="indicatorChNo">01</span> / 08</div>
-    <div class="chapter-indicator-title" id="indicatorChTitle">PROLOGUE</div>
-    <div class="chapter-indicator-progress">
-      <div class="chapter-indicator-progress-bar" id="indicatorProgressBar"></div>
-    </div>
+<div id="chap" class="chapter-jumper" aria-label="章ナビゲーション">
+  <button
+    id="chapterToggle"
+    class="chapter-toggle"
+    type="button"
+    aria-expanded="false"
+    aria-controls="chapterJumpMenu"
+  >
+    <span class="chapter-toggle-label">CHAPTER</span>
+    <span id="chapNum">01 / 08</span>
+    <span id="chapName">PROLOGUE</span>
+  </button>
+
+  <div id="chapterJumpMenu" class="chapter-jump-menu" aria-hidden="true">
+    <p class="chapter-menu-title">CHAPTERS</p>
+
+    <button class="chapter-jump-item" type="button" data-target="#prologueMoon" data-ch="01">
+      <span>01</span>
+      <strong>PROLOGUE</strong>
+      <em>探していたもの</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#memory" data-ch="02">
+      <span>02</span>
+      <strong>MEMORY</strong>
+      <em>幼少期</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#wound" data-ch="03">
+      <span>03</span>
+      <strong>WOUND</strong>
+      <em>傷と孤独</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#love" data-ch="04">
+      <span>04</span>
+      <strong>LOVE</strong>
+      <em>愛されたい私</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#mother" data-ch="05">
+      <span>05</span>
+      <strong>MOTHER</strong>
+      <em>守ること、自由でいること</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#break" data-ch="06">
+      <span>06</span>
+      <strong>STILLNESS</strong>
+      <em>変われない日々</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#remember" data-ch="07">
+      <span>07</span>
+      <strong>REMEMBER</strong>
+      <em>自分を思い出す</em>
+    </button>
+
+    <button class="chapter-jump-item" type="button" data-target="#return" data-ch="08">
+      <span>08</span>
+      <strong>RETURN</strong>
+      <em>自分に還る</em>
+    </button>
   </div>
 </div>
 
@@ -4830,39 +4981,29 @@
   }
 
   function updateIndicator() {
-    const chNoEl = document.getElementById('indicatorChNo');
-    const chTitleEl = document.getElementById('indicatorChTitle');
-    const progressBarEl = document.getElementById('indicatorProgressBar');
+    const chNumEl = document.getElementById('chapNum');
+    const chNameEl = document.getElementById('chapName');
     
-    if (!chNoEl || !chTitleEl || !progressBarEl) return;
+    if (!chNumEl || !chNameEl) return;
     
-    // フェードアウト
-    indicator.style.opacity = '0';
+    chNumEl.textContent = `${currentChapter} / 08`;
+    chNameEl.textContent = chapterNames[currentChapter] || '';
     
-    setTimeout(() => {
-      chNoEl.textContent = currentChapter;
-      chTitleEl.textContent = chapterNames[currentChapter] || '';
-      
-      // プログレスバーを更新
-      const progress = (Number(currentChapter) / 8) * 100;
-      progressBarEl.style.width = progress + '%';
-      
-      // フェードイン
-      indicator.style.opacity = isHero ? '0.2' : '1';
-    }, 150);
+    // 章メニュー内の active 状態を更新
+    updateChapterMenuActive(currentChapter);
+    
+    // 明るい背景判定
+    const activeSection = document.querySelector(`[data-ch="${currentChapter}"]`);
+    const theme = activeSection?.getAttribute('data-theme');
+    
+    document.body.classList.toggle(
+      'is-light-chapter',
+      ['light', 'rose', 'dawn'].includes(theme)
+    );
   }
 
-  // スクロール時にヒーロー判定＆章更新
+  // スクロール時に章更新
   window.addEventListener('scroll', () => {
-    // ヒーロー判定
-    const heroPos = heroEl ? heroEl.getBoundingClientRect().bottom : 0;
-    const newIsHero = heroPos > window.innerHeight * 0.5;
-    
-    if (newIsHero !== isHero) {
-      isHero = newIsHero;
-      indicator.style.opacity = isHero ? '0.2' : '1';
-    }
-    
     // 画面中央の章を更新
     getCurrentChapterByCenter();
   }, { passive: true });
@@ -4873,6 +5014,84 @@
   // 初期化
   getCurrentChapterByCenter();
   updateIndicator();
+})();
+
+// 章ナビゲーション機能（タップで移動）
+(function() {
+  const chapterToggle = document.getElementById('chapterToggle');
+  const chapterJumper = document.getElementById('chap');
+  const chapterJumpMenu = document.getElementById('chapterJumpMenu');
+  const chapterJumpItems = [...document.querySelectorAll('.chapter-jump-item')];
+
+  function openChapterMenu() {
+    if (!chapterJumper || !chapterToggle || !chapterJumpMenu) return;
+
+    chapterJumper.classList.add('is-open');
+    chapterToggle.setAttribute('aria-expanded', 'true');
+    chapterJumpMenu.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeChapterMenu() {
+    if (!chapterJumper || !chapterToggle || !chapterJumpMenu) return;
+
+    chapterJumper.classList.remove('is-open');
+    chapterToggle.setAttribute('aria-expanded', 'false');
+    chapterJumpMenu.setAttribute('aria-hidden', 'true');
+  }
+
+  function toggleChapterMenu() {
+    if (!chapterJumper) return;
+
+    if (chapterJumper.classList.contains('is-open')) {
+      closeChapterMenu();
+    } else {
+      openChapterMenu();
+    }
+  }
+
+  function updateChapterMenuActive(chapter) {
+    chapterJumpItems.forEach(item => {
+      const isActive = item.dataset.ch === chapter;
+      item.classList.toggle('is-active', isActive);
+    });
+  }
+
+  // グローバルに updateChapterMenuActive を公開（既存の章更新処理から呼び出せるように）
+  window.updateChapterMenuActive = updateChapterMenuActive;
+
+  chapterToggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    toggleChapterMenu();
+  });
+
+  chapterJumpItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const targetSelector = item.dataset.target;
+      const target = document.querySelector(targetSelector);
+
+      if (!target) return;
+
+      target.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+
+      closeChapterMenu();
+    });
+  });
+
+  document.addEventListener('click', (event) => {
+    if (!chapterJumper) return;
+    if (!chapterJumper.contains(event.target)) {
+      closeChapterMenu();
+    }
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      closeChapterMenu();
+    }
+  });
 })();
 </script>
 
