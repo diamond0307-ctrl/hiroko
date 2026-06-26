@@ -8,8 +8,8 @@
   <meta property="og:title" content="HIROKO｜生まれてきてよかった、を思い出す旅" />
   <meta property="og:description" content="Netflixドキュメンタリー × 人生エッセイ × ドキュメンタリー型LP" />
   <meta property="og:type" content="website" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="assets/gsap.min.js"></script>
+  <script src="assets/ScrollTrigger.min.js"></script>
   <style>
     :root {
       color-scheme: dark;
@@ -1424,6 +1424,327 @@
     .pmosaic img:nth-child(2),
     .pmosaic img:nth-child(3) { aspect-ratio: 1; }
     .pmosaic img:nth-child(4) { grid-column: 1 / -1; aspect-ratio: 3/1; }
+
+    /* ===== CINEMATIC PASS: CHAPTER 5+ ===== */
+    .section.cinema-loss,
+    .section.cinema-return,
+    .section.cinema-world,
+    .section.cinema-healing,
+    .section.cinema-vision {
+      isolation: isolate;
+    }
+    .section.cinema-loss > div,
+    .section.cinema-return > div,
+    .section.cinema-world > div,
+    .section.cinema-healing > div,
+    .section.cinema-vision > div {
+      position: relative;
+      z-index: 3;
+    }
+    .section.cinema-loss {
+      background:
+        radial-gradient(ellipse at 50% 118%, rgba(117,126,145,0.1), transparent 52%),
+        linear-gradient(180deg, rgba(6,8,14,0.18), rgba(2,3,7,0.5));
+    }
+    .section.cinema-loss::before {
+      display: block;
+      content: "";
+      position: absolute;
+      inset: -18%;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        repeating-radial-gradient(ellipse at 50% 84%, rgba(210,224,238,0.14) 0 1px, transparent 2px 18px),
+        linear-gradient(180deg, transparent 0 40%, rgba(4,8,15,0.72));
+      opacity: 0.18;
+      transform: translateY(var(--water-drift, 0px)) scale(1.05);
+      filter: blur(0.2px);
+    }
+    .section.cinema-loss .photo {
+      filter: saturate(0.64) brightness(0.72) contrast(1.04);
+      opacity: 0.62;
+    }
+    .section.cinema-loss.is-visible .photo img {
+      animation: kenBurnsLoss 18s ease-in-out forwards;
+    }
+    .cinema-loss .photo::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.24) 58%, rgba(255,255,255,0));
+      opacity: 0;
+      animation: lossBleach 13s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+    .cinema-crack {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0;
+      mix-blend-mode: screen;
+      background:
+        linear-gradient(116deg, transparent 0 44%, rgba(255,255,255,0.18) 44.15%, transparent 44.5%),
+        linear-gradient(72deg, transparent 0 61%, rgba(255,255,255,0.12) 61.1%, transparent 61.42%);
+      transition: opacity 2.2s ease;
+    }
+    .section.is-visible .cinema-crack { opacity: 0.32; }
+
+    .section.cinema-return {
+      background:
+        radial-gradient(circle at 48% 36%, rgba(234,211,162,0.12), transparent 22rem),
+        linear-gradient(180deg, rgba(24,18,28,0.2), rgba(53,39,46,0.1));
+    }
+    .section.cinema-return::before {
+      display: block;
+      content: "";
+      position: absolute;
+      inset: -12%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.24;
+      background-image:
+        radial-gradient(circle, rgba(234,211,162,0.62) 0 1px, transparent 1.5px),
+        radial-gradient(circle, rgba(255,248,244,0.22) 0 1px, transparent 1.4px);
+      background-size: 92px 130px, 148px 190px;
+      animation: goldGather 9s ease-in-out infinite alternate;
+    }
+    .section.cinema-return .reveal {
+      transform: translateY(28px);
+      filter: blur(12px);
+      transition: opacity 1.8s cubic-bezier(.2,.72,.2,1), transform 1.8s cubic-bezier(.2,.72,.2,1), filter 1.8s ease;
+    }
+    .section.cinema-return.is-visible .reveal {
+      filter: blur(0);
+    }
+
+    .world-map-line {
+      position: absolute;
+      inset: 8% -6% auto;
+      height: 42svh;
+      z-index: 0;
+      opacity: 0.16;
+      pointer-events: none;
+    }
+    .world-map-line svg {
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .travel-route {
+      fill: none;
+      stroke: rgba(234,211,162,0.72);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      stroke-dasharray: 540;
+      stroke-dashoffset: 540;
+      filter: drop-shadow(0 0 10px rgba(234,211,162,0.16));
+    }
+    .section.is-visible .travel-route {
+      animation: routeDraw 7.5s ease-in-out forwards;
+    }
+    .travel-lanes {
+      display: grid;
+      gap: 10px;
+      margin: 38px -32px 0;
+      overflow: hidden;
+      position: relative;
+      z-index: 2;
+    }
+    .travel-lanes::before,
+    .travel-lanes::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 52px;
+      z-index: 3;
+      pointer-events: none;
+    }
+    .travel-lanes::before { left: 0; background: linear-gradient(90deg, rgba(21,12,18,0.94), transparent); }
+    .travel-lanes::after { right: 0; background: linear-gradient(270deg, rgba(21,12,18,0.94), transparent); }
+    .travel-lane {
+      display: flex;
+      width: max-content;
+      gap: 10px;
+      animation: travelLane 36s linear infinite;
+      will-change: transform;
+    }
+    .travel-lane.reverse {
+      animation-name: travelLaneReverse;
+      animation-duration: 42s;
+    }
+    .travel-lane img {
+      width: 168px;
+      height: 112px;
+      object-fit: cover;
+      border-radius: 7px;
+      opacity: 0.78;
+      filter: saturate(0.86) brightness(0.82);
+      box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+    }
+    .section.cinema-world .photo img,
+    .section.cinema-healing .photo img,
+    .section.cinema-return .photo img,
+    .section.cinema-vision .photo img {
+      animation: kenBurnsSoft 22s ease-in-out infinite alternate;
+      will-change: transform;
+    }
+
+    .section.cinema-healing {
+      background:
+        radial-gradient(ellipse at 50% 8%, rgba(186,222,214,0.12), transparent 28rem),
+        linear-gradient(180deg, rgba(9,11,18,0.16), rgba(18,14,27,0.18));
+    }
+    .section.cinema-healing::before {
+      display: block;
+      content: "";
+      position: absolute;
+      inset: -20%;
+      z-index: 0;
+      pointer-events: none;
+      opacity: 0.22;
+      background:
+        conic-gradient(from 120deg at 50% 46%, transparent, rgba(143,217,202,0.28), rgba(196,156,225,0.22), transparent 42%),
+        radial-gradient(circle at 48% 52%, rgba(255,248,244,0.08), transparent 26rem);
+      filter: blur(28px);
+      animation: auroraBreath 10s ease-in-out infinite alternate;
+    }
+    .section.cinema-healing .reveal {
+      transition-duration: 1.7s;
+    }
+
+    .vision-mosaic {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      grid-auto-rows: 10svh;
+      opacity: 0;
+      filter: saturate(0.82) brightness(0.82);
+      transition: opacity 3.2s ease;
+      pointer-events: none;
+    }
+    .section.is-visible .vision-mosaic { opacity: 0.34; }
+    .vision-mosaic img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transform: scale(1.06);
+      animation: mosaicArrive 7s ease forwards;
+      animation-delay: calc(var(--i) * 55ms);
+    }
+    .vision-mosaic::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 50% 42%, rgba(255,255,255,0.12), transparent 26rem),
+        linear-gradient(180deg, rgba(255,246,241,0.1), rgba(255,246,241,0.68));
+    }
+    .vision-earth {
+      width: min(58vw, 280px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      margin: 0 auto 48px;
+      opacity: 0.72;
+      background:
+        radial-gradient(circle at 34% 26%, rgba(255,255,255,0.72), transparent 10%),
+        radial-gradient(ellipse at 64% 42%, rgba(119,176,151,0.54), transparent 17%),
+        radial-gradient(ellipse at 36% 64%, rgba(82,131,171,0.56), transparent 18%),
+        linear-gradient(135deg, rgba(116,165,196,0.72), rgba(228,196,214,0.66));
+      box-shadow: 0 0 70px rgba(255,255,255,0.22);
+      animation: earthTurn 22s linear infinite;
+    }
+    .vision-words {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      font-family: var(--serif);
+      color: rgba(77,34,48,0.22);
+      font-size: clamp(1rem, 4.8vw, 1.8rem);
+    }
+    .vision-words span {
+      position: absolute;
+      animation: wordFloat 9s ease-in-out infinite alternate;
+    }
+    .vision-words span:nth-child(1) { left: 17%; top: 18%; }
+    .vision-words span:nth-child(2) { right: 19%; top: 24%; animation-delay: 1.1s; }
+    .vision-words span:nth-child(3) { left: 10%; bottom: 28%; animation-delay: 2.1s; }
+    .vision-words span:nth-child(4) { right: 11%; bottom: 22%; animation-delay: 3.2s; }
+    .vision-words span:nth-child(5) { left: 42%; bottom: 14%; animation-delay: 4.2s; }
+    .final-answer {
+      min-height: 92svh;
+      background: linear-gradient(180deg, rgba(255,246,241,0.1), rgba(255,246,241,0.78));
+    }
+    .final-answer .big-question {
+      display: inline-block;
+      animation: finalBreath 6s ease-in-out infinite;
+    }
+    .cta .line-btn {
+      background: rgba(77,34,48,0.08);
+      color: rgba(77,34,48,0.78);
+      border: 1px solid rgba(77,34,48,0.16);
+      box-shadow: none;
+      transition: background 600ms ease, color 600ms ease, transform 600ms ease;
+    }
+    .cta .line-btn:hover {
+      background: rgba(77,34,48,0.14);
+      color: rgba(77,34,48,0.92);
+      transform: translateY(-2px);
+    }
+
+    @keyframes kenBurnsSoft {
+      from { transform: scale(1.02) translate3d(-1.2%, 0, 0); }
+      to { transform: scale(1.1) translate3d(1.4%, -1.2%, 0); }
+    }
+    @keyframes kenBurnsLoss {
+      0% { transform: scale(1.02) translate3d(0, 0, 0); opacity: 1; }
+      72% { transform: scale(1.08) translate3d(1.2%, -1.4%, 0); opacity: 0.78; }
+      100% { transform: scale(1.1) translate3d(1.4%, -1.8%, 0); opacity: 0.48; }
+    }
+    @keyframes lossBleach {
+      from { opacity: 0.04; }
+      to { opacity: 0.34; }
+    }
+    @keyframes goldGather {
+      from { transform: scale(1.06) translateY(18px); background-position: 0 0, 70px 100px; }
+      to { transform: scale(0.98) translateY(-12px); background-position: 90px 130px, 0 20px; }
+    }
+    @keyframes routeDraw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes travelLane {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+    @keyframes travelLaneReverse {
+      from { transform: translateX(-50%); }
+      to { transform: translateX(0); }
+    }
+    @keyframes auroraBreath {
+      from { transform: translate3d(-3%, -1%, 0) rotate(-4deg) scale(1); opacity: 0.14; }
+      to { transform: translate3d(3%, 2%, 0) rotate(5deg) scale(1.08); opacity: 0.3; }
+    }
+    @keyframes mosaicArrive {
+      0% { opacity: 0; transform: scale(1.12); filter: blur(7px); }
+      100% { opacity: 0.92; transform: scale(1); filter: blur(0); }
+    }
+    @keyframes earthTurn {
+      from { transform: rotate(0deg); background-position: 0 0; }
+      to { transform: rotate(360deg); background-position: 120px 0; }
+    }
+    @keyframes wordFloat {
+      from { transform: translateY(10px); opacity: 0.24; }
+      to { transform: translateY(-10px); opacity: 0.42; }
+    }
+    @keyframes finalBreath {
+      0%, 100% { opacity: 0.84; filter: blur(0); transform: translateY(0); }
+      50% { opacity: 1; filter: blur(0.2px); transform: translateY(-4px); }
+    }
 
     @media (min-width: 760px) {
       body { background: radial-gradient(circle at 50% 0, rgba(154,54,101,0.17), transparent 30rem), #07040a; }
@@ -2977,9 +3298,10 @@
   </section>
 
   <!-- ======== 第5章補完セクション：離婚後「真の自立とは何か？」======== -->
-  <section class="section chapter5 tall" data-theme="love">
+  <section class="section chapter5 cinema-loss tall" data-theme="love">
+    <div class="cinema-crack" aria-hidden="true"></div>
     <figure class="photo soft dark reveal">
-      <img src="assets/divorce-kitchen-night.jpg" alt="夜のキッチン、生活感のある部屋" />
+      <img src="assets/after-divorce-2.jpg" alt="静かな室内の記憶" />
     </figure>
     <div>
       <p class="eyebrow reveal">05 / independence</p>
@@ -2994,7 +3316,7 @@
   </section>
 
   <!-- ======== S46: 親のロール ======== -->
-  <section class="section road-movie compact" data-theme="love">
+  <section class="section road-movie cinema-loss compact" data-theme="love">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         父親役と母親役。<br />
@@ -3008,7 +3330,7 @@
   </section>
 
   <!-- ======== S47: 旅の断片（横スクロール） ======== -->
-  <section class="section life-fragments compact" data-theme="love">
+  <section class="section life-fragments cinema-loss compact" data-theme="love">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1rem;line-height:2.5;color:rgba(255,248,244,0.88)">
         新幹線。<br />
@@ -3019,24 +3341,24 @@
       </p>
       <div class="pstrip-road reveal" style="margin-top:32px">
         <div class="pstrip-track">
-          <img src="assets/road-shinkansen.jpg" alt="新幹線の窓">
-          <img src="assets/road-ferry.jpg" alt="フェリーの甲板">
-          <img src="assets/road-car-window.jpg" alt="車窓から見える景色">
-          <img src="assets/road-island.jpg" alt="離島">
-          <img src="assets/road-airbnb.jpg" alt="Airbnbの部屋">
+          <img src="assets/travel-1.jpg" alt="旅の記憶">
+          <img src="assets/travel-2.jpg" alt="旅の記憶">
+          <img src="assets/travel-3.jpg" alt="旅の記憶">
+          <img src="assets/travel-4.jpg" alt="旅の記憶">
+          <img src="assets/travel-5.jpg" alt="旅の記憶">
           <!-- loop -->
-          <img src="assets/road-shinkansen.jpg" alt="新幹線の窓">
-          <img src="assets/road-ferry.jpg" alt="フェリーの甲板">
-          <img src="assets/road-car-window.jpg" alt="車窓から見える景色">
-          <img src="assets/road-island.jpg" alt="離島">
-          <img src="assets/road-airbnb.jpg" alt="Airbnbの部屋">
+          <img src="assets/travel-1.jpg" alt="旅の記憶">
+          <img src="assets/travel-2.jpg" alt="旅の記憶">
+          <img src="assets/travel-3.jpg" alt="旅の記憶">
+          <img src="assets/travel-4.jpg" alt="旅の記憶">
+          <img src="assets/travel-5.jpg" alt="旅の記憶">
         </div>
       </div>
     </div>
   </section>
 
   <!-- ======== S48: どこでも生きていける ======== -->
-  <section class="section short" data-theme="love" id="liveAnywhere">
+  <section class="section cinema-loss short" data-theme="love" id="liveAnywhere">
     <div style="display:grid;align-items:center;text-align:center;padding:0 32px">
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.8rem,8vw,2.8rem);line-height:1.9;color:rgba(255,248,244,0.92)">
         どこでも、<br />生きていけるよね。
@@ -3045,7 +3367,7 @@
   </section>
 
   <!-- ======== S49: 経験の積み重ね ======== -->
-  <section class="section compact" data-theme="love">
+  <section class="section cinema-loss compact" data-theme="love">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7">
         そんな経験を、<br />
@@ -3055,7 +3377,7 @@
   </section>
 
   <!-- ======== S50: 加速する ======== -->
-  <section class="section acceleration short" data-theme="love">
+  <section class="section acceleration cinema-loss short" data-theme="love">
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.5vw,1.8rem);color:rgba(255,248,244,0.90)">
         どんどん加速する。
@@ -3064,7 +3386,7 @@
   </section>
 
   <!-- ======== S51: 鑑定コンテンツの切り捨て ======== -->
-  <section class="section compact" data-theme="love">
+  <section class="section cinema-loss compact" data-theme="love">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         これまでやってきた、<br />
@@ -3080,7 +3402,7 @@
   </section>
 
   <!-- ======== S52: コーチングとの出逢い ======== -->
-  <section class="section compact" data-theme="dawn">
+  <section class="section cinema-return compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.88)">
         そんなときに知人がやっていた<br />
@@ -3094,7 +3416,7 @@
   </section>
 
   <!-- ======== S53: コーチング・コミュニティの展開 ======== -->
-  <section class="section compact" data-theme="dawn">
+  <section class="section cinema-return compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.82)">
         これで、これまで関わってきた人の<br />
@@ -3109,7 +3431,7 @@
   </section>
 
   <!-- ======== S54: 売上の急増 ======== -->
-  <section class="section short" data-theme="dawn">
+  <section class="section cinema-return short" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.85)">
         たった2日間のオンラインレッスンだけで、<br />
@@ -3120,7 +3442,7 @@
   </section>
 
   <!-- ======== S55: SNS・システム構築 ======== -->
-  <section class="section compact" data-theme="dawn">
+  <section class="section cinema-return compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.81)">
         SNSやシステムを使って<br />
@@ -3133,7 +3455,7 @@
   </section>
 
   <!-- ======== S56: オンライン・SNS通知（断片） ======== -->
-  <section class="section online-fragments compact" data-theme="dawn">
+  <section class="section online-fragments cinema-return compact" data-theme="dawn">
     <div class="sns-fragment reveal" style="position:relative;height:200px;opacity:0.7">
       <div style="position:absolute;top:20px;left:32px;font-size:0.8rem;color:rgba(255,248,244,0.5)">📱 SNS通知</div>
       <div style="position:absolute;top:60px;left:32px;font-size:0.9rem;color:rgba(255,248,244,0.6)">💬 コメント、いいね</div>
@@ -3144,7 +3466,7 @@
   </section>
 
   <!-- ======== S57: 暗転・葛藤の始まり ======== -->
-  <section class="section compact" data-theme="break">
+  <section class="section cinema-loss compact" data-theme="break">
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.5vw,1.8rem);color:rgba(255,248,244,0.88)">
         でも、苦しくなる。
@@ -3153,7 +3475,7 @@
   </section>
 
   <!-- ======== S58: 変わる人と変わらない人 ======== -->
-  <section class="section compact" data-theme="break">
+  <section class="section cinema-loss compact" data-theme="break">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.78)">
         なぜなら、<br /><br />
@@ -3165,7 +3487,7 @@
   </section>
 
   <!-- ======== S59: 批判と妬みの声（背景） ======== -->
-  <section class="section voice-fragments compact" data-theme="break" style="position:relative">
+  <section class="section voice-fragments cinema-loss compact" data-theme="break" style="position:relative">
     <div class="voice-bg" style="position:absolute;inset:0;opacity:0.08;font-size:0.75rem;line-height:2.2;color:rgba(255,248,244,0.25);overflow:hidden;pointer-events:none;padding:32px">
       <span style="display:block;margin-bottom:8px">嫌味も、妬みも。</span>
       <span style="display:block;margin-bottom:8px">ひろこさんだからできるんですよ。</span>
@@ -3183,7 +3505,7 @@
   </section>
 
   <!-- ======== S60: 人間関係の矛盾 ======== -->
-  <section class="section compact" data-theme="break">
+  <section class="section cinema-loss compact" data-theme="break">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.75)">
         立場もコミットも違う。<br />
@@ -3196,7 +3518,7 @@
   </section>
 
   <!-- ======== S61: エンパワーメントの限界 ======== -->
-  <section class="section compact" data-theme="break">
+  <section class="section cinema-loss compact" data-theme="break">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.73)">
         どれだけエンパワーしても、<br />
@@ -3212,7 +3534,7 @@
   </section>
 
   <!-- ======== S62: 深い疑問へ ======== -->
-  <section class="section question-sequence tall" data-theme="break">
+  <section class="section question-sequence cinema-loss tall" data-theme="break">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.78);margin-bottom:48px">
         そして、疑問が生まれる。
@@ -3244,7 +3566,7 @@
   </section>
 
   <!-- ======== S63: 次章への橋渡し ======== -->
-  <section class="section short" id="deeperQuestions" style="display:grid;align-items:center">
+  <section class="section cinema-loss short" id="deeperQuestions" style="display:grid;align-items:center">
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.6rem,7.5vw,2.4rem);line-height:1.8;color:rgba(255,248,244,0.89)">
         この問いが、<br />
@@ -3257,7 +3579,7 @@
   </section>
 
   <!-- ======== Chapter 6: 行き詰まり・気づき ======== -->
-  <section class="section tall" id="break" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
+  <section class="section cinema-loss tall" id="break" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
     <figure class="photo soft dark reveal">
       <img src="assets/after-divorce-3.jpg" alt="" />
     </figure>
@@ -3280,7 +3602,7 @@
   </section>
 
   <!-- ======== Chapter 7: 気づき ======== -->
-  <section class="section awake center-message" id="remember" data-theme="awake" data-ch="07" data-ch-name="REMEMBER">
+  <section class="section awake cinema-return center-message" id="remember" data-theme="awake" data-ch="07" data-ch-name="REMEMBER">
     <div class="butterfly"></div>
     <figure class="photo round rose-f">
       <img src="assets/meditation.jpg" alt="" />
@@ -3292,7 +3614,7 @@
     </div>
   </section>
 
-  <section class="section section-reflection" data-theme="awake">
+  <section class="section section-reflection cinema-return" data-theme="awake">
     <div class="reflection-card reveal">
       <p class="reflection-kicker">break / what I found</p>
       <h3>この崩壊が、入口だった。</h3>
@@ -3304,9 +3626,14 @@
   </section>
 
   <!-- ======== 第7章補完セクション：世界旅、海外移住「豊かさとは何か？」======== -->
-  <section class="section chapter7 tall" data-theme="dawn">
+  <section class="section chapter7 cinema-world tall" data-theme="dawn">
+    <div class="world-map-line" aria-hidden="true">
+      <svg viewBox="0 0 520 260" preserveAspectRatio="none">
+        <path d="M28 160 C96 108, 138 170, 198 122 S310 88, 372 132 444 86 498 116" class="travel-route" />
+      </svg>
+    </div>
     <figure class="photo soft rose-f reveal">
-      <img src="assets/world-journey-hero.jpg" alt="世界旅" />
+      <img src="assets/world-1.jpg" alt="世界旅" />
     </figure>
     <div>
       <p class="eyebrow reveal">07 / world journey</p>
@@ -3316,7 +3643,7 @@
   </section>
 
   <!-- ======== S22: 旅の風景 ======== -->
-  <section class="section world-journey compact" data-theme="dawn">
+  <section class="section world-journey cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8">
         トルコ、ギリシャ、ベトナム、カンボジア。<br />
@@ -3331,12 +3658,27 @@
   </section>
 
   <!-- ======== S23: 世界の子どもたち（画像モザイク） ======== -->
-  <section class="section world-journey compact has-journey-mosaic" data-theme="dawn">
+  <section class="section world-journey cinema-world compact has-journey-mosaic" data-theme="dawn">
+    <div class="world-map-line" aria-hidden="true">
+      <svg viewBox="0 0 520 260" preserveAspectRatio="none">
+        <path d="M38 178 C90 116, 166 154, 222 94 S324 78, 392 126 456 94 502 132" class="travel-route" />
+      </svg>
+    </div>
     <div class="journey-photo-mosaic reveal">
-      <img class="journey-child-1" src="assets/world-child-turkey.jpg" alt="トルコの子ども" />
-      <img class="journey-child-2" src="assets/world-child-vietnam.jpg" alt="ベトナムの子ども" />
-      <img class="journey-child-3" src="assets/world-child-cambodia.jpg" alt="カンボジアの子ども" />
-      <img class="journey-child-4" src="assets/world-child-hongkong.jpg" alt="香港の子ども" />
+      <img class="journey-child-1" src="assets/travel-1.jpg" alt="世界旅の記憶" />
+      <img class="journey-child-2" src="assets/travel-2.jpg" alt="世界旅の記憶" />
+      <img class="journey-child-3" src="assets/travel-3.jpg" alt="世界旅の記憶" />
+      <img class="journey-child-4" src="assets/travel-4.jpg" alt="世界旅の記憶" />
+    </div>
+    <div class="travel-lanes reveal" aria-hidden="true">
+      <div class="travel-lane">
+        <img src="assets/travel-1.jpg" alt=""><img src="assets/travel-2.jpg" alt=""><img src="assets/travel-3.jpg" alt=""><img src="assets/travel-4.jpg" alt=""><img src="assets/travel-5.jpg" alt=""><img src="assets/travel-6.jpg" alt=""><img src="assets/travel-7.jpg" alt="">
+        <img src="assets/travel-1.jpg" alt=""><img src="assets/travel-2.jpg" alt=""><img src="assets/travel-3.jpg" alt=""><img src="assets/travel-4.jpg" alt=""><img src="assets/travel-5.jpg" alt=""><img src="assets/travel-6.jpg" alt=""><img src="assets/travel-7.jpg" alt="">
+      </div>
+      <div class="travel-lane reverse">
+        <img src="assets/now-2.jpg" alt=""><img src="assets/now-3.jpg" alt=""><img src="assets/now-4.jpg" alt=""><img src="assets/now-5.jpg" alt=""><img src="assets/world-1.jpg" alt=""><img src="assets/community-1.jpg" alt=""><img src="assets/flower-1.jpg" alt="">
+        <img src="assets/now-2.jpg" alt=""><img src="assets/now-3.jpg" alt=""><img src="assets/now-4.jpg" alt=""><img src="assets/now-5.jpg" alt=""><img src="assets/world-1.jpg" alt=""><img src="assets/community-1.jpg" alt=""><img src="assets/flower-1.jpg" alt="">
+      </div>
     </div>
     <div>
       <p class="body-copy sm reveal" style="margin-top:32px">
@@ -3347,7 +3689,7 @@
   </section>
 
   <!-- ======== S24: 豊かさへの問い（前半） ======== -->
-  <section class="section wealth-question short" data-theme="dawn">
+  <section class="section wealth-question cinema-world short" data-theme="dawn">
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.8vw,1.9rem);line-height:2">暮らしが何不自由なくできることが<br />本当の豊かさ？</h2>
       <p class="body-copy sm reveal whisper" style="margin-top:32px">
@@ -3358,7 +3700,7 @@
   </section>
 
   <!-- ======== S25: 豊かさとは何か（中心問） ======== -->
-  <section class="section wealth-question tall" data-theme="dawn" id="wealthQuestion">
+  <section class="section wealth-question cinema-world tall" data-theme="dawn" id="wealthQuestion">
     <div style="position:absolute;width:1.2rem;height:1.2rem;border-radius:50%;background:rgba(234,211,162,0.15);left:8%;top:16%;z-index:0"></div>
     <div style="position:relative;z-index:1">
       <h1 class="impact-text reveal slow-text" style="font-size:clamp(1.8rem,8.5vw,2.9rem);line-height:1.8">
@@ -3376,7 +3718,7 @@
   </section>
 
   <!-- ======== S26: マレーシア移住への選択 ======== -->
-  <section class="section migration-shift compact" data-theme="dawn">
+  <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         自由な選択肢の中で、<br />
@@ -3389,7 +3731,7 @@
   </section>
 
   <!-- ======== S27: 子どもの教育への葛藤 ======== -->
-  <section class="section migration-shift compact" data-theme="dawn">
+  <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         貧しい暮らしをしている子どもたちは<br />
@@ -3406,7 +3748,7 @@
   </section>
 
   <!-- ======== S28: クラウドファンディングへの決断 ======== -->
-  <section class="section migration-shift compact" data-theme="dawn">
+  <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         自己資金だけではなく、<br />
@@ -3419,7 +3761,7 @@
   </section>
 
   <!-- ======== S29: 批判の声（背景テキスト） ======== -->
-  <section class="section criticism-voices compact" data-theme="dawn" style="opacity:0.9">
+  <section class="section criticism-voices cinema-world compact" data-theme="dawn" style="opacity:0.9">
     <div class="criticism-bg" style="position:absolute;inset:0;opacity:0.06;font-size:0.75rem;line-height:2.3;color:rgba(255,248,244,0.3);overflow:hidden;pointer-events:none;padding:32px;word-break:break-word;font-family:var(--sans)">
       <span>応援できない。自分の子供の教育資金を、ましてや義務教育があるのに人のお金でやろうとすること。</span>
       <span style="display:block;margin-top:12px">それは親のエゴではないか。</span>
@@ -3439,7 +3781,7 @@
   </section>
 
   <!-- ======== S30: 可能性を諦めたくない ======== -->
-  <section class="section short" data-theme="dawn" id="possibilityAnchor" style="display:grid;align-items:center">
+  <section class="section cinema-world short" data-theme="dawn" id="possibilityAnchor" style="display:grid;align-items:center">
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.9rem,9vw,3rem);line-height:2;color:rgba(255,248,244,0.95)">
         可能性を<br />諦めたくない。
@@ -3448,7 +3790,7 @@
   </section>
 
   <!-- ======== S31: 挑戦と複雑な感情 ======== -->
-  <section class="section migration-shift compact" data-theme="dawn">
+  <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         それでも挑戦した。<br /><br />
@@ -3463,9 +3805,9 @@
   </section>
 
   <!-- ======== S32: 負荷の重層化 ======== -->
-  <section class="section migration-shift tall" data-theme="down-dawn">
+  <section class="section migration-shift cinema-loss tall" data-theme="down-dawn">
     <figure class="photo soft dark reveal" style="opacity:0.5;filter:saturate(0.6) brightness(0.65)">
-      <img src="assets/malaysia-life-heavy.jpg" alt="マレーシアでの生活の重さ" />
+      <img src="assets/travel-7.jpg" alt="マレーシアでの生活の重さ" />
     </figure>
     <div style="position:relative;z-index:1">
       <div class="burden-list reveal">
@@ -3479,14 +3821,14 @@
   </section>
 
   <!-- ======== S33: 自由と犠牲の問い ======== -->
-  <section class="section short" data-theme="down-dawn">
+  <section class="section cinema-loss short" data-theme="down-dawn">
     <div>
       <h2 class="quote reveal" style="color:rgba(255,248,244,0.82);font-size:clamp(1.2rem,5vw,1.8rem);line-height:1.95">自由ではある環境。<br /><br />何かを選択することは、<br />何かを犠牲にすることなのか？</h2>
     </div>
   </section>
 
   <!-- ======== S34: 先行きの不透明性 ======== -->
-  <section class="section migration-shift compact" data-theme="down-dawn">
+  <section class="section migration-shift cinema-loss compact" data-theme="down-dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.78)">
         暮らすことはできても、<br />
@@ -3501,9 +3843,9 @@
   </section>
 
   <!-- ======== S35: 資本主義への問い ======== -->
-  <section class="section capitalism-question tall" data-theme="down-dawn">
+  <section class="section capitalism-question cinema-loss tall" data-theme="down-dawn">
     <figure class="photo soft dark reveal" style="opacity:0.45;filter:saturate(0.5) brightness(0.6)">
-      <img src="assets/capitalism-question.jpg" alt="資本主義への問い" />
+      <img src="assets/after-divorce-1.jpg" alt="資本主義への問い" />
     </figure>
     <div style="position:relative;z-index:1">
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.6rem,7.5vw,2.4rem);line-height:1.9;color:rgba(255,248,244,0.89)">
@@ -3517,7 +3859,7 @@
   </section>
 
   <!-- ======== S36: 資本主義への違和感 ======== -->
-  <section class="section capitalism-question compact" data-theme="down-dawn">
+  <section class="section capitalism-question cinema-loss compact" data-theme="down-dawn">
     <div>
       <div class="capital-questions reveal">
         <p class="q-line" style="font-size:1.01rem;line-height:2.5;color:rgba(255,248,244,0.8);margin-bottom:28px">ここで資本主義への違和感が強まる。</p>
@@ -3530,7 +3872,7 @@
   </section>
 
   <!-- ======== S37: 心の崩壊へ（前奏） ======== -->
-  <section class="section collapse-scene compact" data-theme="down-dawn">
+  <section class="section collapse-scene cinema-loss compact" data-theme="down-dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.70)">
         楽しかったけど、<br />
@@ -3540,9 +3882,9 @@
   </section>
 
   <!-- ======== S38: 静かな崩壊 ======== -->
-  <section class="section collapse-scene tall" data-theme="down-dawn">
+  <section class="section collapse-scene cinema-loss tall" data-theme="down-dawn">
     <figure class="photo soft dark reveal" style="opacity:0.35;filter:saturate(0.4) brightness(0.55)">
-      <img src="assets/collapse-room.jpg" alt="疲弊した室内" />
+      <img src="assets/after-divorce-3.jpg" alt="疲弊した室内" />
     </figure>
     <div style="position:relative;z-index:1">
       <div class="collapse-state reveal late">
@@ -3559,7 +3901,7 @@
   </section>
 
   <!-- ======== S39: 鬱と経済的絶望 ======== -->
-  <section class="section collapse-scene short" data-theme="down-dawn">
+  <section class="section collapse-scene cinema-loss short" data-theme="down-dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.68)">
         鬱になり、<br />
@@ -3571,7 +3913,7 @@
   </section>
 
   <!-- ======== S40: 残金86円 ======== -->
-  <section class="section collapse-scene short" id="remaining86yen" style="display:grid;align-items:center;padding:96px 32px">
+  <section class="section collapse-scene cinema-loss short" id="remaining86yen" style="display:grid;align-items:center;padding:96px 32px">
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9.5vw,3.2rem);line-height:1.8;color:rgba(255,248,244,0.91)">
         残金<br />
@@ -3583,7 +3925,7 @@
   </section>
 
   <!-- ======== S41: 帰国後の状態 ======== -->
-  <section class="section healing-return compact" data-theme="down-dawn">
+  <section class="section healing-return cinema-loss compact" data-theme="down-dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.70)">
         もう何もしたくなかった。<br /><br />
@@ -3596,9 +3938,9 @@
   </section>
 
   <!-- ======== S42: 気づきへの転機 ======== -->
-  <section class="section healing-return tall" data-theme="awake">
+  <section class="section healing-return cinema-return tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.55">
-      <img src="assets/healing-memory.jpg" alt="子ども時代の記憶" />
+      <img src="assets/meditation.jpg" alt="静けさの記憶" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.80)">
@@ -3616,7 +3958,7 @@
   </section>
 
   <!-- ======== S43: 子ども時代の自分への気づき ======== -->
-  <section class="section healing-return short" id="childSelfRealization" style="display:grid;align-items:center">
+  <section class="section healing-return cinema-return short" id="childSelfRealization" style="display:grid;align-items:center">
     <div>
       <h2 class="quote reveal slow-text" style="font-size:clamp(1.3rem,5.8vw,1.9rem);line-height:2.1;color:rgba(255,248,244,0.89)">
         こんな大人に、<br />
@@ -3629,9 +3971,9 @@
   </section>
 
   <!-- ======== S44: 終章 ======== -->
-  <section class="section healing-return tall" data-theme="awake">
+  <section class="section healing-return cinema-return tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.48">
-      <img src="assets/return-quiet.jpg" alt="静かな帰還" />
+      <img src="assets/flower-1.jpg" alt="静かな帰還" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.79)">
@@ -3656,9 +3998,9 @@
   <!-- ======== Chapter 8: ヒーリング・形而上学「すべては内に存在している」======== -->
 
   <!-- ======== 第8章補完セクション：ヒーリング・形而上学「すべては内に存在している」======== -->
-  <section class="section chapter8 tall" data-theme="awake">
+  <section class="section chapter8 cinema-healing tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.6">
-      <img src="assets/healing-dawn-sky.jpg" alt="夜明け前の静かな空" />
+      <img src="assets/meditation.jpg" alt="夜明け前の静けさ" />
     </figure>
     <div>
       <p class="eyebrow reveal">08 / healing</p>
@@ -3668,7 +4010,7 @@
   </section>
 
   <!-- ======== Ch8-S2: 認識の転換点 ======== -->
-  <section class="section healing-metaphysics compact" data-theme="awake">
+  <section class="section healing-metaphysics cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.82)">
         その先で、<br />
@@ -3681,7 +4023,7 @@
   </section>
 
   <!-- ======== Ch8-S3: コーチングの知識 ======== -->
-  <section class="section inner-answer compact" data-theme="awake">
+  <section class="section inner-answer cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.79)">
         コーチとして、<br />
@@ -3696,7 +4038,7 @@
   </section>
 
   <!-- ======== Ch8-S4: 別のアプローチとの出逢い ======== -->
-  <section class="section wisdom-layer compact" data-theme="awake">
+  <section class="section wisdom-layer cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.80)">
         けれど、<br />
@@ -3707,7 +4049,7 @@
   </section>
 
   <!-- ======== Ch8-S5: ヒーリング・形而上学 ======== -->
-  <section class="section healing-metaphysics short" data-theme="awake" id="healingMetaphysics">
+  <section class="section healing-metaphysics cinema-healing short" data-theme="awake" id="healingMetaphysics">
     <div style="display:grid;align-items:center;text-align:center;padding:0 32px">
       <div>
         <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9vw,3.2rem);line-height:1.7;color:rgba(255,248,244,0.92)">
@@ -3719,7 +4061,7 @@
   </section>
 
   <!-- ======== Ch8-S6: 自己癒しの本質 ======== -->
-  <section class="section self-healing compact" data-theme="awake">
+  <section class="section self-healing cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.81)">
         自分自身を、<br />
@@ -3732,7 +4074,7 @@
   </section>
 
   <!-- ======== Ch8-S7: 目に見えない世界の学問 ======== -->
-  <section class="section wisdom-layer compact" data-theme="awake">
+  <section class="section wisdom-layer cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.77)">
         目に見えない世界の学問。<br />
@@ -3749,9 +4091,9 @@
   </section>
 
   <!-- ======== Ch8-S8: 内側からの自己変容 ======== -->
-  <section class="section tall" data-theme="awake">
+  <section class="section cinema-healing tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.5">
-      <img src="assets/healing-inner-light.jpg" alt="内側の光が広がるイメージ" />
+      <img src="assets/flower-1.jpg" alt="内側の光が広がるイメージ" />
     </figure>
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.2rem,5.2vw,1.8rem);color:rgba(255,248,244,0.87);line-height:2">
@@ -3767,7 +4109,7 @@
   </section>
 
   <!-- ======== Ch8-S9: ヒーラーになることの本質 ======== -->
-  <section class="section essence-return compact" data-theme="awake">
+  <section class="section essence-return cinema-healing compact" data-theme="awake">
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.2rem,5vw,1.8rem);font-weight:400;color:rgba(255,248,244,0.88);line-height:2;margin-bottom:28px">
         ヒーラーになった。<br /><br />
@@ -3784,7 +4126,7 @@
   </section>
 
   <!-- ======== Ch8-S10: 自己認識の終わりなき旅 ======== -->
-  <section class="section compact" data-theme="awake">
+  <section class="section cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.79)">
         どこまででも、<br />
@@ -3799,7 +4141,7 @@
   </section>
 
   <!-- ======== Ch8-S11: サポートの本質 ======== -->
-  <section class="section essence-return compact" data-theme="awake">
+  <section class="section essence-return cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.80)">
         本来の自分を<br />
@@ -3810,7 +4152,7 @@
   </section>
 
   <!-- ======== Ch8-S12: This is ME ======== -->
-  <section class="section this-is-me short" id="thisIsMe" style="display:grid;align-items:center">
+  <section class="section this-is-me cinema-healing short" id="thisIsMe" style="display:grid;align-items:center">
     <div style="text-align:center;padding:0 32px">
       <p class="body-copy reveal" style="margin:0;font-size:1.01rem;line-height:2.6;color:rgba(255,248,244,0.75);margin-bottom:32px">
         本人が，
@@ -3823,7 +4165,7 @@
   </section>
 
   <!-- ======== Ch8-S13: 自分の喜びに生きること ======== -->
-  <section class="section living-art compact" data-theme="awake">
+  <section class="section living-art cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.78)">
         そう表現して、<br />
@@ -3836,7 +4178,7 @@
   </section>
 
   <!-- ======== Ch8-S14: 人生が一本につながる ======== -->
-  <section class="section life-integration short" id="lifeIntegration" style="display:grid;align-items:center;padding:96px 32px">
+  <section class="section life-integration cinema-healing short" id="lifeIntegration" style="display:grid;align-items:center;padding:96px 32px">
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9vw,3.2rem);line-height:1.7;color:rgba(255,248,244,0.90)">
         人生が一本に<br />つながる。
@@ -3845,9 +4187,9 @@
   </section>
 
   <!-- ======== Ch8-S15: 幼少期からの問い ======== -->
-  <section class="section tall" data-theme="awake">
+  <section class="section cinema-healing tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.5">
-      <img src="assets/healing-childhood-memory.jpg" alt="幼少期の記憶を想起させる淡い写真" />
+      <img src="assets/baby-child-center.jpg" alt="幼少期の記憶を想起させる淡い写真" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.8;color:rgba(255,248,244,0.80)">
@@ -3867,7 +4209,7 @@
   </section>
 
   <!-- ======== Ch8-S16: 答えを伝える ======== -->
-  <section class="section essence-return compact" data-theme="awake">
+  <section class="section essence-return cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.79)">
         この答えを，<br /><br />
@@ -3878,9 +4220,9 @@
   </section>
 
   <!-- ======== Ch8-S17: 影響の輪が広がる ======== -->
-  <section class="section ripple-circle tall" data-theme="awake">
+  <section class="section ripple-circle cinema-healing tall" data-theme="awake">
     <figure class="photo soft rose-f reveal" style="opacity:0.5">
-      <img src="assets/healing-ripple-circle.jpg" alt="人から人へ輪が広がるような抽象イメージ" />
+      <img src="assets/community-1.jpg" alt="人から人へ輪が広がるようなイメージ" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.79)">
@@ -3898,7 +4240,7 @@
   </section>
 
   <!-- ======== Epilogue: 今・大切なこと・好きなもの・宣言 ======== -->
-  <section class="section tall rose" id="return" data-theme="rose" data-ch="08" data-ch-name="RETURN">
+  <section class="section cinema-vision tall rose" id="return" data-theme="rose" data-ch="08" data-ch-name="RETURN">
     <figure class="photo full rose-f reveal">
       <img src="assets/now-1-face-blur.jpg" alt="" />
     </figure>
@@ -3923,7 +4265,7 @@
     </div>
   </section>
 
-  <section class="section section-reflection" data-theme="rose">
+  <section class="section section-reflection cinema-vision" data-theme="rose">
     <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:50% 30%;--photo-bright:.78;--photo-sat:1">
       <img src="assets/now-6.jpg" alt="" />
     </div>
@@ -3938,7 +4280,7 @@
   </section>
 
   <!-- ======== Epilogue: 大切にしていること ======== -->
-  <section class="section light" data-theme="light">
+  <section class="section cinema-vision light" data-theme="light">
     <div>
       <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">09 / values</p>
       <h2 class="quote reveal">大切にしていること。</h2>
@@ -3952,7 +4294,7 @@
   </section>
 
   <!-- ======== S24: LIKES ======== -->
-  <section class="section light" data-theme="light">
+  <section class="section cinema-vision light" data-theme="light">
     <div>
       <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">10 / likes</p>
       <h2 class="quote reveal">好きなものが、<br />私をほどいていく。</h2>
@@ -3969,7 +4311,7 @@
   </section>
 
   <!-- ======== S25: MANIFESTO ======== -->
-  <section class="section light" data-theme="light">
+  <section class="section cinema-vision light" data-theme="light">
     <div class="heart c"></div>
     <div>
       <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Manifesto</p>
@@ -3979,7 +4321,23 @@
   </section>
 
   <!-- ======== S26: 過去の自分へ ======== -->
-  <section class="section light center-message" data-theme="light">
+  <section class="section cinema-vision tall light" data-theme="light" id="vision">
+    <div class="vision-mosaic" id="visionMosaic" aria-hidden="true"></div>
+    <div class="vision-words" aria-hidden="true">
+      <span>愛</span>
+      <span>光</span>
+      <span>平和</span>
+      <span>子ども</span>
+      <span>未来</span>
+    </div>
+    <div style="text-align:center">
+      <div class="vision-earth reveal" aria-hidden="true"></div>
+      <p class="eyebrow reveal" style="color:rgba(77,34,48,.54)">Vision</p>
+      <h2 class="quote reveal" style="color:rgba(77,34,48,.82)">愛が、<br />世界へ広がっていく。</h2>
+    </div>
+  </section>
+
+  <section class="section light center-message final-answer" data-theme="light">
     <div style="text-align:center">
       <p class="body-copy reveal" style="margin-top:0;font-size:1.28rem;line-height:3.2;color:rgba(77,34,48,.88)">
         あなたは大丈夫。<br /><br />
@@ -3990,7 +4348,7 @@
   </section>
 
   <!-- ======== Epilogue: CTA ======== -->
-  <section class="section cta light" data-theme="light">
+  <section class="section cta cinema-vision light" data-theme="light">
     <div class="earth"></div>
     <figure class="photo soft rose-f reveal">
       <img src="assets/hero.png" alt="" style="object-position:52% 38%" />
@@ -4251,7 +4609,7 @@
   // ---- PAGE TURN ON THEME CHANGE ----
   const pageTurn = document.getElementById('pageTurn');
   const themedSections = [...document.querySelectorAll('.section[data-theme]')];
-  const themeOrder = ['void','night','hunger','love','break','awake','dawn','rose','light'];
+  const themeOrder = ['void','night','hunger','love','break','down-dawn','awake','dawn','rose','light'];
   let activeTheme = null;
   let lastThemeIndex = -1;
   let pageTurnTimer = null;
@@ -4329,6 +4687,69 @@
   updateBg();
   updateThemePageTurn();
 
+  // ---- CINEMATIC PASS: CHAPTER 5+ ----
+  document.querySelectorAll('.cinema-loss').forEach(section => {
+    gsap.to(section, {
+      '--water-drift': '28px',
+      ease: 'none',
+      scrollTrigger: {
+        trigger: section,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 2.4,
+      }
+    });
+  });
+
+  gsap.utils.toArray('.cinema-world .photo, .cinema-healing .photo, .cinema-return .photo, .cinema-vision .photo').forEach(photo => {
+    const img = photo.querySelector('img');
+    if (!img) return;
+    gsap.fromTo(img,
+      { yPercent: -2 },
+      {
+        yPercent: 4,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: photo,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 1.8,
+        }
+      }
+    );
+  });
+
+  gsap.utils.toArray('.travel-lane').forEach((lane, index) => {
+    gsap.to(lane, {
+      y: index % 2 ? -18 : 18,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: lane.closest('.section'),
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: 1.6,
+      }
+    });
+  });
+
+  const visionMosaic = document.getElementById('visionMosaic');
+  if (visionMosaic) {
+    const visionPhotos = [
+      'now-2.jpg','now-3.jpg','now-4.jpg','now-5.jpg','now-6.jpg',
+      'travel-1.jpg','travel-2.jpg','travel-3.jpg','travel-4.jpg','travel-5.jpg','travel-6.jpg','travel-7.jpg',
+      'community-1.jpg','flower-1.jpg','world-1.jpg','meditation.jpg'
+    ];
+    const frag = document.createDocumentFragment();
+    for (let i = 0; i < 110; i++) {
+      const img = document.createElement('img');
+      img.src = `assets/${visionPhotos[i % visionPhotos.length]}`;
+      img.alt = '';
+      img.style.setProperty('--i', i);
+      frag.appendChild(img);
+    }
+    visionMosaic.appendChild(frag);
+  }
+
   // ---- BUTTERFLIES (canvas) ----
   // z-index: -1 → テキスト・写真の後ろ、背景の前
   const bflyCanvas = document.createElement('canvas');
@@ -4359,7 +4780,7 @@
       wingAngle: Math.random() * Math.PI,
       wingSpeed: 0.055 + Math.random() * 0.04,
       opacity: 0,
-      targetOpacity: 0.42 + Math.random() * 0.35,
+      targetOpacity: 0.08 + Math.random() * 0.08,
       hue: 295 + Math.random() * 50,
       born: false,
       delay: 1.5 + i * 1.8,
@@ -4437,7 +4858,7 @@
     bflyTime += 0.016;
 
     const scrollT = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    bflyActive = scrollT > 0.52;
+    bflyActive = scrollT > 0.62 && scrollT < 0.78;
 
     butterflies.forEach(b => {
       // フェードイン/アウト
