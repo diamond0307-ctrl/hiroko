@@ -2354,9 +2354,14 @@
     /* モバイル対応 */
     @media (max-width: 520px) {
       .chapter-indicator {
-        right: max(12px, env(safe-area-inset-right));
-        bottom: max(16px, env(safe-area-inset-bottom));
-        width: min(188px, calc(100vw - 24px));
+        position: fixed;
+        right: max(18px, env(safe-area-inset-right));
+        bottom: calc(env(safe-area-inset-bottom) + 96px);
+        z-index: 9999;
+        width: min(188px, calc(100vw - 36px));
+        max-width: min(72vw, 280px);
+        transform: scale(0.92);
+        transform-origin: right bottom;
       }
       .chapter-jump-toggle {
         padding: 12px 13px 11px;
