@@ -1614,6 +1614,75 @@
       transition-duration: 1.7s;
     }
 
+    .chapter8-image {
+      width: min(100%, 760px);
+      min-height: 320px;
+      max-height: 64svh;
+      aspect-ratio: 1.5;
+      margin: 0 auto 54px;
+      border-radius: 8px;
+      opacity: 0.96;
+      background: rgba(8,10,18,0.24);
+      border-color: rgba(255,236,205,0.22);
+      box-shadow:
+        0 30px 92px rgba(0,0,0,0.28),
+        inset 0 0 0 1px rgba(255,255,255,0.05);
+    }
+    .chapter8-image img {
+      object-position: var(--chapter8-pos, center);
+      filter: saturate(var(--chapter8-sat, .92)) brightness(var(--chapter8-bright, .76)) contrast(1.06);
+    }
+    .chapter8-image::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at var(--chapter8-glow-x, 50%) var(--chapter8-glow-y, 48%), rgba(236,205,150,0.08), transparent 42%),
+        linear-gradient(180deg, rgba(7,9,18,0.04), rgba(7,9,18,0.22)),
+        linear-gradient(90deg, rgba(5,7,14,0.16), transparent 44%, rgba(5,7,14,0.12));
+    }
+    .chapter8-image.wisdom-still {
+      margin-bottom: 46px;
+      --chapter8-pos: 48% 52%;
+      --chapter8-bright: .72;
+      --chapter8-sat: .9;
+      --chapter8-glow-x: 26%;
+      --chapter8-glow-y: 54%;
+    }
+    .chapter8-image.inner-growth-image {
+      width: min(100%, 680px);
+      aspect-ratio: 1.42;
+      border-radius: 44% 56% 54% 46% / 38% 42% 58% 62%;
+      --chapter8-pos: 50% 54%;
+      --chapter8-bright: .76;
+      --chapter8-sat: .98;
+      --chapter8-glow-x: 50%;
+      --chapter8-glow-y: 62%;
+    }
+    .chapter8-image.life-thread-image {
+      width: min(100%, 820px);
+      min-height: 340px;
+      aspect-ratio: 1.68;
+      margin-bottom: 48px;
+      --chapter8-pos: 52% 50%;
+      --chapter8-bright: .82;
+      --chapter8-sat: 1;
+      --chapter8-glow-x: 64%;
+      --chapter8-glow-y: 52%;
+    }
+    .chapter8-image.ripple-influence-image {
+      width: min(100%, 780px);
+      min-height: 360px;
+      aspect-ratio: 1.55;
+      --chapter8-pos: 50% 58%;
+      --chapter8-bright: .78;
+      --chapter8-sat: .9;
+      --chapter8-glow-x: 48%;
+      --chapter8-glow-y: 54%;
+    }
+
     .vision-mosaic {
       position: absolute;
       inset: 0;
@@ -1953,6 +2022,34 @@
         width: min(78vw, 300px);
         margin-inline: auto;
         aspect-ratio: 0.82;
+      }
+      .chapter8-image {
+        width: 100%;
+        min-height: 220px;
+        max-height: 42svh;
+        aspect-ratio: 1.18;
+        margin-bottom: 38px;
+        border-radius: 7px;
+      }
+      .chapter8-image.wisdom-still {
+        --chapter8-pos: 45% 54%;
+      }
+      .chapter8-image.inner-growth-image {
+        min-height: 250px;
+        aspect-ratio: 1.02;
+        border-radius: 38% 62% 52% 48% / 40% 44% 56% 60%;
+        --chapter8-pos: 50% 56%;
+      }
+      .chapter8-image.life-thread-image,
+      .chapter8-image.ripple-influence-image {
+        min-height: 240px;
+        aspect-ratio: 1.16;
+      }
+      .chapter8-image.life-thread-image {
+        --chapter8-pos: 58% 50%;
+      }
+      .chapter8-image.ripple-influence-image {
+        --chapter8-pos: 55% 58%;
       }
       .photo.sm-round {
         width: 92px;
@@ -2370,8 +2467,8 @@
       <p class="eyebrow reveal">chapters</p>
       <h2 class="quote reveal">
         この物語は、<br />
-        いくつかの記憶で<br />
-        できている。
+        いくつかの記憶が、<br />
+        重なってできている。
       </h2>
       <p class="body-copy sm reveal">
         最後は繋がる<br />
@@ -2554,7 +2651,7 @@
       <h2 class="lead reveal" style="opacity:.82">
         結果的に、<br />
         痕は残った。<br /><br />
-        私の心にも<br />
+        私の心にも、<br />
         痕が残った。
       </h2>
       <p class="body-copy sm reveal">「安心」が存在しない環境。</p>
@@ -2937,7 +3034,7 @@
   <!-- ======== S25: 次の高み ======== -->
   <section class="section compact" data-theme="hunger">
     <div>
-      <h2 class="quote reveal">挑戦。<br /><br />次の高みを<br />常に目指してた。</h2>
+      <h2 class="quote reveal">挑戦。<br /><br />常に、<br />次の高みを目指してた。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         日経新聞を読み、<br />
         学び、挑戦し、<br />
@@ -2975,7 +3072,7 @@
       <img src="assets/ChatGPT Image 2026年6月18日 16_31_16.png" alt="" style="--memory-photo-pos:50% 30%" />
     </div>
     <div>
-      <h2 class="quote reveal">人は、<br />どこまででも<br />人であった。</h2>
+      <h2 class="quote reveal">人は、<br />どこまでも人であった。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         男性としての本能。<br />
         ステータス。責任。<br /><br />
@@ -3032,8 +3129,8 @@
       <p class="body-copy reveal" style="margin-top:0;font-size:1.04rem;line-height:2.6">
         経済。金融。税理士課程。<br /><br />
         23歳。<br />
-        慶應義塾大学 経済学部の<br />
-        通信課程にも入学した。<br /><br />
+        慶應義塾大学<br />
+        経済学部 通信課程にも入学した。<br /><br />
         税理士を目指すため、<br />
         先のステータスがほしかった。<br /><br />
         入学論文のテーマは、<br /><br />
@@ -3253,7 +3350,7 @@
   <!-- ======== S42: 子育ての基準 ======== -->
   <section class="section compact" data-theme="love">
     <div>
-      <h2 class="quote reveal">「正解の子育て」への<br />違和感。</h2>
+      <h2 class="quote reveal">「正解の子育て」への違和感。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         子どもの発達。<br />
         集団検診で言われた。<br /><br />
@@ -3277,8 +3374,8 @@
         同じようにできないとだめなの？<br /><br />
         ここで、後の思想が芽生える。<br /><br />
         大人、親、そして自分の選択が、<br />
-        もしかしたら子どもの可能性を<br />
-        奪っているかもしれない。
+        もしかしたら、<br />
+        子どもの可能性を奪っているかもしれない。
       </p>
     </div>
   </section>
@@ -3305,7 +3402,7 @@
     </figure>
     <div>
       <p class="eyebrow reveal">05 / independence</p>
-      <h2 class="quote reveal">離婚。<br />私が大黒柱に<br />ならなきゃ！</h2>
+      <h2 class="quote reveal">離婚。<br />私自身が、<br />大黒柱にならなきゃ！</h2>
       <p class="body-copy sm reveal">
         家賃を支払って、<br />
         子どものフリースクール代。<br />
@@ -3390,8 +3487,8 @@
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         これまでやってきた、<br />
-        個人鑑定2500人のコンテンツは<br />
-        切り捨てた。<br /><br />
+        個人鑑定2500人分。<br />
+        そのコンテンツは切り捨てた。<br /><br />
       </p>
       <p class="body-copy reveal" style="font-size:0.98rem;line-height:2.6;color:rgba(255,248,244,0.76)">
         人は、知っても変わらない。<br />
@@ -3419,12 +3516,12 @@
   <section class="section cinema-return compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.82)">
-        これで、これまで関わってきた人の<br />
-        行動をサポートできる。<br /><br />
+        これで、これまで関わってきた人の行動を、<br />
+        サポートできる。<br /><br />
         "自分の人生を創る"をテーマにした<br />
         コーチングやコミュニティ。<br /><br />
         自分の正解は自分で創る、をテーマにした<br />
-        お料理系オンラインレッスンや<br />
+        お料理系オンラインレッスン、<br />
         オンラインサロン。
       </p>
     </div>
@@ -3451,17 +3548,6 @@
         めちゃくちゃ稼いだ。<br />
         人ともたくさん繋がった。
       </p>
-    </div>
-  </section>
-
-  <!-- ======== S56: オンライン・SNS通知（断片） ======== -->
-  <section class="section online-fragments cinema-return compact" data-theme="dawn">
-    <div class="sns-fragment reveal" style="position:relative;height:200px;opacity:0.7">
-      <div style="position:absolute;top:20px;left:32px;font-size:0.8rem;color:rgba(255,248,244,0.5)">📱 SNS通知</div>
-      <div style="position:absolute;top:60px;left:32px;font-size:0.9rem;color:rgba(255,248,244,0.6)">💬 コメント、いいね</div>
-      <div style="position:absolute;top:100px;left:32px;font-size:0.9rem;color:rgba(255,248,244,0.6)">📊 売上 ↑</div>
-      <div style="position:absolute;top:140px;left:32px;font-size:0.9rem;color:rgba(255,248,244,0.6)">🎥 Zoom 講座</div>
-      <div style="position:absolute;top:180px;left:32px;font-size:0.8rem;color:rgba(255,248,244,0.5)">✨ 新規クライアント</div>
     </div>
   </section>
 
@@ -3542,8 +3628,8 @@
       <div class="questions-container reveal late">
         <h3 class="q-item" style="font-size:clamp(1.1rem,4.8vw,1.6rem);font-weight:400;color:rgba(255,248,244,0.85);line-height:1.9;margin-bottom:40px">
           人はどうして、<br />
-          言っていることと<br />
-          やっていることが違うのか。
+          言葉と行動が<br />
+          違うのか。
         </h3>
         <h3 class="q-item" style="font-size:clamp(1.1rem,4.8vw,1.6rem);font-weight:400;color:rgba(255,248,244,0.82);line-height:1.9;margin-bottom:40px">
           人はどうして<br />
@@ -3585,7 +3671,7 @@
     </figure>
     <div>
       <p class="eyebrow reveal">06 / stillness</p>
-      <h2 class="quote reveal">「なんで人は<br />変われないのか？」</h2>
+      <h2 class="quote reveal">「人はなぜ、<br />変われないのか？」</h2>
       <p class="body-copy sm reveal">
         知っても変わらない。<br />
         行動しない。<br />
@@ -3594,8 +3680,8 @@
         もっとできたんじゃないか。<br /><br />
         言葉では限界がある。<br />
         願望は嘘をつく。<br />
-        足りないものを<br />
-        埋めようとしているだけ。<br />
+        足りないものを埋めようとしている<br />
+        だけ。<br />
         本当にやりたいことじゃない。
       </p>
     </div>
@@ -3691,10 +3777,10 @@
   <!-- ======== S24: 豊かさへの問い（前半） ======== -->
   <section class="section wealth-question cinema-world short" data-theme="dawn">
     <div>
-      <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.8vw,1.9rem);line-height:2">暮らしが何不自由なくできることが<br />本当の豊かさ？</h2>
+      <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.8vw,1.9rem);line-height:2">暮らしが何不自由なく<br />できることが本当の豊かさ？</h2>
       <p class="body-copy sm reveal whisper" style="margin-top:32px">
-        お金を稼ぐことが<br />
-        本当の豊かさ？
+        お金を稼ぐこと。<br />
+        それが本当の豊かさ？
       </p>
     </div>
   </section>
@@ -3704,7 +3790,7 @@
     <div style="position:absolute;width:1.2rem;height:1.2rem;border-radius:50%;background:rgba(234,211,162,0.15);left:8%;top:16%;z-index:0"></div>
     <div style="position:relative;z-index:1">
       <h1 class="impact-text reveal slow-text" style="font-size:clamp(1.8rem,8.5vw,2.9rem);line-height:1.8">
-        豊かさとは<br />何なのか。
+        豊かさって、<br />何なのか。
       </h1>
       <div class="reveal" style="margin-top:64px">
         <p class="body-copy sm" style="color:rgba(255,248,244,0.68);line-height:2.8">
@@ -3734,8 +3820,8 @@
   <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
-        貧しい暮らしをしている子どもたちは<br />
-        世界にたくさんいる。<br />
+        貧しい暮らしをしている<br />
+        子どもたちは世界にたくさんいる。<br />
         日本にもたくさんいる。<br /><br />
         そんな中で、<br />
         我が子の教育に何百万もかけること。<br /><br />
@@ -3774,8 +3860,8 @@
       </p>
       <p class="body-copy reveal whisper" style="font-size:0.95rem;line-height:2.6">
         大人みんなで、<br />
-        子どもの夢を叶える道があっても<br />
-        いいんじゃないか。
+        子どもの夢を叶える道も、<br />
+        あっていいんじゃないか。
       </p>
     </div>
   </section>
@@ -3784,7 +3870,7 @@
   <section class="section cinema-world short" data-theme="dawn" id="possibilityAnchor" style="display:grid;align-items:center">
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.9rem,9vw,3rem);line-height:2;color:rgba(255,248,244,0.95)">
-        可能性を<br />諦めたくない。
+        可能性を、<br />諦めたくない。
       </h2>
     </div>
   </section>
@@ -3795,8 +3881,8 @@
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         それでも挑戦した。<br /><br />
         やってみて、<br />
-        ありがたさと<br />
-        罪悪感でいっぱいになった。<br /><br />
+        ありがたさと罪悪感。<br />
+        胸がいっぱいになった。<br /><br />
       </p>
       <p class="body-copy reveal" style="font-size:0.98rem;line-height:2.6;color:rgba(255,248,244,0.72)">
         疲弊した。
@@ -3832,7 +3918,7 @@
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.78)">
         暮らすことはできても、<br />
-        上がり続ける未曾有の学費と<br />
+        上がり続ける未曾有の学費、<br />
         為替の変動リスク、<br />
         先行きの見通しがつかない中で、<br /><br />
       </p>
@@ -3849,11 +3935,11 @@
     </figure>
     <div style="position:relative;z-index:1">
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.6rem,7.5vw,2.4rem);line-height:1.9;color:rgba(255,248,244,0.89)">
-        私は何のために<br />働いている？
+        私は、<br />何のために働いている？
       </h2>
       <p class="body-copy sm reveal late" style="margin-top:42px;color:rgba(255,248,244,0.71)">
-        こどもの学費の捻出のために<br />
-        働いているのではない。
+        こどもの学費。<br />
+        その捻出のために働いているのではない。
       </p>
     </div>
   </section>
@@ -3917,8 +4003,7 @@
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9.5vw,3.2rem);line-height:1.8;color:rgba(255,248,244,0.91)">
         残金<br />
-        <span class="number-highlight" style="font-size:1.2em;color:#ead3a2;font-family:Georgia,serif">86円</span><br />
-        で<br />
+        <span class="number-highlight" style="font-size:1.2em;color:#ead3a2;font-family:Georgia,serif">86円</span>。<br />
         日本に帰国した。
       </h2>
     </div>
@@ -3945,13 +4030,13 @@
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.80)">
         自分にムチを打って、<br />
-        子どもの願いを叶えることに<br />
-        いつの間にか<br />
-        一生懸命生きていて、<br /><br />
+        子どもの願いを叶えたくて、<br />
+        夢中で、<br />
+        いつの間にか一生懸命生きていて、<br /><br />
       </p>
       <p class="body-copy reveal late" style="font-size:0.99rem;line-height:2.7;color:rgba(255,248,244,0.76)">
-        自分が子どもの頃に<br />
-        やってほしかったことを<br />
+        子どもの頃、<br />
+        私がやってほしかったことを、<br />
         やっていたのかもしれない。
       </p>
     </div>
@@ -3962,8 +4047,8 @@
     <div>
       <h2 class="quote reveal slow-text" style="font-size:clamp(1.3rem,5.8vw,1.9rem);line-height:2.1;color:rgba(255,248,244,0.89)">
         こんな大人に、<br />
-        子どもの頃の私が<br />
-        出逢いたかった。<br /><br />
+        子どもの頃、<br />
+        私が出逢いたかった。<br /><br />
         それを叶えたかった<br />
         だけなのかもしれない。
       </h2>
@@ -3980,7 +4065,7 @@
         何もかもが限界だった。<br /><br />
         でも、<br />
         その崩壊の中に、<br />
-        自分を愛することの<br />
+        自分を愛する<br />
         必要性を見つけた。
       </p>
       <div class="reflection-card reveal late" style="margin-top:64px;background:rgba(255,248,244,0.04);padding:28px;border-left:2px solid rgba(234,211,162,0.28)">
@@ -4004,7 +4089,7 @@
     </figure>
     <div>
       <p class="eyebrow reveal">08 / healing</p>
-      <h2 class="lead reveal" style="line-height:2.2">ヒーリングと形而上学<br /><br />すべては<br />内に存在している</h2>
+      <h2 class="lead reveal" style="line-height:2.2">ヒーリングと形而上学<br /><br />すべては、<br />内に存在している</h2>
       <p class="body-copy sm reveal">稼ぐこと。自立すること。生きていくこと。鬱。</p>
     </div>
   </section>
@@ -4017,7 +4102,7 @@
         今の私がたどり着いた道。<br /><br />
       </p>
       <h2 class="quote reveal" style="font-size:clamp(1.3rem,5.5vw,1.9rem);color:rgba(255,248,244,0.90)">
-        すべては<br />自分の中にある。
+        すべては、<br />自分の中にある。
       </h2>
     </div>
   </section>
@@ -4027,7 +4112,7 @@
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.79)">
         コーチとして、<br />
-        内なる答えを引き出すことは<br />
+        内なる答えを引き出すことは、<br />
         たくさんやってきた。<br /><br />
       </p>
       <p class="body-copy reveal whisper" style="font-size:0.99rem;line-height:2.6;color:rgba(255,248,244,0.68)">
@@ -4075,6 +4160,9 @@
 
   <!-- ======== Ch8-S7: 目に見えない世界の学問 ======== -->
   <section class="section wisdom-layer cinema-healing compact" data-theme="awake">
+    <figure class="photo chapter8-image wisdom-still reveal">
+      <img src="assets/healing-wisdom-still.png" alt="古い本とキャンドル、幾何学模様のある静物" loading="lazy" />
+    </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.77)">
         目に見えない世界の学問。<br />
@@ -4092,8 +4180,8 @@
 
   <!-- ======== Ch8-S8: 内側からの自己変容 ======== -->
   <section class="section cinema-healing tall" data-theme="awake">
-    <figure class="photo soft rose-f reveal" style="opacity:0.5">
-      <img src="assets/flower-1.jpg" alt="内側の光が広がるイメージ" />
+    <figure class="photo chapter8-image inner-growth-image reveal">
+      <img src="assets/inner-growth-sprout.png" alt="暗い土から内側の光をまとって芽が出る" loading="lazy" />
     </figure>
     <div>
       <h2 class="quote reveal" style="font-size:clamp(1.2rem,5.2vw,1.8rem);color:rgba(255,248,244,0.87);line-height:2">
@@ -4119,7 +4207,7 @@
       <p class="body-copy reveal" style="font-size:1rem;line-height:2.6;color:rgba(255,248,244,0.75);margin-top:32px">
         誰かを追い求めるのではなく、<br /><br />
         独自を貫き、生きること。<br />
-        自分にしかできない生き方を<br />
+        自分にしかできない生き方を、<br />
         表現していくこと。
       </p>
     </div>
@@ -4144,8 +4232,8 @@
   <section class="section essence-return cinema-healing compact" data-theme="awake">
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7;color:rgba(255,248,244,0.80)">
-        本来の自分を<br />
-        思い出すサポート。<br /><br />
+        本来の自分を思い出す<br />
+        サポート。<br /><br />
         人を変えるのではなく，
       </p>
     </div>
@@ -4154,9 +4242,6 @@
   <!-- ======== Ch8-S12: This is ME ======== -->
   <section class="section this-is-me cinema-healing short" id="thisIsMe" style="display:grid;align-items:center">
     <div style="text-align:center;padding:0 32px">
-      <p class="body-copy reveal" style="margin:0;font-size:1.01rem;line-height:2.6;color:rgba(255,248,244,0.75);margin-bottom:32px">
-        本人が，
-      </p>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9.5vw,3.2rem);line-height:1.6;color:rgba(255,248,244,0.92)">
         私はこれでいい。<br /><br />
         <span style="color:#ead3a2;font-family:Georgia,serif">This is ME.</span>
@@ -4179,9 +4264,12 @@
 
   <!-- ======== Ch8-S14: 人生が一本につながる ======== -->
   <section class="section life-integration cinema-healing short" id="lifeIntegration" style="display:grid;align-items:center;padding:96px 32px">
+    <figure class="photo chapter8-image life-thread-image reveal">
+      <img src="assets/life-thread-memory.png" alt="黄金の線が記憶の断片をつないでいく" loading="lazy" />
+    </figure>
     <div>
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(2rem,9vw,3.2rem);line-height:1.7;color:rgba(255,248,244,0.90)">
-        人生が一本に<br />つながる。
+        人生が、<br />一本につながる。
       </h2>
     </div>
   </section>
@@ -4221,8 +4309,8 @@
 
   <!-- ======== Ch8-S17: 影響の輪が広がる ======== -->
   <section class="section ripple-circle cinema-healing tall" data-theme="awake">
-    <figure class="photo soft rose-f reveal" style="opacity:0.5">
-      <img src="assets/community-1.jpg" alt="人から人へ輪が広がるようなイメージ" />
+    <figure class="photo chapter8-image ripple-influence-image reveal">
+      <img src="assets/ripple-influence-water.png" alt="水面に触れた指先から波紋が静かに広がる" loading="lazy" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.79)">
@@ -4232,8 +4320,7 @@
         私に出逢った人たちが，
       </p>
       <h2 class="quote reveal late" style="font-size:clamp(1.2rem,5.2vw,1.8rem);color:rgba(255,248,244,0.87);line-height:2;margin-top:42px">
-        自分に還る人生の旅であることに<br />
-        気づき，<br /><br />
+        自分に還る人生の旅だと気づき，<br /><br />
         歩み始めている。
       </h2>
     </div>
@@ -4671,6 +4758,17 @@
   }
 
   function updateBg() {
+    const line = window.innerHeight * 0.54;
+    const current = themedSections.find(section => {
+      const rect = section.getBoundingClientRect();
+      return rect.top <= line && rect.bottom >= line;
+    });
+    if (current?.dataset.theme === 'void') {
+      root.style.setProperty('--bg-a', '#030207');
+      root.style.setProperty('--bg-b', '#0b0513');
+      root.style.setProperty('--bg-c', '#190821');
+      return;
+    }
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const t = maxScroll > 0 ? Math.min(1, window.scrollY / maxScroll) : 0;
     let i = 0;
