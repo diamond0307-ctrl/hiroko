@@ -218,21 +218,54 @@
 
     /* 後半セクションのテキスト色（背景が明るくなるため） */
     [data-theme="light"],
-    [data-theme="dawn"],
     [data-theme="rose"] { color: #4d2230; }
     [data-theme="light"] .eyebrow,
-    [data-theme="dawn"] .eyebrow,
     [data-theme="rose"] .eyebrow { color: rgba(77,34,48,0.6); }
     [data-theme="light"] .ribbon,
-    [data-theme="dawn"] .ribbon,
     [data-theme="rose"] .ribbon  { color: rgba(77,34,48,0.28); }
 
+    /* dawn: 暗い背景の上で使うテーマのため白系テキストに統一（可読性優先） */
+    [data-theme="dawn"] { color: rgba(255,248,244,0.88); }
+    [data-theme="dawn"] .eyebrow { color: rgba(234,211,162,0.75); }
+    [data-theme="dawn"] .ribbon { color: rgba(255,248,244,0.26); }
+
     /* 新テーマ: down-dawn（疲弊・違和感が滲む空気） */
-    [data-theme="down-dawn"] { color: rgba(255,248,244,0.74); }
-    [data-theme="down-dawn"] .eyebrow { color: rgba(255,248,244,0.52); }
+    [data-theme="down-dawn"] { color: rgba(255,248,244,0.84); }
+    [data-theme="down-dawn"] .eyebrow { color: rgba(255,248,244,0.6); }
     [data-theme="down-dawn"] .ribbon { color: rgba(255,248,244,0.24); }
-    [data-theme="down-dawn"] .quote { color: rgba(255,248,244,0.82); }
-    [data-theme="down-dawn"] .impact-text { color: rgba(255,248,244,0.88); }
+    [data-theme="down-dawn"] .quote { color: rgba(255,248,244,0.9); }
+    [data-theme="down-dawn"] .impact-text { color: rgba(255,248,244,0.94); }
+
+    /* 後半章（6〜8章）の可読性フロア：
+       インラインの淡色指定が暗背景に沈まないよう下限を引き上げる */
+    [data-theme="break"] .body-copy,
+    [data-theme="down-dawn"] .body-copy,
+    [data-theme="down-dawn"] .q-line,
+    [data-theme="down-dawn"] .state-line,
+    [data-theme="down-dawn"] .burden-item,
+    [data-theme="dawn"] .body-copy,
+    [data-theme="awake"] .body-copy {
+      color: rgba(255,248,244,0.86) !important;
+    }
+    [data-theme="break"] .quote,
+    [data-theme="break"] .impact-text,
+    [data-theme="break"] .q-item,
+    [data-theme="down-dawn"] .quote,
+    [data-theme="down-dawn"] .impact-text,
+    [data-theme="dawn"] .quote,
+    [data-theme="dawn"] .lead,
+    [data-theme="dawn"] .impact-text,
+    [data-theme="awake"] .quote,
+    [data-theme="awake"] .lead,
+    [data-theme="awake"] .impact-text,
+    [data-theme="awake"] .q-line {
+      color: rgba(255,248,244,0.95) !important;
+    }
+    [data-theme="dawn"] .quote,
+    [data-theme="dawn"] .lead,
+    [data-theme="dawn"] .impact-text {
+      text-shadow: 0 2px 22px rgba(0,0,0,0.35);
+    }
 
 
     .prologue-moon {
@@ -470,31 +503,79 @@
       animation: blobDrift3 22s ease-in-out infinite alternate;
     }
 
-    /* ===== BUTTERFLIES ===== */
-    #bflyLayer {
-      position: fixed; inset: 0; z-index: -1;
-      pointer-events: none; overflow: hidden;
+    /* ===== BUTTERFLIES — スクロールに漂う小さな蝶（余韻の空気感） ===== */
+    #butterfly-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 2;               /* 背景・写真より上／CTAの暗幕と本文より下 */
+      pointer-events: none;
+      overflow: hidden;
     }
-    .bfly {
+    #butterfly-layer .bf-layer,
+    #butterfly-layer .bf-extra {
       position: absolute;
-      width: 44px; height: 28px;
+      inset: 0;
+      will-change: transform;
+      transition: opacity 1.8s ease;
+    }
+    #butterfly-layer .bf-back,
+    #butterfly-layer .bf-mid,
+    #butterfly-layer .bf-front { opacity: 0.9; }
+    #butterfly-layer .bf-extra { opacity: 0; transition: opacity 2.6s ease; }
+
+    /* シーン別の密度・存在感：走馬灯で少し増え、CTAで静かに */
+    #butterfly-layer.bf-soulmap .bf-layer { opacity: 1; }
+    #butterfly-layer.bf-soulmap .bf-extra { opacity: 0.92; }
+    #butterfly-layer.bf-cta .bf-back,
+    #butterfly-layer.bf-cta .bf-mid       { opacity: 0; }
+    #butterfly-layer.bf-cta .bf-front     { opacity: 0.26; }
+    #butterfly-layer.bf-cta .bf-extra     { opacity: 0; }
+
+    .bf {
+      position: absolute;
+      top: 0; left: 0;
+      width: var(--w, 11px);
+      height: calc(var(--w, 11px) * 0.9);
       opacity: 0;
-      filter: drop-shadow(0 0 8px rgba(220,120,200,0.5));
-      animation: bflyFloat var(--bd,20s) ease-in-out infinite;
-      animation-delay: var(--bdelay,0s);
+      filter: drop-shadow(0 0 2.4px rgba(255,250,238,0.42)) blur(var(--bl, 0px));
+      animation: bfDrift var(--drift, 30s) ease-in-out var(--ddelay, 0s) infinite;
     }
-    .bfly::before, .bfly::after {
-      content: ""; position: absolute; top: 0;
-      width: 22px; height: 28px;
-      border-radius: 70% 30% 70% 30%;
+    .bf::before, .bf::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      height: 100%;
+      width: 52%;
+      background: var(--wing, rgba(255,255,255,0.9));
+      border-radius: 66% 34% 54% 46%;
     }
-    .bfly::before { left: 0; transform-origin: right center; transform: rotate(var(--bl,-20deg)); }
-    .bfly::after  { right: 0; transform-origin: left center; transform: rotate(var(--br,20deg)) scaleX(-1); }
-    .bfly.p::before, .bfly.p::after {
-      background: linear-gradient(135deg, rgba(230,150,220,0.7), rgba(180,60,160,0.25));
+    .bf::before {
+      left: 0;
+      transform-origin: right center;
+      animation: bfFlapL var(--flap, 3s) ease-in-out var(--fdelay, 0s) infinite;
     }
-    .bfly.r::before, .bfly.r::after {
-      background: linear-gradient(135deg, rgba(255,200,220,0.65), rgba(220,100,140,0.2));
+    .bf::after {
+      right: 0;
+      transform-origin: left center;
+      animation: bfFlapR var(--flap, 3s) ease-in-out var(--fdelay, 0s) infinite;
+    }
+    @keyframes bfFlapL { 0%,100% { transform: scaleX(1); }  50% { transform: scaleX(0.3); } }
+    @keyframes bfFlapR { 0%,100% { transform: scaleX(-1); } 50% { transform: scaleX(-0.3); } }
+    @keyframes bfDrift {
+      0%   { opacity: 0; transform: translate(var(--x0,0), var(--y0,0)) rotate(var(--r0,0deg)) scale(calc(var(--sc,1) * 0.9)); }
+      10%  { opacity: var(--op, 0.35); }
+      50%  { transform: translate(var(--x1,0), var(--y1,0)) rotate(var(--r1,0deg)) scale(var(--sc,1)); }
+      90%  { opacity: var(--op, 0.35); }
+      100% { opacity: 0; transform: translate(var(--x2,0), var(--y2,0)) rotate(var(--r2,0deg)) scale(calc(var(--sc,1) * 1.05)); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #butterfly-layer .bf-layer, #butterfly-layer .bf-extra { opacity: 0.32 !important; }
+      .bf {
+        animation: none;
+        opacity: var(--op, 0.3);
+        transform: translate(var(--x1,0), var(--y1,0)) rotate(var(--r1,0deg)) scale(var(--sc,1));
+      }
+      .bf::before, .bf::after { animation: none; }
     }
 
     /* ===== SPARKLES ===== */
@@ -574,6 +655,568 @@
       font-family: var(--sans);
       font-size: 0.68rem; letter-spacing: 0.22em; text-transform: uppercase;
     }
+    /* 章冒頭の現在地マーカー（CHAPTER N / 08） */
+    .eyebrow.chapter-marker {
+      display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap;
+    }
+    .chapter-marker .cm-no { font-size: 0.74rem; white-space: nowrap; }
+    .chapter-marker .cm-no i {
+      font-style: normal; opacity: 0.5;
+      margin-left: 0.3em; font-size: 0.85em;
+    }
+    .chapter-marker .cm-name { opacity: 0.62; font-size: 0.62rem; letter-spacing: 0.24em; }
+
+    /* 章の終わりを示す区切り（次章への余白） */
+    .chapter-close {
+      margin-top: 96px;
+      display: grid;
+      justify-items: center;
+      gap: 16px;
+      text-align: center;
+      font-family: var(--sans);
+      letter-spacing: 0.24em;
+    }
+    .chapter-close::before {
+      content: "";
+      width: 1px;
+      height: 64px;
+      background: linear-gradient(180deg, transparent, rgba(234,211,162,0.55));
+    }
+    .chapter-close .close-label {
+      color: rgba(234,211,162,0.7);
+      font-size: 0.62rem;
+    }
+    .chapter-close .close-next {
+      color: rgba(255,248,244,0.42);
+      font-size: 0.56rem;
+    }
+
+    /* マレーシア国旗（7章・移住シーン）— 背景に大きく、スクロール連動でフェード */
+    .flag-scene { position: relative; overflow: hidden; }
+    .flag-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(78vw, 720px);
+      transform: translate(-50%, -50%) scale(0.92);
+      z-index: 0;
+      line-height: 0;
+      opacity: 0;
+      pointer-events: none;
+      filter: saturate(0.85) blur(0.4px)
+              drop-shadow(0 30px 80px rgba(0,0,0,0.45));
+      will-change: opacity, transform;
+    }
+    .flag-bg svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 10px;
+    }
+    .flag-scene > div { position: relative; z-index: 1; }
+
+    /* ===== FINAL SUMMARY: 明るい締めくくりゾーン ===== */
+    .final-summary {
+      position: relative;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(234,211,162,0.28), transparent 38rem),
+        linear-gradient(180deg, #fff8ef 0%, #f4e6dc 48%, #ead8cf 100%);
+      color: #332622;
+    }
+    .final-summary::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 240px;
+      background: linear-gradient(180deg, rgba(23,17,38,0.4), transparent);
+      pointer-events: none;
+    }
+    .final-summary .section { color: #332622; }
+    .final-summary .eyebrow,
+    .final-summary .chapter-marker { color: rgba(51,38,34,0.55); }
+    .final-summary .quote,
+    .final-summary .lead,
+    .final-summary .impact-text,
+    .final-summary .body-copy,
+    .final-summary .story-line {
+      color: #332622;
+      text-shadow: none;
+    }
+    .final-summary .body-copy.sm { color: rgba(51,38,34,0.72); }
+    .final-summary .final-opener {
+      min-height: 96svh;
+      text-align: center;
+    }
+    .final-summary .final-opener .quote {
+      font-size: clamp(1.9rem, 8vw, 2.7rem);
+      line-height: 1.9;
+    }
+    .final-summary .final-opener .body-copy {
+      max-width: 30em;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== LIFE is ART — 最終セクション（ダーク・ラグジュアリー） ===== */
+    .life-art {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      align-items: stretch;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 16%, rgba(118,65,126,0.34), transparent 30%),
+        radial-gradient(circle at 18% 82%, rgba(75,18,58,0.42), transparent 34%),
+        linear-gradient(155deg, #020006 0%, #0b0310 34%, #17071c 66%, #050006 100%);
+      color: var(--ink);
+      padding: clamp(58px, 8svh, 92px) 0 clamp(48px, 7svh, 84px);
+      isolation: isolate;
+    }
+    .life-art::before,
+    .life-art::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+    }
+    .life-art::before {
+      z-index: 1;
+      background:
+        radial-gradient(circle at 12% 16%, rgba(234,211,162,0.18) 0 1px, transparent 2px),
+        radial-gradient(circle at 86% 68%, rgba(255,238,190,0.16) 0 1px, transparent 2px),
+        radial-gradient(circle at 72% 38%, rgba(255,255,255,0.14) 0 1px, transparent 2px);
+      background-size: 98px 144px, 146px 178px, 182px 230px;
+      opacity: 0.48;
+      mix-blend-mode: screen;
+    }
+    .life-art::after {
+      z-index: 3;
+      background:
+        linear-gradient(90deg, rgba(2,0,6,0.98) 0%, rgba(8,2,12,0.94) 38%, rgba(13,4,18,0.58) 62%, rgba(4,0,7,0.22) 100%),
+        linear-gradient(180deg, rgba(0,0,0,0.36) 0%, rgba(0,0,0,0.02) 32%, rgba(0,0,0,0.18) 68%, rgba(0,0,0,0.78) 100%);
+    }
+    .life-art__bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .life-art__bg img {
+      position: absolute;
+      top: 50%;
+      right: -18%;
+      width: min(86vw, 560px);
+      height: 104%;
+      transform: translateY(-50%);
+      object-fit: cover;
+      object-position: 64% 42%;
+      opacity: 0.62;
+      filter: saturate(0.82) contrast(1.06) brightness(0.72) sepia(0.08);
+    }
+    .life-art__bg::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 86% 82%, rgba(234,211,162,0.18), transparent 17%),
+        radial-gradient(circle at 78% 86%, rgba(91,18,70,0.44), transparent 24%),
+        linear-gradient(90deg, #030007 0%, rgba(4,0,8,0.96) 32%, rgba(8,2,14,0.72) 57%, rgba(3,0,7,0.48) 100%);
+    }
+    .life-art__ornaments {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      pointer-events: none;
+    }
+    .life-art__ornaments::before {
+      content: "";
+      position: absolute;
+      right: -76px;
+      bottom: -64px;
+      width: min(64vw, 420px);
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 38% 32%, rgba(92,24,84,0.92) 0 9%, transparent 10% 100%),
+        radial-gradient(circle at 62% 34%, rgba(113,34,96,0.68) 0 8%, transparent 9% 100%),
+        radial-gradient(circle at 47% 60%, rgba(47,7,45,0.88) 0 15%, transparent 16% 100%),
+        radial-gradient(circle at 70% 65%, rgba(234,211,162,0.16) 0 5%, transparent 6% 100%);
+      filter: blur(10px);
+      opacity: 0.44;
+    }
+    .life-art__ornaments::after {
+      content: "";
+      position: absolute;
+      right: 7%;
+      bottom: 8%;
+      width: 74px;
+      height: 132px;
+      border: 1px solid rgba(234,211,162,0.18);
+      border-radius: 40px 40px 12px 12px;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255,226,160,0.34), transparent 18%),
+        linear-gradient(180deg, rgba(255,255,255,0.07), rgba(81,22,75,0.12));
+      box-shadow: 0 0 32px rgba(234,211,162,0.12), inset 0 0 28px rgba(234,211,162,0.04);
+      opacity: 0.48;
+    }
+    .life-art__lace {
+      position: absolute;
+      inset: 0 auto 0 46%;
+      width: min(44vw, 470px);
+      z-index: 2;
+      pointer-events: none;
+      opacity: 0.15;
+      background:
+        radial-gradient(circle at 50% 50%, transparent 0 10px, rgba(234,211,162,0.55) 11px 12px, transparent 13px),
+        radial-gradient(circle at 0 50%, transparent 0 8px, rgba(255,248,244,0.38) 9px 10px, transparent 11px);
+      background-size: 56px 56px, 56px 56px;
+      mask-image: linear-gradient(90deg, transparent, #000 30%, #000 70%, transparent);
+    }
+    .life-art__inner {
+      position: relative;
+      z-index: 4;
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 0 clamp(24px, 6.4vw, 76px);
+      display: flex;
+      align-items: center;
+    }
+    .life-art__col {
+      position: relative;
+      z-index: 4;
+      width: min(100%, 32em);
+      padding: clamp(14px, 3svh, 42px) 0;
+    }
+    .life-art__brand {
+      font-family: var(--serif);
+      font-size: clamp(1.35rem, 6vw, 2.65rem);
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      margin: 0 0 12px;
+      font-weight: 400;
+      text-shadow: 0 0 26px rgba(234,211,162,0.18);
+    }
+    .life-art__brand-sub {
+      font-family: var(--serif);
+      font-size: clamp(0.82rem, 3vw, 1rem);
+      color: rgba(255,248,244,0.72);
+      letter-spacing: 0.08em;
+      line-height: 1.9;
+      margin: 0 0 clamp(50px, 8svh, 82px);
+    }
+    .life-art__head {
+      font-family: var(--serif);
+      font-weight: 400;
+      font-size: clamp(2.35rem, 12.2vw, 5.7rem);
+      line-height: 1.55;
+      letter-spacing: 0.08em;
+      color: rgba(255,250,242,0.92);
+      margin: 0 0 clamp(32px, 5.2svh, 54px);
+      text-shadow: 0 2px 32px rgba(0,0,0,0.78), 0 0 42px rgba(234,211,162,0.12);
+    }
+    .life-art__rule {
+      width: clamp(170px, 42vw, 292px);
+      height: 18px;
+      margin: 0 0 clamp(32px, 5svh, 52px);
+      color: var(--gold);
+      opacity: 0.74;
+    }
+    .life-art__rule svg { display: block; width: 100%; height: 100%; overflow: visible; }
+    .life-art__body {
+      font-family: var(--serif);
+      font-size: clamp(0.92rem, 3.45vw, 1.08rem);
+      line-height: 2.32;
+      letter-spacing: 0.05em;
+      color: rgba(255,248,244,0.82);
+      margin: 0 0 clamp(34px, 5.5svh, 54px);
+      text-shadow: 0 2px 22px rgba(0,0,0,0.72);
+    }
+    .life-art__body .em { color: var(--gold); }
+    .life-art__actions {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 18px;
+    }
+    .life-art__cta {
+      position: relative;
+      z-index: 5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      width: min(100%, 430px);
+      font-family: var(--serif);
+      font-size: clamp(0.98rem, 3.3vw, 1.12rem);
+      letter-spacing: 0.08em;
+      color: rgba(234,211,162,0.92);
+      text-decoration: none;
+      white-space: nowrap;
+      padding: clamp(18px, 2.8svh, 23px) clamp(24px, 7vw, 50px);
+      border: 1px solid rgba(234,211,162,0.62);
+      border-radius: 4px;
+      background: linear-gradient(180deg, rgba(234,211,162,0.08), rgba(234,211,162,0.025));
+      box-shadow: inset 0 0 0 1px rgba(255,248,244,0.035), 0 20px 50px rgba(0,0,0,0.34);
+      transition: background 0.5s ease, border-color 0.5s ease, transform 0.5s ease, box-shadow 0.5s ease;
+    }
+    .life-art__cta:hover {
+      background: linear-gradient(180deg, rgba(234,211,162,0.16), rgba(234,211,162,0.055));
+      border-color: rgba(234,211,162,0.86);
+      box-shadow: inset 0 0 0 1px rgba(255,248,244,0.07), 0 0 34px rgba(234,211,162,0.12), 0 20px 50px rgba(0,0,0,0.38);
+      transform: translateY(-2px);
+    }
+    .life-art__cta .arw {
+      color: var(--gold);
+      transition: transform 0.5s ease;
+    }
+    .life-art__cta:hover .arw { transform: translateX(5px); }
+    .life-art__cta--sub {
+      font-size: clamp(0.86rem, 2.8vw, 0.96rem);
+      padding: clamp(13px, 2.1svh, 17px) clamp(22px, 5vw, 38px);
+      color: rgba(255,248,244,0.72);
+      border-color: rgba(234,211,162,0.32);
+      background: rgba(255,248,244,0.018);
+      box-shadow: none;
+    }
+    .life-art__cta--sub:hover {
+      background: rgba(255,248,244,0.06);
+      border-color: rgba(234,211,162,0.58);
+    }
+    @media (max-width: 720px) {
+      .life-art {
+        align-items: flex-start;
+        padding-top: max(54px, 7svh);
+      }
+      .life-art__bg img {
+        right: -38%;
+        width: 100%;
+        height: 100%;
+        object-position: 62% 42%;
+        opacity: 0.5;
+      }
+      .life-art__lace { inset-inline-start: 38%; width: 70vw; opacity: 0.11; }
+      .life-art__col { max-width: 100%; }
+      .life-art__body { max-width: 25em; }
+      .life-art__cta { width: min(100%, 392px); }
+      .life-art__cta {
+        font-size: clamp(0.9rem, 3.05vw, 1rem);
+        padding-inline: 20px;
+      }
+    }
+    @media (min-width: 900px) {
+      .life-art__bg img {
+        right: 0;
+        width: min(52vw, 650px);
+        opacity: 0.7;
+      }
+      .life-art__col { width: min(48vw, 34em); }
+    }
+
+    /* ===== SOULMAP — 人生の走馬灯（エピローグ・集大成） ===== */
+    .soulmap { position: relative; background: transparent; }
+    .soulmap__stage {
+      position: relative;
+      height: 100svh;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      --wallB: 0.86;
+      --washo: 0.42;
+    }
+    /* パララックス写真レイヤー（手前・中間・奥） */
+    .soulmap__layers {
+      position: absolute;
+      inset: -12% -8%;
+      z-index: 0;
+      transform-origin: 50% 50%;
+      will-change: transform;
+    }
+    .smlayer {
+      position: absolute;
+      inset: 0;
+      filter: brightness(var(--wallB)) saturate(0.92);
+      will-change: transform, filter;
+    }
+    .smph {
+      position: absolute;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 26px 64px rgba(46,30,22,0.30);
+      transform: rotate(var(--r, 0deg));
+    }
+    .smph img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: var(--o, 0.7);
+      filter: blur(var(--b, 2px)) sepia(0.05);
+      animation: smDrift var(--dur, 22s) ease-in-out var(--delay, 0s) infinite;
+    }
+    @keyframes smDrift {
+      0%, 100% {
+        transform: translateY(0);
+        opacity: var(--o, 0.7);
+        filter: blur(var(--b, 2px)) sepia(0.05);
+      }
+      50% {
+        transform: translateY(-13px);
+        opacity: calc(var(--o, 0.7) * 0.7);
+        filter: blur(calc(var(--b, 2px) + 1.8px)) sepia(0.05);
+      }
+    }
+    /* 中央の光（朝日がカーテンから差し込むような） */
+    .soulmap__light {
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 92vmax; height: 92vmax;
+      transform: translate(-50%, -50%) scale(var(--ls, 0.55));
+      background: radial-gradient(circle,
+        rgba(255,252,246,0.78) 0%,
+        rgba(255,249,239,0.34) 26%,
+        rgba(255,247,235,0.10) 50%,
+        rgba(255,247,235,0) 68%);
+      opacity: var(--lo, 0.12);
+      z-index: 1;
+      pointer-events: none;
+      mix-blend-mode: screen;
+      will-change: transform, opacity;
+    }
+    /* 暖色ウォッシュ（白・クリーム・薄ゴールド） */
+    .soulmap__wash {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(120% 90% at 50% 46%, rgba(255,246,224,0.10) 0%, rgba(255,244,226,0) 55%),
+        linear-gradient(180deg,
+          rgba(255,251,244,0.6) 0%,
+          rgba(255,248,239,0.16) 26%,
+          rgba(255,246,236,0.16) 72%,
+          rgba(250,240,229,0.62) 100%);
+      opacity: var(--washo, 0.42);
+    }
+    /* コピー */
+    .soulmap__copy {
+      position: relative;
+      z-index: 3;
+      text-align: center;
+      padding: 0 6vw;
+      pointer-events: none;
+    }
+    .soulmap .sm-big {
+      font-family: var(--serif);
+      font-weight: 400;
+      color: #3a2a22;
+      margin: 0;
+      letter-spacing: 0.09em;
+      line-height: 1.7;
+    }
+    .soulmap .sm-big--1 {
+      font-size: clamp(1.7rem, 6.6vw, 3rem);
+      text-shadow: 0 2px 26px rgba(255,250,242,0.92);
+    }
+    .soulmap .sm-big--1 .c {
+      display: inline-block;
+      white-space: pre;
+    }
+    .soulmap .sm-big--2 {
+      position: absolute;
+      left: 0; right: 0;
+      top: 50%;
+      transform: translateY(60px);
+      font-size: clamp(2.4rem, 11vw, 5.2rem);
+      letter-spacing: 0.18em;
+      line-height: 1.5;
+      opacity: 0;
+      color: #33241c;
+      text-shadow: 0 2px 44px rgba(255,252,246,0.96), 0 0 70px rgba(255,238,204,0.55);
+    }
+    /* 締めの一文たち */
+    .soulmap__closing {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      padding: 0 8vw;
+      text-align: center;
+    }
+    .soulmap .sm-cl {
+      position: absolute;
+      max-width: 22em;
+      font-family: var(--serif);
+      font-size: clamp(1.05rem, 3.9vw, 1.55rem);
+      line-height: 2.25;
+      letter-spacing: 0.07em;
+      color: #46342a;
+      margin: 0;
+      opacity: 0;
+      text-shadow: 0 2px 22px rgba(255,250,242,0.94);
+    }
+    .soulmap .sm-cl--final { color: #2f2119; }
+    .soulmap .sm-cl--final .accent {
+      display: inline-block;
+      color: #9d7c3c;
+      font-size: 1.2em;
+      letter-spacing: 0.12em;
+      margin: 0.15em 0;
+    }
+    @media (max-width: 720px) {
+      .soulmap__layers { inset: -16% -16%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .smph img { animation: none; }
+    }
+
+    /* ===== AFTERGLOW — 余韻（走馬灯とLIFE is ARTの間の静けさ・ベージュ→闇への橋） ===== */
+    .afterglow {
+      position: relative;
+      min-height: 64svh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      background: linear-gradient(180deg,
+        #ead8cf 0%,
+        #d7c1bc 20%,
+        #9a7d80 44%,
+        #4a3541 66%,
+        #221621 84%,
+        #140e18 100%);
+    }
+    .afterglow__breath {
+      position: relative;
+      width: 1px;
+      height: clamp(90px, 17vh, 170px);
+      background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(234,211,162,0.72) 50%,
+        transparent 100%);
+      animation: afterglowBreath 5.6s ease-in-out infinite;
+    }
+    .afterglow__breath::after {
+      content: "";
+      position: absolute;
+      left: 50%; top: 50%;
+      width: 3px; height: 3px;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+      background: rgba(240,224,180,0.95);
+      box-shadow: 0 0 20px 7px rgba(234,211,162,0.42);
+    }
+    @keyframes afterglowBreath {
+      0%, 100% { opacity: 0.28; transform: scaleY(0.82); }
+      50%      { opacity: 0.85; transform: scaleY(1.08); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .afterglow__breath { animation: none; opacity: 0.6; }
+    }
+
     .quote {
       font-size: clamp(1.8rem,7.8vw,2.5rem);
       font-weight: 400; line-height: 1.75;
@@ -647,9 +1290,6 @@
       font-family: var(--sans);
       font-size: 0.82rem; line-height: 2.05;
     }
-    [data-theme="dawn"] .quote,
-    [data-theme="dawn"] .lead,
-    [data-theme="dawn"] .impact-text,
     [data-theme="rose"] .quote,
     [data-theme="rose"] .lead,
     [data-theme="rose"] .impact-text {
@@ -658,15 +1298,12 @@
         0 1px 18px rgba(255,248,244,0.48),
         0 1px 1px rgba(255,248,244,0.34);
     }
-    [data-theme="dawn"] .body-copy,
-    [data-theme="dawn"] .body-copy.sm,
     [data-theme="rose"] .body-copy,
     [data-theme="rose"] .body-copy.sm {
       color: rgba(77,34,48,0.8);
       text-shadow: 0 1px 10px rgba(255,248,244,0.36);
       font-weight: 600;
     }
-    [data-theme="dawn"] .scene-label,
     [data-theme="rose"] .scene-label {
       color: rgba(77,34,48,0.58);
     }
@@ -751,8 +1388,7 @@
       line-height: 2.1;
     }
     [data-theme="light"] .reflection-card,
-    [data-theme="rose"] .reflection-card,
-    [data-theme="dawn"] .reflection-card {
+    [data-theme="rose"] .reflection-card {
       border-color: rgba(77,34,48,0.12);
       background:
         linear-gradient(145deg, rgba(255,255,255,0.38), rgba(255,255,255,0.16)),
@@ -761,13 +1397,11 @@
       box-shadow: 0 28px 70px rgba(180,58,104,0.12);
     }
     [data-theme="light"] .reflection-card p,
-    [data-theme="rose"] .reflection-card p,
-    [data-theme="dawn"] .reflection-card p {
+    [data-theme="rose"] .reflection-card p {
       color: rgba(77,34,48,0.72);
     }
     [data-theme="light"] .reflection-kicker,
-    [data-theme="rose"] .reflection-kicker,
-    [data-theme="dawn"] .reflection-kicker {
+    [data-theme="rose"] .reflection-kicker {
       color: rgba(77,34,48,0.62);
     }
     .memory-fragment {
@@ -1054,6 +1688,7 @@
       transition: opacity 900ms ease, transform 900ms ease;
     }
     .section.is-visible .reveal                        { opacity: 1; transform: none; }
+    .life-art.is-visible .reveal                       { opacity: 1; transform: none; }
     .section.is-visible .reveal:nth-child(2)           { transition-delay: 130ms; }
     .section.is-visible .reveal:nth-child(3)           { transition-delay: 250ms; }
     .section.is-visible .reveal:nth-child(4)           { transition-delay: 370ms; }
@@ -1324,13 +1959,6 @@
       from { transform: translate(0,0) scale(0.9); opacity:.3; }
       to   { transform: translate(40px,-50px) scale(1.15); opacity:.6; }
     }
-    @keyframes bflyFloat {
-      0%   { opacity:0; transform: translate(0,0) rotate(0deg); }
-      10%  { opacity:.55; }
-      50%  { opacity:.45; transform: translate(var(--bx,30px), var(--by,-40px)) rotate(var(--brot,8deg)); }
-      90%  { opacity:.35; }
-      100% { opacity:0; transform: translate(var(--bx2,60px), var(--by2,-80px)) rotate(var(--brot2,-5deg)); }
-    }
     @keyframes breathe   { 0%,100%{opacity:.88} 50%{opacity:1} }
     @keyframes softBlink { 0%,100%{opacity:.38} 50%{opacity:1} }
     @keyframes particleDrift {
@@ -1444,7 +2072,20 @@
     .section.cinema-loss {
       background:
         radial-gradient(ellipse at 50% 118%, rgba(117,126,145,0.1), transparent 52%),
-        linear-gradient(180deg, rgba(6,8,14,0.18), rgba(2,3,7,0.5));
+        linear-gradient(180deg, rgba(8,11,22,0.55), rgba(3,4,10,0.72));
+    }
+    /* Chapter 6: 深い藍・黒紫・静かな水面 */
+    .section.cinema-loss[data-theme="break"] {
+      background:
+        radial-gradient(ellipse at 50% 118%, rgba(96,120,168,0.12), transparent 52%),
+        linear-gradient(180deg, rgba(9,13,30,0.62), rgba(6,7,20,0.78));
+    }
+    /* Chapter 7 前半: 世界の広がり・旅の空気（藍に微かな暖色） */
+    .section.cinema-world {
+      background:
+        radial-gradient(ellipse at 50% 0%, rgba(126,152,208,0.1), transparent 26rem),
+        radial-gradient(circle at 82% 84%, rgba(234,211,162,0.06), transparent 20rem),
+        linear-gradient(180deg, rgba(8,12,26,0.58), rgba(8,9,22,0.68));
     }
     .section.cinema-loss::before {
       display: block;
@@ -1493,7 +2134,7 @@
     .section.cinema-return {
       background:
         radial-gradient(circle at 48% 36%, rgba(234,211,162,0.12), transparent 22rem),
-        linear-gradient(180deg, rgba(24,18,28,0.2), rgba(53,39,46,0.1));
+        linear-gradient(180deg, rgba(20,15,30,0.55), rgba(38,28,40,0.45));
     }
     .section.cinema-return::before {
       display: block;
@@ -1594,7 +2235,7 @@
     .section.cinema-healing {
       background:
         radial-gradient(ellipse at 50% 8%, rgba(186,222,214,0.12), transparent 28rem),
-        linear-gradient(180deg, rgba(9,11,18,0.16), rgba(18,14,27,0.18));
+        linear-gradient(180deg, rgba(12,13,24,0.55), rgba(24,18,36,0.5));
     }
     .section.cinema-healing::before {
       display: block;
@@ -2200,7 +2841,7 @@
       color: rgba(255,248,244,0.64);
       font-weight: 400;
     }
-    .chapter-indicator-number span {
+    .chapter-indicator-current {
       display: inline;
       font-size: 1.05rem;
       font-weight: 400;
@@ -2305,6 +2946,10 @@
       background: rgba(234,211,162,0.12);
       color: rgba(255,248,244,0.98);
     }
+    .chapter-jump-link[data-jump-ch="FINAL"] .chapter-jump-no,
+    .chapter-jump-link[data-jump-ch="FINAL"] .chapter-jump-name strong {
+      letter-spacing: 0.16em;
+    }
     .chapter-jump-no {
       color: rgba(234,211,162,0.82);
       font-family: Georgia, serif;
@@ -2342,8 +2987,8 @@
     [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number {
       color: rgba(90,38,56,0.62);
     }
-    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-number span,
-    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-number span {
+    [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-current,
+    [data-theme="rose"] ~ .chapter-indicator .chapter-indicator-current {
       color: rgba(90,38,56,0.82);
     }
     [data-theme="dawn"] ~ .chapter-indicator .chapter-indicator-progress,
@@ -2379,14 +3024,14 @@
       }
       .chapter-jump-menu {
         width: min(230px, calc(100vw - 24px));
-        max-height: min(62svh, 438px);
+        max-height: min(68svh, 500px);
         overflow-y: auto;
         border-radius: 18px;
       }
       .chapter-jump-link {
-        min-height: 40px;
+        min-height: 38px;
         grid-template-columns: 38px 1fr;
-        padding: 7px 9px;
+        padding: 6px 9px;
       }
     }
   </style>
@@ -2401,7 +3046,12 @@
   <div class="gblob b3"></div>
 </div>
 <!-- butterflies -->
-<div id="bflyLayer"></div>
+<div id="butterfly-layer" aria-hidden="true">
+  <div class="bf-layer bf-back"></div>
+  <div class="bf-layer bf-mid"></div>
+  <div class="bf-layer bf-front"></div>
+  <div class="bf-extra"></div>
+</div>
 <!-- sparkles -->
 <canvas id="sparkCanvas"></canvas>
 <!-- page turn transition -->
@@ -2523,10 +3173,10 @@
           <span class="chapter-arrow">→</span>
         </a>
 
-        <a class="chapter-card" href="#remember">
+        <a class="chapter-card" href="#journey">
           <span class="chapter-no">CHAPTER 07</span>
-          <strong>REMEMBER</strong>
-          <em>自分を思い出す</em>
+          <strong>JOURNEY</strong>
+          <em>豊かさとは何か</em>
           <span class="chapter-arrow">→</span>
         </a>
 
@@ -2549,6 +3199,7 @@
       <div class="prologue-moon-orb" id="prologueMoonOrb"></div>
     </div>
     <div>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 01 <i>/ 08</i></span><span class="cm-name">PROLOGUE｜探していたもの</span></p>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.1rem;line-height:2.5">
         私は思う。<br /><br />
         人は変わる必要なんてない。<br /><br />
@@ -2594,7 +3245,7 @@
   <section class="section compact childhood" id="memory" data-theme="void" data-ch="02" data-ch-name="MEMORY">
     <div class="moon"></div>
     <div>
-      <p class="eyebrow reveal">1章｜幼少期</p>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 02 <i>/ 08</i></span><span class="cm-name">MEMORY｜幼少期</span></p>
       <h2 class="quote reveal question-reveal" aria-label="幼少期。私は、生まれてきてよかったの？">
         <span class="q-small">私は、</span>
         <span class="q-mid">生まれてきて</span>
@@ -2756,7 +3407,7 @@
       <img src="assets/teenage-tug.jpg" alt="" style="object-position:52% 28%" />
     </figure>
     <div>
-      <p class="eyebrow reveal">02 / teenage</p>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 03 <i>/ 08</i></span><span class="cm-name">WOUND｜傷と孤独</span></p>
       <h2 class="quote reveal">世界は、<br />なぜ争うのか？</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         小5で、いじめ。<br />
@@ -2991,7 +3642,7 @@
       <img src="assets/twenties-mirror-style.jpg" alt="" style="object-position:50% 54%" />
     </figure>
     <div>
-      <p class="eyebrow reveal">03 / twenties</p>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 04 <i>/ 08</i></span><span class="cm-name">LOVE｜愛されたい私</span></p>
       <h2 class="quote reveal">"欠乏を埋める人生"だった。</h2>
       <div class="one-word reveal">
         <span>愛。</span><span>承認。</span><span>お金。</span>
@@ -3180,7 +3831,7 @@
       <img src="assets/mother-1.jpg" alt="" />
     </figure>
     <div>
-      <p class="eyebrow reveal">05 / mother</p>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 05 <i>/ 08</i></span><span class="cm-name">MOTHER｜守ること、自由でいること</span></p>
       <h2 class="lead reveal">守る。<br /><br />でも、<br />自由でいたい。</h2>
       <p class="body-copy reveal">
         24歳で結婚。<br />
@@ -3556,6 +4207,29 @@
     </div>
   </section>
 
+  <!-- ======== Chapter 6: 潜在意識・本音・言葉の嘘 ======== -->
+  <section class="section cinema-loss tall" id="break" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
+    <figure class="photo soft dark reveal">
+      <img src="assets/after-divorce-3.jpg" alt="" />
+    </figure>
+    <div>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 06 <i>/ 08</i></span><span class="cm-name">STILLNESS｜変われない日々</span></p>
+      <h2 class="quote reveal">「人はなぜ、<br />変われないのか？」</h2>
+      <p class="body-copy sm reveal">
+        知っても変わらない。<br />
+        行動しない。<br />
+        戻ってしまう。<br /><br />
+        私は向いてないのかな。<br />
+        もっとできたんじゃないか。<br /><br />
+        言葉では限界がある。<br />
+        願望は嘘をつく。<br />
+        足りないものを埋めようとしている<br />
+        だけ。<br />
+        本当にやりたいことじゃない。
+      </p>
+    </div>
+  </section>
+
   <!-- ======== S57: 暗転・葛藤の始まり ======== -->
   <section class="section cinema-loss compact" data-theme="break">
     <div>
@@ -3663,61 +4337,19 @@
         この問いが、<br />
         次へ進ませる。
       </h2>
-      <p class="body-copy sm reveal late" style="margin-top:42px;color:rgba(255,248,244,0.68)">
-        深層心理のコーチングへ。
+      <p class="body-copy sm reveal late" style="margin-top:42px;color:rgba(255,248,244,0.78)">
+        成功から、本質へ。<br />
+        表層から、深層へ。
       </p>
+      <div class="chapter-close reveal late">
+        <span class="close-label">Chapter 06 ─ 了</span>
+        <span class="close-next">Next：Chapter 07｜世界旅と、豊かさへの問い</span>
+      </div>
     </div>
   </section>
 
-  <!-- ======== Chapter 6: 行き詰まり・気づき ======== -->
-  <section class="section cinema-loss tall" id="break" data-theme="break" data-ch="06" data-ch-name="STILLNESS">
-    <figure class="photo soft dark reveal">
-      <img src="assets/after-divorce-3.jpg" alt="" />
-    </figure>
-    <div>
-      <p class="eyebrow reveal">06 / stillness</p>
-      <h2 class="quote reveal">「人はなぜ、<br />変われないのか？」</h2>
-      <p class="body-copy sm reveal">
-        知っても変わらない。<br />
-        行動しない。<br />
-        戻ってしまう。<br /><br />
-        私は向いてないのかな。<br />
-        もっとできたんじゃないか。<br /><br />
-        言葉では限界がある。<br />
-        願望は嘘をつく。<br />
-        足りないものを埋めようとしている<br />
-        だけ。<br />
-        本当にやりたいことじゃない。
-      </p>
-    </div>
-  </section>
-
-  <!-- ======== Chapter 7: 気づき ======== -->
-  <section class="section awake cinema-return center-message" id="remember" data-theme="awake" data-ch="07" data-ch-name="REMEMBER">
-    <div class="butterfly"></div>
-    <figure class="photo round rose-f">
-      <img src="assets/meditation.jpg" alt="" />
-    </figure>
-    <div style="text-align:center;padding-top:44px">
-      <p class="eyebrow reveal">07 / remember</p>
-      <h2 class="impact-text reveal slow-text">「人は変わるんじゃない。」</h2>
-      <p class="body-copy reveal big-question" style="color:#fff">思い出すんだ。</p>
-    </div>
-  </section>
-
-  <section class="section section-reflection cinema-return" data-theme="awake">
-    <div class="reflection-card reveal">
-      <p class="reflection-kicker">break / what I found</p>
-      <h3>この崩壊が、入口だった。</h3>
-      <p>
-        変われない自分を責めるのをやめたとき、別の道が見えた。<br />
-        本当の変化は、足すことではなく、思い出すことから始まった。
-      </p>
-    </div>
-  </section>
-
-  <!-- ======== 第7章補完セクション：世界旅、海外移住「豊かさとは何か？」======== -->
-  <section class="section chapter7 cinema-world tall" data-theme="dawn">
+  <!-- ======== Chapter 7: 世界旅、海外移住「豊かさとは何か？」======== -->
+  <section class="section chapter7 cinema-world tall" id="journey" data-theme="dawn" data-ch="07" data-ch-name="JOURNEY">
     <div class="world-map-line" aria-hidden="true">
       <svg viewBox="0 0 520 260" preserveAspectRatio="none">
         <path d="M28 160 C96 108, 138 170, 198 122 S310 88, 372 132 444 86 498 116" class="travel-route" />
@@ -3727,7 +4359,7 @@
       <img src="assets/world-1.jpg" alt="世界旅" />
     </figure>
     <div>
-      <p class="eyebrow reveal">07 / world journey</p>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 07 <i>/ 08</i></span><span class="cm-name">JOURNEY｜豊かさとは何か</span></p>
       <h2 class="lead reveal" style="line-height:2.2">世界旅、海外移住<br />豊かさとは何か？</h2>
       <p class="body-copy sm reveal">子どもを連れ世界に旅に出た。</p>
     </div>
@@ -3809,7 +4441,25 @@
   </section>
 
   <!-- ======== S26: マレーシア移住への選択 ======== -->
-  <section class="section migration-shift cinema-world compact" data-theme="dawn">
+  <section class="section migration-shift cinema-world compact flag-scene" data-theme="dawn">
+    <div class="flag-bg" role="img" aria-label="マレーシア国旗">
+      <svg viewBox="0 0 28 14" xmlns="http://www.w3.org/2000/svg">
+        <rect width="28" height="14" fill="#ffffff" />
+        <g fill="#cc0001">
+          <rect y="0" width="28" height="1" />
+          <rect y="2" width="28" height="1" />
+          <rect y="4" width="28" height="1" />
+          <rect y="6" width="28" height="1" />
+          <rect y="8" width="28" height="1" />
+          <rect y="10" width="28" height="1" />
+          <rect y="12" width="28" height="1" />
+        </g>
+        <rect width="14" height="8" fill="#010066" />
+        <circle cx="5.4" cy="4" r="2.7" fill="#ffcc00" />
+        <circle cx="6.4" cy="4" r="2.25" fill="#010066" />
+        <path fill="#ffcc00" d="M9.90,1.65 10.17,2.83 10.92,1.88 10.65,3.06 11.74,2.53 10.98,3.48 12.19,3.48 11.10,4.00 12.19,4.52 10.98,4.52 11.74,5.47 10.65,4.94 10.92,6.12 10.17,5.17 9.90,6.35 9.63,5.17 8.88,6.12 9.15,4.94 8.06,5.47 8.82,4.52 7.61,4.52 8.70,4.00 7.61,3.48 8.82,3.48 8.06,2.53 9.15,3.06 8.88,1.88 9.63,2.83Z" />
+      </svg>
+    </div>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         自由な選択肢の中で、<br />
@@ -3824,6 +4474,9 @@
   <!-- ======== S27: 子どもの教育への葛藤 ======== -->
   <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
+      <figure class="photo soft rose-f reveal" style="margin:0 auto 32px">
+        <img src="assets/journey-airplane.jpg" alt="世界へ向かう機上から" />
+      </figure>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
         貧しい暮らしをしている<br />
         子どもたちは世界にたくさんいる。<br />
@@ -3897,8 +4550,8 @@
 
   <!-- ======== S32: 負荷の重層化 ======== -->
   <section class="section migration-shift cinema-loss tall" data-theme="down-dawn">
-    <figure class="photo soft dark reveal" style="opacity:0.5;filter:saturate(0.6) brightness(0.65)">
-      <img src="assets/travel-7.jpg" alt="マレーシアでの生活の重さ" />
+    <figure class="photo soft dark reveal" style="opacity:0.9;filter:saturate(0.95) brightness(0.95)">
+      <img src="assets/journey-family.jpg" alt="家族との日々" />
     </figure>
     <div style="position:relative;z-index:1">
       <div class="burden-list reveal">
@@ -3935,8 +4588,8 @@
 
   <!-- ======== S35: 資本主義への問い ======== -->
   <section class="section capitalism-question cinema-loss tall" data-theme="down-dawn">
-    <figure class="photo soft dark reveal" style="opacity:0.45;filter:saturate(0.5) brightness(0.6)">
-      <img src="assets/after-divorce-1.jpg" alt="資本主義への問い" />
+    <figure class="photo soft dark reveal" style="opacity:0.82;filter:saturate(0.9) brightness(0.9)">
+      <img src="assets/journey-friends.jpg" alt="旅先での出会い" />
     </figure>
     <div style="position:relative;z-index:1">
       <h2 class="impact-text reveal slow-text" style="font-size:clamp(1.6rem,7.5vw,2.4rem);line-height:1.9;color:rgba(255,248,244,0.89)">
@@ -3974,8 +4627,8 @@
 
   <!-- ======== S38: 静かな崩壊 ======== -->
   <section class="section collapse-scene cinema-loss tall" data-theme="down-dawn">
-    <figure class="photo soft dark reveal" style="opacity:0.35;filter:saturate(0.4) brightness(0.55)">
-      <img src="assets/after-divorce-3.jpg" alt="疲弊した室内" />
+    <figure class="photo soft dark reveal" style="opacity:0.6;filter:saturate(0.7) brightness(0.72)">
+      <img src="assets/journey-flowers.jpg" alt="静かな時間" />
     </figure>
     <div style="position:relative;z-index:1">
       <div class="collapse-state reveal late">
@@ -4014,23 +4667,61 @@
     </div>
   </section>
 
-  <!-- ======== S41: 帰国後の状態 ======== -->
+  <!-- ======== S41: 何もかもが限界だった ======== -->
+  <section class="section healing-return cinema-loss tall" data-theme="down-dawn">
+    <div>
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8">
+        何もかもが限界だった。
+      </p>
+      <div class="reflection-card reveal late" style="margin-top:64px;background:rgba(255,248,244,0.04);padding:28px;border-left:2px solid rgba(234,211,162,0.28)">
+        <p style="color:rgba(255,248,244,0.7);font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">world journey / what I learned</p>
+        <h3 style="color:rgba(255,248,244,0.92);font-size:clamp(1.1rem,5vw,1.6rem);font-weight:400;line-height:1.9;margin-bottom:12px">
+          「豊かさ」とは、<br />
+          外部にあるのではなく、<br />
+          自分がどう存在するかに<br />
+          あるのかもしれない。
+        </h3>
+        <p style="color:rgba(255,248,244,0.78);line-height:2;font-size:0.95rem">
+          子どもを癒すことと同じくらい、<br />
+          自分自身を癒すことが大切だった。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== S41b: 帰国後の状態（第7章の着地） ======== -->
   <section class="section healing-return cinema-loss compact" data-theme="down-dawn">
     <div>
-      <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.70)">
+      <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8">
         もう何もしたくなかった。<br /><br />
       </p>
-      <p class="body-copy reveal" style="font-size:0.98rem;line-height:2.6;color:rgba(255,248,244,0.64)">
+      <p class="body-copy reveal" style="font-size:0.98rem;line-height:2.6">
         ただただ<br />
         自分の癒しが必要だった。
       </p>
+      <div class="chapter-close reveal late">
+        <span class="close-label">Chapter 07 ─ 了</span>
+        <span class="close-next">Next：Chapter 08｜ヒーリングと、自分に還る旅</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== Chapter 8: ヒーリング・形而上学「すべては内に存在している」======== -->
+  <section class="section chapter8 cinema-healing tall" id="return" data-theme="awake" data-ch="08" data-ch-name="RETURN">
+    <figure class="photo soft rose-f reveal" style="opacity:0.6">
+      <img src="assets/meditation.jpg" alt="夜明け前の静けさ" />
+    </figure>
+    <div>
+      <p class="eyebrow chapter-marker reveal"><span class="cm-no">Chapter 08 <i>/ 08</i></span><span class="cm-name">RETURN｜生まれてきてよかった</span></p>
+      <h2 class="lead reveal" style="line-height:2.2">ヒーリングと形而上学<br /><br />すべては、<br />内に存在している</h2>
+      <p class="body-copy sm reveal">稼ぐこと。自立すること。生きていくこと。鬱。</p>
     </div>
   </section>
 
   <!-- ======== S42: 気づきへの転機 ======== -->
   <section class="section healing-return cinema-return tall" data-theme="awake">
-    <figure class="photo soft rose-f reveal" style="opacity:0.55">
-      <img src="assets/meditation.jpg" alt="静けさの記憶" />
+    <figure class="photo family rose-f reveal" style="opacity:0.72">
+      <img src="assets/return-family-journey.jpg" alt="子どもたちとの旅の記憶" style="object-position:50% 44%" />
     </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.80)">
@@ -4060,42 +4751,27 @@
     </div>
   </section>
 
-  <!-- ======== S44: 終章 ======== -->
-  <section class="section healing-return cinema-return tall" data-theme="awake">
-    <figure class="photo soft rose-f reveal" style="opacity:0.48">
-      <img src="assets/flower-1.jpg" alt="静かな帰還" />
+  <!-- ======== Ch8: 思い出すんだ ======== -->
+  <section class="section awake cinema-return center-message" id="remember" data-theme="awake">
+    <div class="butterfly"></div>
+    <figure class="photo round rose-f">
+      <img src="assets/remember-selfie.jpg" alt="" style="object-position:32% 26%" />
     </figure>
-    <div>
-      <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.8;color:rgba(255,248,244,0.79)">
-        何もかもが限界だった。<br /><br />
-        でも、<br />
-        その崩壊の中に、<br />
-        自分を愛する<br />
-        必要性を見つけた。
-      </p>
-      <div class="reflection-card reveal late" style="margin-top:64px;background:rgba(255,248,244,0.04);padding:28px;border-left:2px solid rgba(234,211,162,0.28)">
-        <p style="color:rgba(255,248,244,0.61);font-size:0.85rem;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:12px">world journey / what I learned</p>
-        <h3 style="color:rgba(255,248,244,0.88);font-size:clamp(1.1rem,5vw,1.6rem);font-weight:400;line-height:1.9;margin-bottom:12px">
-          「豊かさ」とは、外部にあるのではなく、<br />自分がどう存在するかにあるのかもしれない。
-        </h3>
-        <p style="color:rgba(255,248,244,0.69);line-height:2;font-size:0.95rem">
-          子どもを癒すことと同じくらい、自分自身を癒すことが大切だった。
-        </p>
-      </div>
+    <div style="text-align:center;padding-top:44px">
+      <p class="eyebrow reveal">08 / remember</p>
+      <h2 class="impact-text reveal slow-text">「人は変わるんじゃない。」</h2>
+      <p class="body-copy reveal big-question" style="color:#fff">思い出すんだ。</p>
     </div>
   </section>
 
-  <!-- ======== Chapter 8: ヒーリング・形而上学「すべては内に存在している」======== -->
-
-  <!-- ======== 第8章補完セクション：ヒーリング・形而上学「すべては内に存在している」======== -->
-  <section class="section chapter8 cinema-healing tall" data-theme="awake">
-    <figure class="photo soft rose-f reveal" style="opacity:0.6">
-      <img src="assets/meditation.jpg" alt="夜明け前の静けさ" />
-    </figure>
-    <div>
-      <p class="eyebrow reveal">08 / healing</p>
-      <h2 class="lead reveal" style="line-height:2.2">ヒーリングと形而上学<br /><br />すべては、<br />内に存在している</h2>
-      <p class="body-copy sm reveal">稼ぐこと。自立すること。生きていくこと。鬱。</p>
+  <section class="section section-reflection cinema-return" data-theme="awake">
+    <div class="reflection-card reveal">
+      <p class="reflection-kicker">healing / what I found</p>
+      <h3>この崩壊が、入口だった。</h3>
+      <p>
+        変われない自分を責めるのをやめたとき、別の道が見えた。<br />
+        本当の変化は、足すことではなく、思い出すことから始まった。
+      </p>
     </div>
   </section>
 
@@ -4146,6 +4822,9 @@
           ヒーリング。<br />
           <span style="display:block;margin-top:20px">形而上学。</span>
         </h2>
+        <figure class="photo chapter8-image wisdom-still reveal" style="margin:44px auto 0">
+          <img src="assets/healing-wisdom-still.png" alt="古い本とキャンドル、幾何学模様のある静物" loading="lazy" />
+        </figure>
       </div>
     </div>
   </section>
@@ -4165,9 +4844,6 @@
 
   <!-- ======== Ch8-S7: 目に見えない世界の学問 ======== -->
   <section class="section wisdom-layer cinema-healing compact" data-theme="awake">
-    <figure class="photo chapter8-image wisdom-still reveal">
-      <img src="assets/healing-wisdom-still.png" alt="古い本とキャンドル、幾何学模様のある静物" loading="lazy" />
-    </figure>
     <div>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.01rem;line-height:2.7;color:rgba(255,248,244,0.77)">
         目に見えない世界の学問。<br />
@@ -4328,16 +5004,37 @@
         自分に還る人生の旅だと気づき，<br /><br />
         歩み始めている。
       </h2>
+      <div class="chapter-close reveal late">
+        <span class="close-label">Chapter 08 ─ 了</span>
+        <span class="close-next">Final｜Life is Art</span>
+      </div>
     </div>
   </section>
 
-  <!-- ======== Epilogue: 今・大切なこと・好きなもの・宣言 ======== -->
-  <section class="section cinema-vision tall rose" id="return" data-theme="rose" data-ch="08" data-ch-name="RETURN">
+  <!-- ======== FINAL SUMMARY: 明るい締めくくりゾーン ======== -->
+  <div class="final-summary">
+
+  <!-- ======== Final: 人生は、ひとつの作品になる ======== -->
+  <section class="section final-opener light" data-theme="final-light" data-chapter="final">
+    <div>
+      <p class="eyebrow reveal">FINAL / LIFE IS ART</p>
+      <h2 class="quote reveal">人生は、<br />ひとつの作品になる。</h2>
+      <p class="body-copy reveal late">
+        どんな痛みも、迷いも、遠回りも、<br />
+        すべてが今の私へとつながっていた。<br /><br />
+        そして今度は、その物語が、<br />
+        誰かの光になっていく。
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== Final: 今・大切なこと・好きなもの・宣言 ======== -->
+  <section class="section cinema-vision tall rose" id="now" data-theme="rose">
     <figure class="photo full rose-f reveal">
       <img src="assets/now-1-face-blur.jpg" alt="" />
     </figure>
     <div>
-      <p class="eyebrow reveal">08 / now</p>
+      <p class="eyebrow reveal">Final / now</p>
       <h2 class="quote reveal">今｜「自分に還る」</h2>
       <p class="body-copy sm reveal whisper">
         ヒーリング。<br /><br />
@@ -4357,10 +5054,7 @@
     </div>
   </section>
 
-  <section class="section section-reflection cinema-vision" data-theme="rose">
-    <div class="memory-fragment" style="--fragment-opacity:.18;--photo-pos:50% 30%;--photo-bright:.78;--photo-sat:1">
-      <img src="assets/now-6.jpg" alt="" />
-    </div>
+  <section class="section section-reflection cinema-vision" data-theme="rose" style="min-height:auto;padding-block:72px">
     <div class="reflection-card reveal">
       <p class="reflection-kicker">return / message</p>
       <h3>この人生の答えは、今の私の中にある。</h3>
@@ -4371,90 +5065,93 @@
     </div>
   </section>
 
-  <!-- ======== Epilogue: 大切にしていること ======== -->
-  <section class="section cinema-vision light" data-theme="light">
-    <div>
-      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">09 / values</p>
-      <h2 class="quote reveal">大切にしていること。</h2>
-      <div class="val-grid reveal">
-        <div class="val"><b>♡ 愛</b><span>守ること。<br />抱きしめること。</span></div>
-        <div class="val"><b>✧ 自由</b><span>誰かの正解から、<br />離れること。</span></div>
-        <div class="val"><b>○ 平和</b><span>争いの奥にある、<br />願いを見ること。</span></div>
-        <div class="val"><b>△ 挑戦</b><span>こわくても、<br />人生を選ぶこと。</span></div>
+  <!-- ======== Epilogue: 人生の走馬灯（集大成のエンディング） ======== -->
+  <section class="soulmap" id="soulmap" data-theme="light" aria-label="人生の走馬灯">
+    <div class="soulmap__stage" id="soulmapStage">
+      <div class="soulmap__layers" aria-hidden="true">
+        <div class="smlayer" data-depth="back"></div>
+        <div class="smlayer" data-depth="mid"></div>
+        <div class="smlayer" data-depth="front"></div>
+      </div>
+      <div class="soulmap__light" aria-hidden="true"></div>
+      <div class="soulmap__wash" aria-hidden="true"></div>
+
+      <div class="soulmap__copy">
+        <h2 class="sm-big sm-big--1">人は変わる必要はない。</h2>
+        <h2 class="sm-big sm-big--2">思い出すだけでいい。</h2>
+      </div>
+
+      <div class="soulmap__closing">
+        <p class="sm-cl" data-cl="0">あなたが探していたものは、<br />どこか遠くにはありませんでした。</p>
+        <p class="sm-cl" data-cl="1">傷ついた日も、<br />泣いた日も、<br />笑った日も、</p>
+        <p class="sm-cl" data-cl="2">全部、<br />今のあなたになるためにあった。</p>
+        <p class="sm-cl" data-cl="3">変わることではなく、<br />思い出すこと。</p>
+        <p class="sm-cl sm-cl--final" data-cl="4">それが、<br /><span class="accent">&ldquo;生まれてきてよかった&rdquo;</span><br />へ還る旅。</p>
       </div>
     </div>
   </section>
 
-  <!-- ======== S24: LIKES ======== -->
-  <section class="section cinema-vision light" data-theme="light">
-    <div>
-      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">10 / likes</p>
-      <h2 class="quote reveal">好きなものが、<br />私をほどいていく。</h2>
-      <div class="ribbon reveal" aria-hidden="true">
-        <span>MUSIC / JOURNEY / FLOWERS / WORDS / ART / FAMILY / MUSIC / JOURNEY / FLOWERS / WORDS / ART / FAMILY / </span>
+  </div><!-- /.final-summary -->
+
+  <!-- ======== 余韻（Afterglow）：走馬灯の静けさを、そっと次へ ======== -->
+  <section class="afterglow" aria-hidden="true">
+    <div class="afterglow__breath"></div>
+  </section>
+
+  <!-- ======== Final: LIFE is ART ======== -->
+  <section class="life-art" id="life-is-art" data-theme="final-light" data-chapter="final" aria-label="LIFE is ART">
+    <div class="life-art__bg" aria-hidden="true">
+      <!-- PHOTO SWAP: 最終CTAの人物写真は、この src を差し替えてください。 -->
+      <img src="assets/now-1.jpg" alt="" />
+    </div>
+    <div class="life-art__lace" aria-hidden="true"></div>
+    <div class="life-art__ornaments" aria-hidden="true"></div>
+    <div class="life-art__inner">
+      <div class="life-art__col">
+        <p class="life-art__brand reveal">LIFE is ART</p>
+        <p class="life-art__brand-sub reveal">人生は、あなた自身が創るアート。</p>
+
+        <h2 class="life-art__head reveal">
+          私は<br />
+          生まれてきて<br />
+          よかったのか
+        </h2>
+
+        <div class="life-art__rule reveal" aria-hidden="true">
+          <svg viewBox="0 0 300 18" xmlns="http://www.w3.org/2000/svg" fill="none">
+            <line x1="0" y1="9" x2="118" y2="9" stroke="currentColor" stroke-width="1" opacity="0.7" />
+            <line x1="182" y1="9" x2="300" y2="9" stroke="currentColor" stroke-width="1" opacity="0.7" />
+            <path d="M150 2 L157 9 L150 16 L143 9 Z" fill="currentColor" />
+            <circle cx="128" cy="9" r="1.6" fill="currentColor" />
+            <circle cx="172" cy="9" r="1.6" fill="currentColor" />
+          </svg>
+        </div>
+
+        <p class="life-art__body reveal">
+          人生は、<br />
+          あなた自身が創るアート。<br /><br />
+          どんな経験も、<br />
+          すべてが意味を持っていた。<br />
+          迷い、傷つき、喜び、愛し、学び、<br />
+          手放し、そして気づく。<br /><br />
+          そのすべてが、魂を育て、<br />
+          人生を彩る色になる。<br /><br />
+          あなたの人生は、<br />
+          あなただけの美しいアート作品。<br /><br />
+          さあ、自分という名のアートを、<br />
+          思いきり生きていこう。
+        </p>
+        <div class="life-art__actions reveal">
+          <a class="life-art__cta" href="https://life-is-art.netlify.app/" target="_blank" rel="noopener">
+            さあ、あなたのアートを始めよう
+            <span class="arw" aria-hidden="true">→</span>
+          </a>
+          <a class="life-art__cta life-art__cta--sub" href="https://www.instagram.com/hiroko_oono_official?igsh=MTF6cHB0cG5saW1lOQ==" target="_blank" rel="noopener noreferrer">
+            Instagramはこちら
+            <span class="arw" aria-hidden="true">→</span>
+          </a>
+        </div>
       </div>
-      <div class="tags">
-        <span class="tag">音楽</span><span class="tag">旅</span>
-        <span class="tag">花</span><span class="tag">言葉</span>
-        <span class="tag">アート</span><span class="tag">家族</span>
-        <span class="tag">世界</span><span class="tag">静かな時間</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- ======== S25: MANIFESTO ======== -->
-  <section class="section cinema-vision light" data-theme="light">
-    <div class="heart c"></div>
-    <div>
-      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Manifesto</p>
-      <h2 class="lead reveal">「人は変わる必要はない。」</h2>
-      <p class="body-copy reveal late" style="color:rgba(77,34,48,.82);font-size:1.14rem">思い出すだけでいい。</p>
-    </div>
-  </section>
-
-  <!-- ======== S26: 過去の自分へ ======== -->
-  <section class="section cinema-vision tall light" data-theme="light" id="vision">
-    <div class="vision-mosaic" id="visionMosaic" aria-hidden="true"></div>
-    <div class="vision-words" aria-hidden="true">
-      <span>愛</span>
-      <span>光</span>
-      <span>平和</span>
-      <span>子ども</span>
-      <span>未来</span>
-    </div>
-    <div style="text-align:center">
-      <div class="vision-earth reveal" aria-hidden="true"></div>
-      <p class="eyebrow reveal" style="color:rgba(77,34,48,.54)">Vision</p>
-      <h2 class="quote reveal" style="color:rgba(77,34,48,.82)">愛が、<br />世界へ広がっていく。</h2>
-    </div>
-  </section>
-
-  <section class="section light center-message final-answer" data-theme="light">
-    <div style="text-align:center">
-      <p class="body-copy reveal" style="margin-top:0;font-size:1.28rem;line-height:3.2;color:rgba(77,34,48,.88)">
-        あなたは大丈夫。<br /><br />
-        愛されている。<br /><br />
-        <span class="big-question">生まれてきてよかった。</span>
-      </p>
-    </div>
-  </section>
-
-  <!-- ======== Epilogue: CTA ======== -->
-  <section class="section cta cinema-vision light" data-theme="light">
-    <div class="earth"></div>
-    <figure class="photo soft rose-f reveal">
-      <img src="assets/hero.png" alt="" style="object-position:52% 38%" />
-    </figure>
-    <div>
-      <p class="eyebrow reveal" style="color:rgba(77,34,48,.6)">Journey</p>
-      <h2 class="lead reveal slow-text">もっと話してみたい方へ。</h2>
-      <a class="line-btn reveal" href="#" aria-label="LINEでつながる">LINEでつながる</a>
-      <p class="body-copy sm reveal" style="color:rgba(73,34,50,.7);margin-top:22px">
-        あなたの人生を思い出す時間を、<br />
-        一緒に。<br /><br />
-        うまく言葉にできなくても大丈夫。<br />
-        まずは、静かにつながるところから。
-      </p>
     </div>
   </section>
 
@@ -4696,12 +5393,12 @@
       e.target.classList.add('is-visible');
     });
   }, { threshold: 0.16, rootMargin: '0px 0px -10% 0px' });
-  document.querySelectorAll('.section').forEach(s => observer.observe(s));
+  document.querySelectorAll('.section, .life-art').forEach(s => observer.observe(s));
 
   // ---- PAGE TURN ON THEME CHANGE ----
   const pageTurn = document.getElementById('pageTurn');
   const themedSections = [...document.querySelectorAll('.section[data-theme]')];
-  const themeOrder = ['void','night','hunger','love','break','down-dawn','awake','dawn','rose','light'];
+  const themeOrder = ['void','night','hunger','love','break','down-dawn','awake','dawn','rose','light','final-light'];
   let activeTheme = null;
   let lastThemeIndex = -1;
   let pageTurnTimer = null;
@@ -4740,16 +5437,20 @@
   }
 
   // ---- SCROLL-LINKED BACKGROUND COLOR ----
-  // black → dark purple → magenta → rose → light pink
-  // 0〜58%: 暗いまま（黒→ごく微かな紫）
-  // 58%〜: 「私はこの子を守る」あたりから薄ピンクへじわっと移行
+  // black → dark purple → magenta(5章) → 深い藍(6章) → 藍〜最暗(7章)
+  // → 夜明け前(8章) → 夜明けの光(FINAL)
+  // 後半は中間色（マゼンタ）を避け、白文字が沈まない暗さを保ったまま
+  // 最後だけ一気に光へ抜ける
   const colorStops = [
     { p:0.00, a:'#030207', b:'#08040f', c:'#110619' },
-    { p:0.35, a:'#060310', b:'#0f0620', c:'#1c0a2a' },
-    { p:0.58, a:'#180a1a', b:'#3a1635', c:'#6b1d40' },
-    { p:0.75, a:'#4a1e3a', b:'#8d3b61', c:'#c96a8e' },
-    { p:0.88, a:'#a0536e', b:'#d4879f', c:'#f0b8c8' },
-    { p:1.00, a:'#f4a9bf', b:'#ffd2dc', c:'#fff6f1' },
+    { p:0.30, a:'#060310', b:'#0f0620', c:'#1c0a2a' },
+    { p:0.46, a:'#14081e', b:'#2c1136', c:'#4a1a44' },
+    { p:0.58, a:'#0a0a1e', b:'#131a38', c:'#1e2250' },
+    { p:0.70, a:'#0b1024', b:'#152046', c:'#233263' },
+    { p:0.79, a:'#070610', b:'#0d0a1c', c:'#141026' },
+    { p:0.88, a:'#171126', b:'#2c1e3e', c:'#463052' },
+    { p:0.95, a:'#8a5a68', b:'#c08a92', c:'#e8bfb4' },
+    { p:1.00, a:'#f2d9c8', b:'#fbeadd', c:'#fff8ef' },
   ];
 
   function h2r(hex) {
@@ -4835,173 +5536,276 @@
     });
   });
 
-  const visionMosaic = document.getElementById('visionMosaic');
-  if (visionMosaic) {
-    const visionPhotos = [
-      'now-2.jpg','now-3.jpg','now-4.jpg','now-5.jpg','now-6.jpg',
+  // ============================================================
+  //  SOULMAP — 人生の走馬灯（エピローグ・集大成）
+  //  写真の壁 × パララックス × 中央の光 × スクロール連動コピー
+  // ============================================================
+  const soulmapStage = document.getElementById('soulmapStage');
+  if (soulmapStage) {
+    // 人生のあらゆる時間が自然に混ざり合う写真セット
+    const smPhotos = [
+      'baby-childhood.jpg','childhood.jpg','childhood-rope.jpg','baby-child-center.jpg','childhood-bus-girls.jpg',
+      'mother-1.jpg','mother-2.jpg','teenage-tug.jpg','rocker-twenties.jpg',
+      'twenties-1.jpg','twenties-2.jpg','twenties-mirror-style.jpg',
       'travel-1.jpg','travel-2.jpg','travel-3.jpg','travel-4.jpg','travel-5.jpg','travel-6.jpg','travel-7.jpg',
-      'community-1.jpg','flower-1.jpg','world-1.jpg','meditation.jpg'
+      'journey-airplane.jpg','journey-family.jpg','journey-friends.jpg','journey-flowers.jpg','world-1.jpg',
+      'community-1.jpg','return-family-journey.jpg','healing-selfie.jpg','remember-selfie.jpg',
+      'now-2.jpg','now-3.jpg','now-4.jpg','now-5.jpg','now-6.jpg','flower-1.jpg','meditation.jpg'
     ];
-    const frag = document.createDocumentFragment();
-    for (let i = 0; i < 110; i++) {
-      const img = document.createElement('img');
-      img.src = `assets/${visionPhotos[i % visionPhotos.length]}`;
-      img.alt = '';
-      img.style.setProperty('--i', i);
-      frag.appendChild(img);
+    // 少し混ぜて時間軸をランダムに（記憶が前後する感覚）
+    for (let i = smPhotos.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [smPhotos[i], smPhotos[j]] = [smPhotos[j], smPhotos[i]];
     }
-    visionMosaic.appendChild(frag);
-  }
 
-  // ---- BUTTERFLIES (canvas) ----
-  // z-index: -1 → テキスト・写真の後ろ、背景の前
-  const bflyCanvas = document.createElement('canvas');
-  bflyCanvas.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;z-index:-1;pointer-events:none;';
-  document.body.appendChild(bflyCanvas);
-  const bctx = bflyCanvas.getContext('2d');
-
-  function resizeBfly() { bflyCanvas.width = window.innerWidth; bflyCanvas.height = window.innerHeight; }
-  resizeBfly();
-  window.addEventListener('resize', resizeBfly);
-
-  // 蝶：画面内をゆっくり飛び回る（リサージュ曲線 + ゆるいドリフト）
-  const butterflies = Array.from({length: 10}, (_, i) => {
-    const cx = Math.random() * window.innerWidth;
-    const cy = 80 + Math.random() * (window.innerHeight - 160);
-    return {
-      cx, cy,           // 軌道中心
-      rx: 60 + Math.random() * 120,  // 横振幅
-      ry: 40 + Math.random() * 80,   // 縦振幅
-      sx: 0.008 + Math.random() * 0.006,  // 横速度
-      sy: 0.006 + Math.random() * 0.005,  // 縦速度
-      phx: Math.random() * Math.PI * 2,
-      phy: Math.random() * Math.PI * 2,
-      // 中心のゆっくりドリフト
-      dcx: (Math.random() - 0.5) * 0.12,
-      dcy: (Math.random() - 0.5) * 0.08,
-      size: 9 + Math.random() * 11,
-      wingAngle: Math.random() * Math.PI,
-      wingSpeed: 0.055 + Math.random() * 0.04,
-      opacity: 0,
-      targetOpacity: 0.08 + Math.random() * 0.08,
-      hue: 295 + Math.random() * 50,
-      born: false,
-      delay: 1.5 + i * 1.8,
-    };
-  });
-
-  let bflyTime = 0;
-  let bflyActive = false;
-
-  function drawButterfly(ctx, x, y, size, wingAngle, opacity, hue) {
-    ctx.save();
-    ctx.translate(x, y);
-    ctx.globalAlpha = opacity;
-    const w = size;
-    const flap = Math.sin(wingAngle);
-
-    // 上羽（左）
-    ctx.save();
-    ctx.scale(flap, 1);
-    const g1 = ctx.createRadialGradient(-w*0.3,-w*0.2, 0, -w*0.6,-w*0.5, w*1.1);
-    g1.addColorStop(0, `hsla(${hue},88%,78%,0.95)`);
-    g1.addColorStop(0.45, `hsla(${hue+12},80%,58%,0.75)`);
-    g1.addColorStop(1, `hsla(${hue-8},70%,38%,0)`);
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(-w*0.15,-w*0.85,-w*1.15,-w*0.95,-w*1.0,-w*0.08);
-    ctx.bezierCurveTo(-w*0.88,w*0.22,-w*0.25,w*0.12,0,0);
-    ctx.fillStyle = g1; ctx.fill();
-    ctx.restore();
-
-    // 上羽（右）
-    ctx.save();
-    ctx.scale(-flap, 1);
-    const g2 = ctx.createRadialGradient(w*0.3,-w*0.2, 0, w*0.6,-w*0.5, w*1.1);
-    g2.addColorStop(0, `hsla(${hue},88%,78%,0.95)`);
-    g2.addColorStop(0.45, `hsla(${hue+12},80%,58%,0.75)`);
-    g2.addColorStop(1, `hsla(${hue-8},70%,38%,0)`);
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(w*0.15,-w*0.85,w*1.15,-w*0.95,w*1.0,-w*0.08);
-    ctx.bezierCurveTo(w*0.88,w*0.22,w*0.25,w*0.12,0,0);
-    ctx.fillStyle = g2; ctx.fill();
-    ctx.restore();
-
-    // 下羽（左）
-    ctx.save();
-    ctx.scale(flap*0.82, 1);
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(-w*0.25,w*0.45,-w*0.85,w*0.65,-w*0.68,w*0.18);
-    ctx.bezierCurveTo(-w*0.48,w*0.06,-w*0.1,w*0.1,0,0);
-    ctx.fillStyle = `hsla(${hue+10},76%,62%,0.52)`; ctx.fill();
-    ctx.restore();
-
-    // 下羽（右）
-    ctx.save();
-    ctx.scale(-flap*0.82, 1);
-    ctx.beginPath();
-    ctx.moveTo(0,0);
-    ctx.bezierCurveTo(w*0.25,w*0.45,w*0.85,w*0.65,w*0.68,w*0.18);
-    ctx.bezierCurveTo(w*0.48,w*0.06,w*0.1,w*0.1,0,0);
-    ctx.fillStyle = `hsla(${hue+10},76%,62%,0.52)`; ctx.fill();
-    ctx.restore();
-
-    // 胴体の光
-    ctx.beginPath();
-    ctx.arc(0,-w*0.08,w*0.07,0,Math.PI*2);
-    ctx.fillStyle = `hsla(${hue},100%,94%,0.85)`; ctx.fill();
-
-    ctx.restore();
-  }
-
-  function animBfly() {
-    bctx.clearRect(0, 0, bflyCanvas.width, bflyCanvas.height);
-    bflyTime += 0.016;
-
-    const scrollT = window.scrollY / Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    bflyActive = scrollT > 0.62 && scrollT < 0.78;
-
-    butterflies.forEach(b => {
-      // フェードイン/アウト
-      if (!bflyActive) {
-        b.opacity = Math.max(0, b.opacity - 0.005);
-        if (b.opacity <= 0) b.born = false;
-      } else {
-        if (!b.born && bflyTime > b.delay) {
-          b.born = true;
-          b.cx = Math.random() * bflyCanvas.width;
-          b.cy = 80 + Math.random() * (bflyCanvas.height - 160);
-          b.phx = Math.random() * Math.PI * 2;
-          b.phy = Math.random() * Math.PI * 2;
-        }
-        if (b.born) b.opacity = Math.min(b.targetOpacity, b.opacity + 0.004);
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const layers = soulmapStage.querySelectorAll('.smlayer');
+    // 奥(back) / 中間(mid) / 手前(front)
+    const cfg = [
+      { count: 20, wmin: 8,  wmax: 13, blur: [3.4, 5.0], op: [0.30, 0.46] },
+      { count: 14, wmin: 12, wmax: 18, blur: [1.8, 3.0], op: [0.52, 0.70] },
+      { count: 9,  wmin: 17, wmax: 25, blur: [0.5, 1.5], op: [0.78, 0.94] },
+    ];
+    let p = 0;
+    cfg.forEach((c, li) => {
+      const layer = layers[li];
+      if (!layer) return;
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < c.count; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'smph';
+        cell.style.width = rnd(c.wmin, c.wmax).toFixed(1) + 'vw';
+        cell.style.height = rnd(c.wmin * 0.86, c.wmax * 1.08).toFixed(1) + 'vw';
+        cell.style.left = rnd(-6, 100).toFixed(1) + '%';
+        cell.style.top = rnd(-8, 100).toFixed(1) + '%';
+        cell.style.setProperty('--r', rnd(-7, 7).toFixed(2) + 'deg');
+        const img = document.createElement('img');
+        img.src = 'assets/' + smPhotos[p % smPhotos.length];
+        p++;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.style.setProperty('--o', rnd(c.op[0], c.op[1]).toFixed(2));
+        img.style.setProperty('--b', rnd(c.blur[0], c.blur[1]).toFixed(2) + 'px');
+        img.style.setProperty('--dur', rnd(16, 30).toFixed(1) + 's');
+        img.style.setProperty('--delay', (-rnd(0, 22)).toFixed(1) + 's');
+        cell.appendChild(img);
+        frag.appendChild(cell);
       }
-      if (b.opacity <= 0) return;
-
-      // リサージュ軌道でゆっくり飛び回る
-      b.phx += b.sx;
-      b.phy += b.sy;
-      const x = b.cx + Math.sin(b.phx) * b.rx;
-      const y = b.cy + Math.sin(b.phy) * b.ry;
-
-      // 中心がゆっくりドリフト（画面内でバウンド）
-      b.cx += b.dcx;
-      b.cy += b.dcy;
-      if (b.cx < b.rx) { b.cx = b.rx; b.dcx *= -1; }
-      if (b.cx > bflyCanvas.width - b.rx) { b.cx = bflyCanvas.width - b.rx; b.dcx *= -1; }
-      if (b.cy < b.ry + 60) { b.cy = b.ry + 60; b.dcy *= -1; }
-      if (b.cy > bflyCanvas.height - b.ry - 60) { b.cy = bflyCanvas.height - b.ry - 60; b.dcy *= -1; }
-
-      b.wingAngle += b.wingSpeed;
-
-      drawButterfly(bctx, x, y, b.size, b.wingAngle, b.opacity, b.hue);
+      layer.appendChild(frag);
     });
 
-    requestAnimationFrame(animBfly);
+    // 1行目を一文字ずつ出すため分割
+    const line1 = soulmapStage.querySelector('.sm-big--1');
+    const line2 = soulmapStage.querySelector('.sm-big--2');
+    const closings = soulmapStage.querySelectorAll('.sm-cl');
+    const chars = [];
+    if (line1) {
+      const t = line1.textContent;
+      line1.textContent = '';
+      for (const ch of t) {
+        const s = document.createElement('span');
+        s.className = 'c';
+        s.textContent = ch;
+        line1.appendChild(s);
+        chars.push(s);
+      }
+    }
+
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    if (reduce || typeof gsap === 'undefined') {
+      // モーション抑制時：静的に主要コピーを見せる
+      gsap && gsap.set(chars, { opacity: 1 });
+      if (line2) line2.style.opacity = '1', line2.style.transform = 'translateY(0)';
+      if (closings.length) closings[closings.length - 1].style.opacity = '1';
+      soulmapStage.style.setProperty('--lo', '0.4');
+    } else {
+      gsap.set(chars, { opacity: 0, filter: 'blur(6px)', yPercent: 40 });
+      gsap.set(line2, { opacity: 0, y: 60 });
+      gsap.set(closings, { opacity: 0, y: 28 });
+      gsap.set('.soulmap__light', { '--lo': 0.10, '--ls': 0.5 });
+
+      const tl = gsap.timeline({
+        defaults: { ease: 'power1.inOut' },
+        scrollTrigger: {
+          trigger: '.soulmap',
+          start: 'top top',
+          end: '+=640%',
+          scrub: 1.4,
+          pin: '.soulmap__stage',
+          anticipatePin: 1,
+        }
+      });
+
+      // ---- 全編：パララックス（奥ほどゆっくり・手前ほど大きく動く） ----
+      tl.fromTo(layers[0], { yPercent: 5 },  { yPercent: -5,  ease: 'none' }, 0)
+        .fromTo(layers[1], { yPercent: 9 },  { yPercent: -13, ease: 'none' }, 0)
+        .fromTo(layers[2], { yPercent: 15 }, { yPercent: -24, ease: 'none' }, 0)
+        .fromTo('.soulmap__layers', { scale: 1.05 }, { scale: 1.13, ease: 'none' }, 0)
+        // 光は全編を通してゆっくり広がる
+        .to('.soulmap__light', { '--lo': 0.2, '--ls': 0.72, ease: 'none' }, 0);
+
+      // ---- Phase 0（0–8）：沈黙。写真だけが漂う ----
+
+      // ---- Phase 1（8–22）：一文字ずつ「人は変わる必要はない。」 ----
+      tl.to(chars, { opacity: 1, filter: 'blur(0px)', yPercent: 0, stagger: 0.85, duration: 3 }, 8);
+
+      // ---- Phase 2（22–33）：静止。読ませる ----
+
+      // ---- Phase 3（33–48）：「思い出すだけでいい。」が下から。写真が明るくなる ----
+      tl.to(line1, { opacity: 0.26, filter: 'blur(1px)', duration: 5 }, 33)
+        .to(line2, { opacity: 1, y: 0, duration: 7 }, 33)
+        .to(soulmapStage, { '--wallB': 1.08, '--washo': 0.24, duration: 7 }, 33)
+        .to('.soulmap__light', { '--lo': 0.5, '--ls': 1.18, duration: 7 }, 33);
+
+      // ---- Phase 4（48–56）：一番の余韻。止める ----
+
+      // 大きな二行を静かに手放す（56–62）
+      tl.to([line1, line2], { opacity: 0, duration: 4 }, 56)
+        .to(soulmapStage, { '--wallB': 0.94, '--washo': 0.34, duration: 4 }, 56)
+        .to('.soulmap__light', { '--lo': 0.34, '--ls': 1.02, duration: 4 }, 56);
+
+      // ---- Phase 5（62–100）：締めの一文が1文ずつフェード ----
+      const clStart = 63;
+      const clEnd = 99;
+      const per = (clEnd - clStart) / closings.length;
+      closings.forEach((cl, i) => {
+        const at = clStart + i * per;
+        tl.to(cl, { opacity: 1, y: 0, duration: per * 0.34 }, at);
+        if (i < closings.length - 1) {
+          tl.to(cl, { opacity: 0, y: -22, duration: per * 0.30 }, at + per * 0.64);
+        }
+      });
+      // 最後の一文とともに、そっと光が満ちる
+      tl.to('.soulmap__light', { '--lo': 0.44, '--ls': 1.1, duration: 6 }, clStart + (closings.length - 1) * per);
+    }
   }
-  animBfly();
+
+  // ============================================================
+  //  BUTTERFLIES — スクロールに漂う小さな蝶（DOM / 3レイヤー / 余韻の空気感）
+  // ============================================================
+  (function initButterflies() {
+    const layer = document.getElementById('butterfly-layer');
+    if (!layer) return;
+
+    const reduce  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const mobile  = window.matchMedia('(max-width: 720px)').matches;
+    const rnd  = (a, b) => a + Math.random() * (b - a);
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    // 白・クリーム・薄ゴールド・淡いピンクのみ（白/クリームを厚めに）
+    const COLORS = [
+      'rgba(255,255,255,0.92)',
+      'rgba(255,255,255,0.92)',
+      'rgba(255,250,238,0.90)',
+      'rgba(255,250,238,0.90)',
+      'rgba(240,225,182,0.85)',   // 薄ゴールド
+      'rgba(255,233,238,0.82)',   // 淡いピンク
+    ];
+
+    // 8割以上を小サイズに。奥ほど小さく、手前はたまに大きめ
+    function sizeFor(depth) {
+      const r = Math.random();
+      if (depth === 'back') return rnd(8, 12);
+      if (depth === 'mid')  return r < 0.86 ? rnd(8, 12) : rnd(14, 18);
+      if (r < 0.76) return rnd(9, 12);
+      if (r < 0.90) return rnd(14, 18);
+      return rnd(22, 28); // 手前のみ、たまに大
+    }
+
+    // 中央帯を避けて端・余白へ寄せる（奥だけ稀に中央を通過）
+    function edgeX(allowCenter) {
+      if (allowCenter && Math.random() < 0.22) return rnd(32, 68);
+      return Math.random() < 0.5 ? rnd(-8, 30) : rnd(70, 108);
+    }
+
+    const cfg = {
+      back:  { op: [0.18, 0.30], blur: 1.2, mul: 1.4 },
+      mid:   { op: [0.28, 0.45], blur: 0.4, mul: 1.0 },
+      front: { op: [0.45, 0.65], blur: 0.0, mul: 0.82 },
+    };
+    const counts = mobile
+      ? { back: 10, mid: 6, front: 4, extra: 4 }
+      : { back: 16, mid: 12, front: 6, extra: 6 };
+
+    function makeBf(depth, extra) {
+      const c = cfg[depth];
+      const bf = document.createElement('div');
+      bf.className = 'bf';
+      const w = sizeFor(depth);
+      bf.style.setProperty('--w', w.toFixed(1) + 'px');
+      bf.style.setProperty('--op', rnd(c.op[0], c.op[1]).toFixed(2));
+      bf.style.setProperty('--bl', c.blur.toFixed(2) + 'px');
+      bf.style.setProperty('--wing', pick(COLORS));
+      // ゆっくり柔らかい羽ばたき（呼吸するように）
+      bf.style.setProperty('--flap', rnd(2.2, 4.2).toFixed(2) + 's');
+      bf.style.setProperty('--fdelay', (-rnd(0, 4)).toFixed(2) + 's');
+      // 風に流れる経路（端から入り端へ抜ける個体も）
+      const allowCenter = depth === 'back';
+      const fromEdge = Math.random() < 0.5 ? -10 : 110;
+      const toEdge   = Math.random() < 0.5 ? -12 : 112;
+      const x0 = extra ? fromEdge : edgeX(allowCenter);
+      const x1 = edgeX(extra ? false : allowCenter);
+      const x2 = extra ? toEdge : edgeX(allowCenter);
+      const y0 = rnd(-6, 106), y1 = y0 + rnd(-16, 16), y2 = y1 + rnd(-18, 18);
+      bf.style.setProperty('--x0', x0.toFixed(1) + 'vw');
+      bf.style.setProperty('--x1', x1.toFixed(1) + 'vw');
+      bf.style.setProperty('--x2', x2.toFixed(1) + 'vw');
+      bf.style.setProperty('--y0', y0.toFixed(1) + 'vh');
+      bf.style.setProperty('--y1', y1.toFixed(1) + 'vh');
+      bf.style.setProperty('--y2', y2.toFixed(1) + 'vh');
+      bf.style.setProperty('--r0', rnd(-12, 12).toFixed(1) + 'deg');
+      bf.style.setProperty('--r1', rnd(-16, 16).toFixed(1) + 'deg');
+      bf.style.setProperty('--r2', rnd(-12, 12).toFixed(1) + 'deg');
+      const dur = rnd(24, 46) * c.mul;
+      bf.style.setProperty('--drift', dur.toFixed(1) + 's');
+      bf.style.setProperty('--ddelay', (-rnd(0, dur)).toFixed(1) + 's');
+      bf.style.setProperty('--sc', rnd(0.85, 1.12).toFixed(2));
+      return bf;
+    }
+
+    const back  = layer.querySelector('.bf-back');
+    const mid   = layer.querySelector('.bf-mid');
+    const front = layer.querySelector('.bf-front');
+    const extra = layer.querySelector('.bf-extra');
+    const byDepth = { back, mid, front };
+
+    ['back', 'mid', 'front'].forEach(depth => {
+      const frag = document.createDocumentFragment();
+      for (let i = 0; i < counts[depth]; i++) frag.appendChild(makeBf(depth, false));
+      byDepth[depth].appendChild(frag);
+    });
+    // 走馬灯だけで現れる予備の数匹（画面外からゆっくり入る）
+    const efrag = document.createDocumentFragment();
+    for (let i = 0; i < counts.extra; i++) efrag.appendChild(makeBf(i % 2 ? 'front' : 'mid', true));
+    extra.appendChild(efrag);
+
+    if (reduce) return; // 動きは止め、CSS側で薄く静止表示
+
+    if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+      // スクロールで空気が動く程度の緩いパララックス（完全追従はしない）
+      gsap.to(back,  { yPercent: -3,  ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 3 } });
+      gsap.to(mid,   { yPercent: -6,  ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 2 } });
+      gsap.to(front, { yPercent: -10, ease: 'none', scrollTrigger: { trigger: document.body, start: 'top top', end: 'bottom bottom', scrub: 1.4 } });
+
+      // Chapter08 走馬灯：少しだけ増やす／予備が入ってくる
+      const soulmap = document.getElementById('soulmap');
+      if (soulmap) {
+        ScrollTrigger.create({
+          trigger: soulmap, start: 'top 72%', end: 'bottom 28%',
+          onToggle: self => layer.classList.toggle('bf-soulmap', self.isActive),
+        });
+      }
+      // LIFE is ART / CTA：静かに、ボタンに重ならないよう控えめ
+      const lifeart = document.querySelector('.life-art');
+      if (lifeart) {
+        ScrollTrigger.create({
+          trigger: lifeart, start: 'top 70%', end: 'bottom top',
+          onToggle: self => layer.classList.toggle('bf-cta', self.isActive),
+        });
+      }
+    }
+  })();
 
   // ---- SPARKLES ----
   const sc = document.getElementById('sparkCanvas');
@@ -5055,7 +5859,7 @@
 <div id="chapterIndicator" class="chapter-indicator" aria-label="チャプター移動">
   <button class="chapter-jump-toggle" id="chapterJumpToggle" type="button" aria-expanded="false" aria-controls="chapterJumpMenu">
     <span class="chapter-indicator-content">
-      <span class="chapter-indicator-number">CHAPTER <span id="indicatorChNo">01</span> / 08</span>
+      <span class="chapter-indicator-number"><span id="indicatorPrefix">CHAPTER </span><span class="chapter-indicator-current" id="indicatorChNo">01</span><span id="indicatorTotal"> / 08</span></span>
       <span class="chapter-indicator-title" id="indicatorChTitle">PROLOGUE</span>
     </span>
     <span class="chapter-indicator-icon" aria-hidden="true">⌃</span>
@@ -5071,8 +5875,9 @@
       <li><a class="chapter-jump-link" href="#love" data-jump-ch="04"><span class="chapter-jump-no">04</span><span class="chapter-jump-name"><strong>LOVE</strong><span>愛されたい私</span></span></a></li>
       <li><a class="chapter-jump-link" href="#mother" data-jump-ch="05"><span class="chapter-jump-no">05</span><span class="chapter-jump-name"><strong>MOTHER</strong><span>守ること、自由でいること</span></span></a></li>
       <li><a class="chapter-jump-link" href="#break" data-jump-ch="06"><span class="chapter-jump-no">06</span><span class="chapter-jump-name"><strong>STILLNESS</strong><span>変われない日々</span></span></a></li>
-      <li><a class="chapter-jump-link" href="#remember" data-jump-ch="07"><span class="chapter-jump-no">07</span><span class="chapter-jump-name"><strong>REMEMBER</strong><span>自分を思い出す</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#journey" data-jump-ch="07"><span class="chapter-jump-no">07</span><span class="chapter-jump-name"><strong>JOURNEY</strong><span>豊かさとは何か</span></span></a></li>
       <li><a class="chapter-jump-link" href="#return" data-jump-ch="08"><span class="chapter-jump-no">08</span><span class="chapter-jump-name"><strong>RETURN</strong><span>生まれてきてよかった</span></span></a></li>
+      <li><a class="chapter-jump-link" href="#life-is-art" data-jump-ch="FINAL"><span class="chapter-jump-no">FINAL</span><span class="chapter-jump-name"><strong>LIFE is ART</strong><span>最後のCTA</span></span></a></li>
     </ul>
   </div>
 </div>
@@ -5082,7 +5887,9 @@
 (function() {
   const indicator = document.getElementById('chapterIndicator');
   const toggle = document.getElementById('chapterJumpToggle');
+  const chPrefixEl = document.getElementById('indicatorPrefix');
   const chNoEl = document.getElementById('indicatorChNo');
+  const chTotalEl = document.getElementById('indicatorTotal');
   const chTitleEl = document.getElementById('indicatorChTitle');
   const progressBarEl = document.getElementById('indicatorProgressBar');
   const jumpLinks = [...document.querySelectorAll('.chapter-jump-link')];
@@ -5095,47 +5902,38 @@
     { ch: '04', name: 'LOVE', el: document.getElementById('love') },
     { ch: '05', name: 'MOTHER', el: document.getElementById('mother') },
     { ch: '06', name: 'STILLNESS', el: document.getElementById('break') },
-    { ch: '07', name: 'REMEMBER', el: document.getElementById('remember') },
+    { ch: '07', name: 'JOURNEY', el: document.getElementById('journey') },
     { ch: '08', name: 'RETURN', el: document.getElementById('return') },
+    { ch: 'FINAL', name: 'LIFE is ART', el: document.getElementById('life-is-art') },
   ];
-  
+
   let currentChapter = '01';
   let isHero = true;
   let fadeTimer;
 
-  // IntersectionObserver で現在の章を追跡
-  const observerOptions = {
-    threshold: 0.35,
-    rootMargin: '0px',
-  };
-
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const dataChName = entry.target.getAttribute('data-ch-name');
-        const dataCh = entry.target.getAttribute('data-ch');
-        
-        // 第1～8章のみを対象
-        if (dataCh && parseInt(dataCh) >= 1 && parseInt(dataCh) <= 8) {
-          if (currentChapter !== dataCh) {
-            currentChapter = dataCh;
-            updateIndicator();
-          }
-        }
-      }
-    });
-  }, observerOptions);
-
-  // 各セクションを観察
-  chapters.forEach((ch) => {
-    if (ch.el) observer.observe(ch.el);
-  });
-
-  // ヒーロー（chapterNav）を観察
   const heroEl = document.getElementById('chapterNav');
-  if (heroEl) {
-    observer.observe(heroEl);
+
+  // スクロール位置から現在の章を決定：
+  // 「画面中央より上に見出しが来た最後の章」を現在章とする（ズレない決定的ロジック）
+  function computeChapter() {
+    const line = window.innerHeight * 0.5;
+    let current = chapters[0];
+    for (const ch of chapters) {
+      if (ch.el && ch.el.getBoundingClientRect().top <= line) current = ch;
+    }
+    return current.ch;
   }
+
+  function trackChapter() {
+    const next = computeChapter();
+    if (next !== currentChapter) {
+      currentChapter = next;
+      updateIndicator();
+    }
+  }
+
+  window.addEventListener('scroll', trackChapter, { passive: true });
+  window.addEventListener('resize', trackChapter, { passive: true });
 
   function updateIndicator() {
     const ch = chapters.find(c => c.ch === currentChapter);
@@ -5146,11 +5944,15 @@
     indicator.style.opacity = '0';
     
     fadeTimer = setTimeout(() => {
+      const isFinal = currentChapter === 'FINAL';
+      chPrefixEl.textContent = isFinal ? '' : 'CHAPTER ';
       chNoEl.textContent = currentChapter;
+      chTotalEl.textContent = isFinal ? '' : ' / 08';
       chTitleEl.textContent = ch.name;
       
       // プログレスバーを更新
-      const progress = (parseInt(currentChapter) / 8) * 100;
+      const chapterIndex = chapters.findIndex(c => c.ch === currentChapter);
+      const progress = ((chapterIndex + 1) / chapters.length) * 100;
       progressBarEl.style.width = progress + '%';
       jumpLinks.forEach((link) => {
         link.classList.toggle('is-active', link.dataset.jumpCh === currentChapter);
@@ -5179,6 +5981,7 @@
       updateIndicator();
       setMenuOpen(false);
       target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(trackChapter, 900);
       history.replaceState(null, '', link.getAttribute('href'));
     });
   });
@@ -5203,9 +6006,40 @@
   }, { passive: true });
 
   // 初期化
+  currentChapter = computeChapter();
   updateIndicator();
+  requestAnimationFrame(trackChapter);
   indicator.style.opacity = '0.2'; // ヒーロー時は薄く
 })();
+</script>
+
+<script>
+  // マレーシア国旗：背景に大きく、スクロール連動でフェードイン／フェードアウト
+  (function () {
+    const scene = document.querySelector('.flag-scene');
+    if (!scene) return;
+    const flag = scene.querySelector('.flag-bg');
+    if (!flag) return;
+
+    const MAX_OPACITY = 0.30;
+
+    function update() {
+      const r = scene.getBoundingClientRect();
+      const vh = window.innerHeight;
+      // セクション中心が画面中央にあるとき 1、遠ざかるほど 0
+      const center = r.top + r.height / 2;
+      const dist = Math.abs(center - vh / 2) / (vh / 2 + r.height / 2);
+      const t = Math.max(0, 1 - dist);
+      const eased = t * t; // 端をより素早くフェード
+      flag.style.opacity = (eased * MAX_OPACITY).toFixed(3);
+      flag.style.transform =
+        'translate(-50%, -50%) scale(' + (0.9 + eased * 0.16).toFixed(3) + ')';
+    }
+
+    window.addEventListener('scroll', update, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  })();
 </script>
 
 </body>
