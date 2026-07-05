@@ -1073,7 +1073,10 @@
     }
 
     /* ===== SOULMAP — 人生の走馬灯（エピローグ・集大成） ===== */
-    .soulmap { position: relative; background: transparent; }
+    .soulmap {
+      position: relative;
+      background: linear-gradient(180deg, #fff9f1 0%, #f7ece4 46%, #f3ebe2 100%);
+    }
     .soulmap__stage {
       position: relative;
       height: 100svh;
@@ -1116,6 +1119,16 @@
       filter: brightness(var(--wallB)) saturate(0.92);
       will-change: transform;
     }
+    /* 走馬灯がゆっくり流れているような、スクロール非依存の緩やかなドリフト */
+    @keyframes smLayerDrift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-16px); }
+    }
+    .soulmap.is-memory-flow .smlayer {
+      animation: smLayerDrift 10s ease-in-out infinite alternate;
+    }
+    .soulmap.is-memory-flow .smlayer[data-depth="mid"]   { animation-duration: 13s; }
+    .soulmap.is-memory-flow .smlayer[data-depth="front"] { animation-duration: 16s; }
     .smph {
       position: absolute;
       border-radius: 12px;
@@ -1239,31 +1252,26 @@
       color: #33241c;
       text-shadow: 0 2px 44px rgba(255,252,246,0.96), 0 0 70px rgba(255,238,204,0.55);
     }
-    /* 締めの一文たち */
+    /* 締めの一文たち：通常フローのセクションとして縦に並べる */
     .soulmap__closing {
-      position: absolute;
-      inset: 0;
+      position: relative;
       z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      padding: 0 8vw;
+      padding: 4svh 8vw 8svh;
       text-align: center;
-      opacity: 0;
-      transition: opacity 1.8s ease;
-    }
-    .soulmap.is-text-phase .soulmap__closing {
-      opacity: 1;
     }
     .soulmap__closing::before {
       display: none;
     }
     .soulmap .sm-cl {
-      position: absolute;
+      position: relative;
       width: min(88vw, 760px);
       max-width: 760px;
-      padding: 0;
+      min-height: 72svh;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4svh 0;
       border: 0;
       background: transparent;
       box-shadow: none;
@@ -1273,11 +1281,10 @@
       letter-spacing: 0.08em;
       color: #2b1f19;
       font-weight: 700;
-      margin: 0;
       opacity: 0;
-      transform: translateY(26px);
+      transform: translateY(28px);
       text-shadow: 0 2px 30px rgba(255,251,244,0.95), 0 0 60px rgba(255,249,240,0.8);
-      transition: none;
+      transition: opacity 1.1s ease, transform 1.1s ease;
       word-break: keep-all;
       overflow-wrap: normal;
     }
@@ -1313,6 +1320,7 @@
       }
       .soulmap .sm-cl {
         width: min(92vw, 460px);
+        min-height: 66svh;
         line-height: 2.05;
         font-size: clamp(1.5rem, 6.6vw, 2rem);
       }
@@ -1342,6 +1350,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .smph img { animation: none; }
+      .soulmap.is-memory-flow .smlayer { animation: none !important; }
     }
 
     /* ===== AFTERGLOW — 余韻（走馬灯とLIFE is ARTの間の静けさ・ベージュ→闇への橋） ===== */
@@ -5263,14 +5272,15 @@
         <h2 class="sm-big sm-big--1">人は変わる必要はない。</h2>
         <h2 class="sm-big sm-big--2">思い出すだけでいい。</h2>
       </div>
+    </div>
 
-      <div class="soulmap__closing">
-        <p class="sm-cl" data-cl="0">私が探していたものは、<br />どこか遠くには<br />ありませんでした。</p>
-        <p class="sm-cl" data-cl="1">傷ついた日も、<br />泣いた日も、<br />笑った日も、</p>
-        <p class="sm-cl" data-cl="2">全部、<br />今の私になるためにあった。</p>
-        <p class="sm-cl" data-cl="3">変わることではなく、<br />思い出すこと。</p>
-        <p class="sm-cl sm-cl--final" data-cl="4">それが、<br /><span class="accent">&ldquo;生まれてきてよかった&rdquo;</span><br />へ還る旅。</p>
-      </div>
+    <!-- 締めの言葉：通常セクションと同じく、画面に入ったら表示してそのまま残す -->
+    <div class="soulmap__closing">
+      <p class="sm-cl" data-cl="0">私が探していたものは、<br />どこか遠くには<br />ありませんでした。</p>
+      <p class="sm-cl" data-cl="1">傷ついた日も、<br />泣いた日も、<br />笑った日も、</p>
+      <p class="sm-cl" data-cl="2">全部、<br />今の私になるためにあった。</p>
+      <p class="sm-cl" data-cl="3">変わることではなく、<br />思い出すこと。</p>
+      <p class="sm-cl sm-cl--final" data-cl="4">それが、<br /><span class="accent">&ldquo;生まれてきてよかった&rdquo;</span><br />へ還る旅。</p>
     </div>
   </section>
 
@@ -5792,101 +5802,39 @@
       layer.appendChild(frag);
     });
 
-    // 1行目を一文字ずつ出すため分割
-    const line1 = soulmapStage.querySelector('.sm-big--1');
-    const line2 = soulmapStage.querySelector('.sm-big--2');
-    const closings = soulmapStage.querySelectorAll('.sm-cl');
-    const chars = [];
-    if (line1) {
-      const t = line1.textContent;
-      line1.textContent = '';
-      for (const ch of t) {
-        const s = document.createElement('span');
-        s.className = 'c';
-        s.textContent = ch;
-        line1.appendChild(s);
-        chars.push(s);
-      }
-    }
-
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function setSoulmapPhase(progress) {
-      // Phase 1: 走馬灯（写真がはっきり流れる） → Phase 2: 文字がはっきり残る
-      const memoryFlow = progress < 0.26;
-      const memoryFade = progress >= 0.26 && progress < 0.31;
-      const textPhase = progress >= 0.31;
+    // 締めの文（.sm-cl）はセクション直下に移したので、ここから取得する
+    const closings = soulmapSection.querySelectorAll('.sm-cl');
 
-      soulmapSection?.classList.toggle('is-memory-flow', memoryFlow);
-      soulmapSection?.classList.toggle('is-memory-fade', memoryFade);
-      soulmapSection?.classList.toggle('is-text-phase', textPhase);
-      soulmapSection?.classList.toggle('is-closing', textPhase);
-      // 文字（.sm-cl）の表示は GSAP タイムラインが専任で制御する
-    }
+    // スクロール連動（scrub/pin）は廃止。
+    // 走馬灯の写真も締めの文も「通常セクションと同じく、画面に入ったら表示して残す」。
+    if ('IntersectionObserver' in window && !reduce) {
+      // 走馬灯：ステージが見えたら写真を出す。一度出したら消さない。
+      const photoObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            soulmapSection.classList.add('is-memory-flow');
+            photoObs.disconnect();
+          }
+        });
+      }, { threshold: 0.12 });
+      photoObs.observe(soulmapStage);
 
-    if (reduce || typeof gsap === 'undefined') {
-      // モーション抑制時：静的に主要コピーを見せる
-      soulmapSection?.classList.add('is-text-phase', 'is-closing');
-      gsap && gsap.set(chars, { opacity: 0 });
-      if (line2) line2.style.opacity = '0';
-      if (closings.length) closings[0].style.opacity = '1';
-      if (closings.length) closings[0].classList.add('is-active');
-      soulmapStage.style.setProperty('--lo', '0.4');
+      // 締めの各文：画面に入ったらフェード表示し、そのまま残す（消えない）。
+      const textObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.classList.add('is-active');
+            textObs.unobserve(e.target);
+          }
+        });
+      }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
+      closings.forEach((cl) => textObs.observe(cl));
     } else {
-      gsap.set(chars, { opacity: 0 });
-      gsap.set(line2, { opacity: 0 });
-      gsap.set(closings, { opacity: 0, y: 26 });
-      gsap.set('.soulmap__light', { '--lo': 0.06, '--ls': 0.72 });
-      setSoulmapPhase(0);
-
-      // タイムライン総尺を 1.0 に揃え、position をそのまま進捗(progress)として設計する。
-      // → スクロール量に対する各フェーズの割合が一目で分かり、文字を長く留められる。
-      const tl = gsap.timeline({
-        defaults: { ease: 'power1.inOut' },
-        scrollTrigger: {
-          trigger: '.soulmap',
-          start: 'top top',
-          // 走馬灯も文字も速く流れすぎないよう、ピン区間を長めに確保する
-          end: isSoulmapMobile ? '+=600%' : '+=680%',
-          scrub: 1,
-          pin: '.soulmap__stage',
-          anticipatePin: 1,
-          onUpdate: self => setSoulmapPhase(self.progress),
-        }
-      });
-
-      // 各文がしっかり読めるよう、表示(in)→長い静止(hold)→退場(out)を順番に。
-      // 最後の一文は退場させず、最後まで画面に残す。
-      const showLine = (el, at, dur = 0.03) =>
-        tl.to(el, { opacity: 1, y: 0, duration: dur, ease: 'power2.out' }, at);
-      const hideLine = (el, at, dur = 0.035) =>
-        tl.to(el, { opacity: 0, y: -16, duration: dur, ease: 'power1.in' }, at);
-
-      // 1. 走馬灯 — 写真だけがはっきり流れる（全体の約1/4をここに使う）
-      tl.fromTo(layers[0], { yPercent: 9 },  { yPercent: -5,  ease: 'none', duration: 0.26 }, 0)
-        .fromTo(layers[1], { yPercent: 14 }, { yPercent: -10, ease: 'none', duration: 0.26 }, 0)
-        .fromTo(layers[2], { yPercent: 20 }, { yPercent: -17, ease: 'none', duration: 0.26 }, 0)
-        .fromTo('.soulmap__layers', { scale: 1.04 }, { scale: 1.02, ease: 'none', duration: 0.26 }, 0)
-        .to('.soulmap__light', { '--lo': 0.1, '--ls': 0.96, ease: 'none', duration: 0.2 }, 0.02)
-        // 2. 写真をそっと手放し、静かな余白へ
-        .to('.soulmap__layers', { opacity: 0, scale: 0.98, ease: 'power2.out', duration: 0.05 }, 0.26)
-        .to(soulmapStage, { '--wallB': 1.02, '--washo': 0.04, duration: 0.05 }, 0.26)
-        .to('.soulmap__light', { '--lo': 0, duration: 0.05 }, 0.27);
-
-      // 3. 文字だけを1文ずつ、はっきりと。各文は長く静止させて印象に残す。
-      //    slot = 0.13（進捗）ずつ。in の後に長い hold を挟み、次の in の直前で out。
-      const first = 0.35;   // 最初の一文が出る進捗
-      const slot  = 0.13;   // 1文あたりの進捗幅
-      closings.forEach((cl, i) => {
-        const at = first + i * slot;
-        showLine(cl, at, i === closings.length - 1 ? 0.05 : 0.035);
-        if (i < closings.length - 1) {
-          // 次の文が出る直前まで留めてから退場（＝しっかり読める静止時間を確保）
-          hideLine(cl, at + slot - 0.035);
-        }
-      });
-      // 総尺を 1.0 に固定（position≒progress を保ち、最後の一文を最後まで残す）
-      tl.to({}, { duration: 0.001 }, 0.999);
+      // 非対応環境・モーション抑制時：すべて静的に表示
+      soulmapSection.classList.add('is-memory-flow');
+      closings.forEach((cl) => cl.classList.add('is-active'));
     }
   }
 
