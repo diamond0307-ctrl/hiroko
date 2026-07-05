@@ -25,13 +25,30 @@
       --sans: "Hiragino Sans","Yu Gothic","Noto Sans JP",sans-serif;
     }
     * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; background: #09040c; }
+    html {
+      scroll-behavior: smooth;
+      background: #09040c;
+      width: 100%;
+      max-width: 100%;
+      overflow-x: hidden;
+      overscroll-behavior-x: none;
+    }
     body {
       margin: 0;
       background: transparent;
       color: var(--ink);
       font-family: var(--serif);
+      width: 100%;
+      max-width: 100%;
       overflow-x: hidden;
+      overscroll-behavior-x: none;
+      touch-action: pan-y;
+    }
+    @supports (overflow: clip) {
+      html,
+      body {
+        overflow-x: clip;
+      }
     }
     h1,h2,h3,p { margin: 0; }
     img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -476,7 +493,11 @@
     /* ===== AMBIENT GLOW LAYER ===== */
     #ambientLayer {
       position: fixed; inset: 0; z-index: -2;
-      pointer-events: none; overflow: hidden;
+      width: 100vw;
+      max-width: 100vw;
+      pointer-events: none;
+      overflow: hidden;
+      contain: paint;
     }
     .gblob {
       position: absolute; border-radius: 50%;
@@ -493,7 +514,7 @@
     .gblob.b2 {
       width: 320px; height: 320px;
       background: radial-gradient(circle, rgba(230,90,160,0.32), transparent 65%);
-      bottom: 10%; right: -80px;
+      bottom: 10%; right: 0;
       animation: blobDrift2 18s ease-in-out infinite alternate;
     }
     .gblob.b3 {
@@ -502,19 +523,31 @@
       top: 40%; left: 30%;
       animation: blobDrift3 22s ease-in-out infinite alternate;
     }
+    @media (max-width: 720px) {
+      .gblob.b2 {
+        width: 260px;
+        height: 260px;
+        right: 22px;
+      }
+    }
 
     /* ===== BUTTERFLIES — スクロールに漂う小さな蝶（余韻の空気感） ===== */
     #butterfly-layer {
       position: fixed;
       inset: 0;
+      width: 100vw;
+      max-width: 100vw;
       z-index: 2;               /* 背景・写真より上／CTAの暗幕と本文より下 */
       pointer-events: none;
       overflow: hidden;
+      contain: paint;
     }
     #butterfly-layer .bf-layer,
     #butterfly-layer .bf-extra {
       position: absolute;
       inset: 0;
+      overflow: hidden;
+      contain: paint;
       will-change: transform;
       transition: opacity 1.8s ease;
     }
@@ -534,33 +567,124 @@
     .bf {
       position: absolute;
       top: 0; left: 0;
-      width: var(--w, 11px);
-      height: calc(var(--w, 11px) * 0.9);
+      width: var(--w, 28px);
+      height: calc(var(--w, 28px) * 0.72);
       opacity: 0;
-      filter: drop-shadow(0 0 2.4px rgba(255,250,238,0.42)) blur(var(--bl, 0px));
-      animation: bfDrift var(--drift, 30s) ease-in-out var(--ddelay, 0s) infinite;
+      transform-style: preserve-3d;
+      filter:
+        drop-shadow(0 0 4px rgba(186,132,220,0.28))
+        drop-shadow(0 2px 5px rgba(0,0,0,0.42))
+        blur(var(--bl, 0px));
+      animation:
+        bfDrift var(--drift, 34s) ease-in-out var(--ddelay, 0s) infinite,
+        bfFloat var(--float, 7.4s) ease-in-out var(--fdelay, 0s) infinite;
+      will-change: transform, opacity;
     }
-    .bf::before, .bf::after {
+    .bf-wing,
+    .bf-body,
+    .bf-antenna {
+      position: absolute;
+      pointer-events: none;
+    }
+    .bf-wing {
+      top: 2%;
+      width: 52%;
+      height: 88%;
+      background:
+        radial-gradient(circle at 36% 30%, rgba(246,221,157,0.85) 0 4%, transparent 5%),
+        radial-gradient(circle at 72% 72%, rgba(246,221,157,0.62) 0 3%, transparent 4%),
+        radial-gradient(ellipse at 48% 50%, rgba(138,83,190,0.78), rgba(79,39,124,0.86) 46%, rgba(8,5,15,0.94) 72%),
+        linear-gradient(135deg, rgba(244,207,142,0.5), rgba(11,6,18,0.2) 42%, rgba(5,4,10,0.86));
+      border: 1px solid rgba(226,190,128,0.76);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,245,210,0.14),
+        inset 0 0 14px rgba(0,0,0,0.72);
+      opacity: var(--wing-op, 0.88);
+      overflow: hidden;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+    .bf-wing::before,
+    .bf-wing::after {
       content: "";
       position: absolute;
-      top: 0;
-      height: 100%;
-      width: 52%;
-      background: var(--wing, rgba(255,255,255,0.9));
-      border-radius: 66% 34% 54% 46%;
+      inset: 12% 12%;
+      border: 1px solid rgba(237,202,143,0.34);
+      border-left-color: rgba(14,7,24,0.7);
+      border-bottom-color: rgba(14,7,24,0.62);
+      border-radius: 50%;
+      transform: rotate(-22deg);
     }
-    .bf::before {
+    .bf-wing::after {
+      inset: 34% 22% 18% 28%;
+      border-color: rgba(10,6,16,0.76);
+      box-shadow:
+        -8px -2px 0 -6px rgba(245,211,153,0.6),
+        8px 4px 0 -6px rgba(245,211,153,0.52);
+      transform: rotate(22deg);
+    }
+    .bf-wing--left {
       left: 0;
+      border-radius: 78% 32% 66% 44% / 58% 34% 72% 48%;
       transform-origin: right center;
-      animation: bfFlapL var(--flap, 3s) ease-in-out var(--fdelay, 0s) infinite;
+      animation: bfFlapL var(--flap, 3.4s) ease-in-out var(--fdelay, 0s) infinite;
     }
-    .bf::after {
+    .bf-wing--right {
       right: 0;
+      border-radius: 32% 78% 44% 66% / 34% 58% 48% 72%;
       transform-origin: left center;
-      animation: bfFlapR var(--flap, 3s) ease-in-out var(--fdelay, 0s) infinite;
+      animation: bfFlapR var(--flap, 3.4s) ease-in-out var(--fdelay, 0s) infinite;
     }
-    @keyframes bfFlapL { 0%,100% { transform: scaleX(1); }  50% { transform: scaleX(0.3); } }
-    @keyframes bfFlapR { 0%,100% { transform: scaleX(-1); } 50% { transform: scaleX(-0.3); } }
+    .bf-body {
+      left: 50%;
+      top: 18%;
+      width: 10%;
+      height: 66%;
+      transform: translateX(-50%);
+      border-radius: 999px;
+      background:
+        linear-gradient(180deg, rgba(242,209,151,0.72), rgba(72,38,104,0.9) 36%, rgba(8,5,14,0.96));
+      box-shadow: 0 0 7px rgba(232,194,125,0.35);
+    }
+    .bf-antenna {
+      left: 50%;
+      top: -13%;
+      width: 42%;
+      height: 38%;
+      transform: translateX(-50%);
+    }
+    .bf-antenna::before,
+    .bf-antenna::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 45%;
+      height: 100%;
+      border-top: 1px solid rgba(236,199,139,0.74);
+      border-radius: 999px 999px 0 0;
+    }
+    .bf-antenna::before {
+      right: 48%;
+      transform: rotate(-32deg);
+      transform-origin: bottom right;
+    }
+    .bf-antenna::after {
+      left: 48%;
+      transform: rotate(32deg);
+      transform-origin: bottom left;
+    }
+    @keyframes bfFlapL {
+      0%,100% { transform: rotateY(0deg) rotateZ(-5deg); }
+      50% { transform: rotateY(62deg) rotateZ(5deg) scaleX(0.82); }
+    }
+    @keyframes bfFlapR {
+      0%,100% { transform: rotateY(0deg) rotateZ(5deg); }
+      50% { transform: rotateY(-62deg) rotateZ(-5deg) scaleX(0.82); }
+    }
+    @keyframes bfFloat {
+      0%,100% { margin-top: 0; margin-left: 0; }
+      50% { margin-top: -9px; margin-left: 7px; }
+    }
     @keyframes bfDrift {
       0%   { opacity: 0; transform: translate(var(--x0,0), var(--y0,0)) rotate(var(--r0,0deg)) scale(calc(var(--sc,1) * 0.9)); }
       10%  { opacity: var(--op, 0.35); }
@@ -575,7 +699,7 @@
         opacity: var(--op, 0.3);
         transform: translate(var(--x1,0), var(--y1,0)) rotate(var(--r1,0deg)) scale(var(--sc,1));
       }
-      .bf::before, .bf::after { animation: none; }
+      .bf-wing { animation: none; }
     }
 
     /* ===== SPARKLES ===== */
@@ -647,6 +771,48 @@
     }
     .photo.dark img { filter: grayscale(0.1) saturate(0.76) contrast(1.1) brightness(0.54); }
     .photo.rose-f img { filter: saturate(0.9) contrast(1.02) brightness(0.9); }
+    .photo.journey-airplane-photo {
+      width: min(88vw, 430px);
+      aspect-ratio: 1.5;
+      border-radius: 999px;
+      background: rgba(15, 14, 28, 0.42);
+    }
+    .photo.journey-airplane-photo img {
+      object-position: 62% 50%;
+      animation: none !important;
+      transform: none !important;
+    }
+    .photo.journey-friends-photo {
+      width: min(88vw, 520px);
+      aspect-ratio: 1.72;
+      border-radius: 999px;
+      opacity: 0.95 !important;
+      filter: saturate(0.9) brightness(0.86) contrast(1.02) !important;
+      background: rgba(15, 14, 28, 0.42);
+    }
+    .photo.journey-friends-photo img {
+      object-position: 50% 50%;
+      filter: saturate(0.94) brightness(0.76) contrast(1.02);
+      animation: none !important;
+      transform: none !important;
+    }
+    .photo.remember-selfie-photo {
+      width: min(78vw, 380px);
+      aspect-ratio: 0.82;
+      border-radius: 999px 999px 28px 28px;
+    }
+    .photo.remember-selfie-photo img {
+      object-position: 18% 38% !important;
+    }
+    .photo.now-return-photo {
+      width: min(88vw, 520px);
+      aspect-ratio: 1.05;
+      border-radius: 999px 999px 30px 30px;
+      background: rgba(15, 14, 28, 0.34);
+    }
+    .photo.now-return-photo img {
+      object-position: 72% 50%;
+    }
 
     /* typography */
     .eyebrow {
@@ -1167,7 +1333,14 @@
       margin: 0.15em 0;
     }
     @media (max-width: 720px) {
-      .soulmap__layers { inset: -16% -16%; }
+      .soulmap__layers {
+        inset: -10% -8%;
+        opacity: 0.82;
+      }
+      .smph {
+        border-radius: 9px;
+        box-shadow: 0 16px 38px rgba(46,30,22,0.22);
+      }
     }
     @media (prefers-reduced-motion: reduce) {
       .smph img { animation: none; }
@@ -1332,6 +1505,15 @@
         0 0 24px rgba(234,211,162,0.16),
         0 2px 18px rgba(0,0,0,0.34);
       text-wrap: balance;
+    }
+    .nowrap-mobile {
+      white-space: nowrap;
+    }
+    @media (max-width: 520px) {
+      .nowrap-mobile {
+        font-size: clamp(1.68rem, 9.4vw, 2.2rem);
+        letter-spacing: 0.02em;
+      }
     }
     .section-reflection {
       min-height: 92svh;
@@ -3000,12 +3182,12 @@
     @media (max-width: 520px) {
       .chapter-indicator {
         position: fixed;
-        right: max(18px, env(safe-area-inset-right));
-        bottom: calc(env(safe-area-inset-bottom) + 96px);
+        right: max(8px, env(safe-area-inset-right));
+        bottom: calc(env(safe-area-inset-bottom) + 56px);
         z-index: 9999;
-        width: min(188px, calc(100vw - 36px));
-        max-width: min(72vw, 280px);
-        transform: scale(0.92);
+        width: min(176px, calc(100vw - 20px));
+        max-width: min(66vw, 260px);
+        transform: scale(0.9);
         transform-origin: right bottom;
       }
       .chapter-jump-toggle {
@@ -3333,7 +3515,7 @@
   <!-- ======== S9: 正しさと成果 ======== -->
   <section class="section compact childhood" data-theme="void">
     <div>
-      <h2 class="quote reveal">さらに母は厳格だった。</h2>
+      <h2 class="quote reveal">さらに母は<br />厳格だった。</h2>
       <p class="body-copy reveal" style="line-height:2.55">
         教師家系。<br />
         成果主義。<br />
@@ -3378,7 +3560,7 @@
       </p>
       <h2 class="lead reveal">
         愛を求めながら、<br /><br />
-        安心を失っていた時代
+        <span class="nowrap-mobile">安心を失っていた時代</span>
       </h2>
       <p class="body-copy sm reveal">
         だった。
@@ -4474,7 +4656,7 @@
   <!-- ======== S27: 子どもの教育への葛藤 ======== -->
   <section class="section migration-shift cinema-world compact" data-theme="dawn">
     <div>
-      <figure class="photo soft rose-f reveal" style="margin:0 auto 32px">
+      <figure class="photo soft rose-f reveal journey-airplane-photo" id="journey-airplane-photo" style="margin:0 auto 32px">
         <img src="assets/journey-airplane.jpg" alt="世界へ向かう機上から" />
       </figure>
       <p class="body-copy reveal" style="margin-top:0;font-size:1.02rem;line-height:2.7">
@@ -4588,7 +4770,7 @@
 
   <!-- ======== S35: 資本主義への問い ======== -->
   <section class="section capitalism-question cinema-loss tall" data-theme="down-dawn">
-    <figure class="photo soft dark reveal" style="opacity:0.82;filter:saturate(0.9) brightness(0.9)">
+    <figure class="photo soft dark reveal journey-friends-photo" id="journey-friends-photo" style="opacity:0.82;filter:saturate(0.9) brightness(0.9)">
       <img src="assets/journey-friends.jpg" alt="旅先での出会い" />
     </figure>
     <div style="position:relative;z-index:1">
@@ -4754,8 +4936,8 @@
   <!-- ======== Ch8: 思い出すんだ ======== -->
   <section class="section awake cinema-return center-message" id="remember" data-theme="awake">
     <div class="butterfly"></div>
-    <figure class="photo round rose-f">
-      <img src="assets/remember-selfie.jpg" alt="" style="object-position:32% 26%" />
+    <figure class="photo round rose-f remember-selfie-photo" id="remember-selfie-photo">
+      <img src="assets/remember-selfie.jpg" alt="" style="object-position:18% 38%" />
     </figure>
     <div style="text-align:center;padding-top:44px">
       <p class="eyebrow reveal">08 / remember</p>
@@ -5030,8 +5212,8 @@
 
   <!-- ======== Final: 今・大切なこと・好きなもの・宣言 ======== -->
   <section class="section cinema-vision tall rose" id="now" data-theme="rose">
-    <figure class="photo full rose-f reveal">
-      <img src="assets/now-1-face-blur.jpg" alt="" />
+    <figure class="photo full rose-f reveal now-return-photo">
+      <img src="assets/now-return-blue-dress.jpg" alt="" />
     </figure>
     <div>
       <p class="eyebrow reveal">Final / now</p>
@@ -5143,11 +5325,11 @@
         </p>
         <div class="life-art__actions reveal">
           <a class="life-art__cta" href="https://life-is-art.netlify.app/" target="_blank" rel="noopener">
-            さあ、あなたのアートを始めよう
+            無料ヒアリングはこちら
             <span class="arw" aria-hidden="true">→</span>
           </a>
           <a class="life-art__cta life-art__cta--sub" href="https://www.instagram.com/hiroko_oono_official?igsh=MTF6cHB0cG5saW1lOQ==" target="_blank" rel="noopener noreferrer">
-            Instagramはこちら
+            Hirokoのinstagram
             <span class="arw" aria-hidden="true">→</span>
           </a>
         </div>
@@ -5560,12 +5742,19 @@
 
     const rnd = (a, b) => a + Math.random() * (b - a);
     const layers = soulmapStage.querySelectorAll('.smlayer');
+    const isSoulmapMobile = window.matchMedia('(max-width: 720px)').matches;
     // 奥(back) / 中間(mid) / 手前(front)
-    const cfg = [
-      { count: 20, wmin: 8,  wmax: 13, blur: [3.4, 5.0], op: [0.30, 0.46] },
-      { count: 14, wmin: 12, wmax: 18, blur: [1.8, 3.0], op: [0.52, 0.70] },
-      { count: 9,  wmin: 17, wmax: 25, blur: [0.5, 1.5], op: [0.78, 0.94] },
-    ];
+    const cfg = isSoulmapMobile
+      ? [
+          { count: 12, wmin: 7,  wmax: 10, blur: [3.8, 5.2], op: [0.20, 0.34] },
+          { count: 8,  wmin: 10, wmax: 14, blur: [2.5, 3.6], op: [0.34, 0.52] },
+          { count: 4,  wmin: 15, wmax: 19, blur: [1.5, 2.4], op: [0.46, 0.64] },
+        ]
+      : [
+          { count: 20, wmin: 8,  wmax: 13, blur: [3.4, 5.0], op: [0.30, 0.46] },
+          { count: 14, wmin: 12, wmax: 18, blur: [1.8, 3.0], op: [0.52, 0.70] },
+          { count: 9,  wmin: 17, wmax: 25, blur: [0.5, 1.5], op: [0.78, 0.94] },
+        ];
     let p = 0;
     cfg.forEach((c, li) => {
       const layer = layers[li];
@@ -5576,8 +5765,8 @@
         cell.className = 'smph';
         cell.style.width = rnd(c.wmin, c.wmax).toFixed(1) + 'vw';
         cell.style.height = rnd(c.wmin * 0.86, c.wmax * 1.08).toFixed(1) + 'vw';
-        cell.style.left = rnd(-6, 100).toFixed(1) + '%';
-        cell.style.top = rnd(-8, 100).toFixed(1) + '%';
+        cell.style.left = rnd(isSoulmapMobile ? 2 : -6, isSoulmapMobile ? 88 : 100).toFixed(1) + '%';
+        cell.style.top = rnd(isSoulmapMobile ? 2 : -8, isSoulmapMobile ? 92 : 100).toFixed(1) + '%';
         cell.style.setProperty('--r', rnd(-7, 7).toFixed(2) + 'deg');
         const img = document.createElement('img');
         img.src = 'assets/' + smPhotos[p % smPhotos.length];
@@ -5691,42 +5880,35 @@
     const reduce  = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const mobile  = window.matchMedia('(max-width: 720px)').matches;
     const rnd  = (a, b) => a + Math.random() * (b - a);
-    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-    // 白・クリーム・薄ゴールド・淡いピンクのみ（白/クリームを厚めに）
-    const COLORS = [
-      'rgba(255,255,255,0.92)',
-      'rgba(255,255,255,0.92)',
-      'rgba(255,250,238,0.90)',
-      'rgba(255,250,238,0.90)',
-      'rgba(240,225,182,0.85)',   // 薄ゴールド
-      'rgba(255,233,238,0.82)',   // 淡いピンク
-    ];
-
-    // 8割以上を小サイズに。奥ほど小さく、手前はたまに大きめ
+    // Gothic butterfly settings:
+    // 位置・サイズ・透明度はここで調整。右側中心に置き、本文とCTAを邪魔しない。
     function sizeFor(depth) {
       const r = Math.random();
-      if (depth === 'back') return rnd(8, 12);
-      if (depth === 'mid')  return r < 0.86 ? rnd(8, 12) : rnd(14, 18);
-      if (r < 0.76) return rnd(9, 12);
-      if (r < 0.90) return rnd(14, 18);
-      return rnd(22, 28); // 手前のみ、たまに大
+      if (mobile) {
+        if (depth === 'back') return rnd(15, 20);
+        if (depth === 'mid') return rnd(18, 25);
+        return r < 0.72 ? rnd(22, 30) : rnd(30, 36);
+      }
+      if (depth === 'back') return rnd(18, 26);
+      if (depth === 'mid') return rnd(24, 34);
+      return r < 0.74 ? rnd(32, 44) : rnd(44, 54);
     }
 
-    // 中央帯を避けて端・余白へ寄せる（奥だけ稀に中央を通過）
+    // 中央帯を避け、右下〜右中央を中心に漂わせる。
     function edgeX(allowCenter) {
-      if (allowCenter && Math.random() < 0.22) return rnd(32, 68);
-      return Math.random() < 0.5 ? rnd(-8, 30) : rnd(70, 108);
+      if (allowCenter && Math.random() < 0.12) return rnd(30, 44);
+      return mobile ? rnd(70, 94) : rnd(72, 96);
     }
 
     const cfg = {
-      back:  { op: [0.18, 0.30], blur: 1.2, mul: 1.4 },
-      mid:   { op: [0.28, 0.45], blur: 0.4, mul: 1.0 },
-      front: { op: [0.45, 0.65], blur: 0.0, mul: 0.82 },
+      back:  { op: [0.20, 0.34], blur: 1.1, mul: 1.5 },
+      mid:   { op: [0.34, 0.52], blur: 0.45, mul: 1.08 },
+      front: { op: [0.48, 0.72], blur: 0.0, mul: 0.9 },
     };
     const counts = mobile
-      ? { back: 10, mid: 6, front: 4, extra: 4 }
-      : { back: 16, mid: 12, front: 6, extra: 6 };
+      ? { back: 3, mid: 3, front: 2, extra: 2 }
+      : { back: 5, mid: 4, front: 3, extra: 2 };
 
     function makeBf(depth, extra) {
       const c = cfg[depth];
@@ -5736,18 +5918,19 @@
       bf.style.setProperty('--w', w.toFixed(1) + 'px');
       bf.style.setProperty('--op', rnd(c.op[0], c.op[1]).toFixed(2));
       bf.style.setProperty('--bl', c.blur.toFixed(2) + 'px');
-      bf.style.setProperty('--wing', pick(COLORS));
+      bf.style.setProperty('--wing-op', rnd(0.72, 0.92).toFixed(2));
       // ゆっくり柔らかい羽ばたき（呼吸するように）
-      bf.style.setProperty('--flap', rnd(2.2, 4.2).toFixed(2) + 's');
+      bf.style.setProperty('--flap', rnd(2.8, 4.8).toFixed(2) + 's');
+      bf.style.setProperty('--float', rnd(6.8, 11.5).toFixed(2) + 's');
       bf.style.setProperty('--fdelay', (-rnd(0, 4)).toFixed(2) + 's');
       // 風に流れる経路（端から入り端へ抜ける個体も）
       const allowCenter = depth === 'back';
-      const fromEdge = Math.random() < 0.5 ? -10 : 110;
-      const toEdge   = Math.random() < 0.5 ? -12 : 112;
+      const fromEdge = mobile ? rnd(78, 96) : rnd(78, 98);
+      const toEdge   = mobile ? rnd(66, 94) : rnd(64, 96);
       const x0 = extra ? fromEdge : edgeX(allowCenter);
       const x1 = edgeX(extra ? false : allowCenter);
       const x2 = extra ? toEdge : edgeX(allowCenter);
-      const y0 = rnd(-6, 106), y1 = y0 + rnd(-16, 16), y2 = y1 + rnd(-18, 18);
+      const y0 = rnd(18, 88), y1 = y0 + rnd(-11, 11), y2 = y1 + rnd(-13, 13);
       bf.style.setProperty('--x0', x0.toFixed(1) + 'vw');
       bf.style.setProperty('--x1', x1.toFixed(1) + 'vw');
       bf.style.setProperty('--x2', x2.toFixed(1) + 'vw');
@@ -5761,6 +5944,7 @@
       bf.style.setProperty('--drift', dur.toFixed(1) + 's');
       bf.style.setProperty('--ddelay', (-rnd(0, dur)).toFixed(1) + 's');
       bf.style.setProperty('--sc', rnd(0.85, 1.12).toFixed(2));
+      bf.innerHTML = '<span class="bf-antenna"></span><span class="bf-wing bf-wing--left"></span><span class="bf-wing bf-wing--right"></span><span class="bf-body"></span>';
       return bf;
     }
 
