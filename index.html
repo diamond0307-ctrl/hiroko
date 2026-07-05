@@ -1281,10 +1281,10 @@
       letter-spacing: 0.08em;
       color: #2b1f19;
       font-weight: 700;
-      opacity: 0;
-      transform: translateY(28px);
+      /* 通常セクションとして常にはっきり表示（スクロール連動のフェードは行わない） */
+      opacity: 1;
+      transform: none;
       text-shadow: 0 2px 30px rgba(255,251,244,0.95), 0 0 60px rgba(255,249,240,0.8);
-      transition: opacity 1.1s ease, transform 1.1s ease;
       word-break: keep-all;
       overflow-wrap: normal;
     }
@@ -1293,7 +1293,7 @@
     }
     .soulmap .sm-cl.is-active {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
     .soulmap .sm-cl[data-cl="0"] {
       font-size: clamp(1.55rem, 5.8vw, 2.5rem);
@@ -5804,13 +5804,10 @@
 
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    // 締めの文（.sm-cl）はセクション直下に移したので、ここから取得する
-    const closings = soulmapSection.querySelectorAll('.sm-cl');
-
-    // スクロール連動（scrub/pin）は廃止。
-    // 走馬灯の写真も締めの文も「通常セクションと同じく、画面に入ったら表示して残す」。
+    // スクロール連動（scrub/pin）もフェードも廃止。
+    // 締めの文は通常セクションと同じく最初からはっきり表示（CSSで opacity:1）。
+    // 走馬灯の写真だけ、ステージが見えたら一度だけ表示する（以後は消さない）。
     if ('IntersectionObserver' in window && !reduce) {
-      // 走馬灯：ステージが見えたら写真を出す。一度出したら消さない。
       const photoObs = new IntersectionObserver((entries) => {
         entries.forEach((e) => {
           if (e.isIntersecting) {
@@ -5820,21 +5817,8 @@
         });
       }, { threshold: 0.12 });
       photoObs.observe(soulmapStage);
-
-      // 締めの各文：画面に入ったらフェード表示し、そのまま残す（消えない）。
-      const textObs = new IntersectionObserver((entries) => {
-        entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('is-active');
-            textObs.unobserve(e.target);
-          }
-        });
-      }, { threshold: 0.4, rootMargin: '0px 0px -10% 0px' });
-      closings.forEach((cl) => textObs.observe(cl));
     } else {
-      // 非対応環境・モーション抑制時：すべて静的に表示
       soulmapSection.classList.add('is-memory-flow');
-      closings.forEach((cl) => cl.classList.add('is-active'));
     }
   }
 
