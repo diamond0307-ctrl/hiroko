@@ -1264,14 +1264,13 @@
     }
     .soulmap .sm-cl {
       position: relative;
+      display: block;
       width: min(88vw, 760px);
       max-width: 760px;
-      min-height: 72svh;
       margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 4svh 0;
+      /* 各文を1画面ぶんの中央あたりに置く（flexにすると<br>が効かないためブロックで） */
+      padding: 30svh 0;
+      text-align: center;
       border: 0;
       background: transparent;
       box-shadow: none;
@@ -1320,7 +1319,7 @@
       }
       .soulmap .sm-cl {
         width: min(92vw, 460px);
-        min-height: 66svh;
+        padding: 26svh 0;
         line-height: 2.05;
         font-size: clamp(1.5rem, 6.6vw, 2rem);
       }
@@ -1328,8 +1327,8 @@
         font-size: clamp(1.56rem, 6.9vw, 2.08rem);
       }
       .soulmap .sm-cl--final .accent {
-        font-size: 1.08em;
-        letter-spacing: 0.06em;
+        font-size: 1.02em;
+        letter-spacing: 0.02em;
       }
       .soulmap__layers {
         inset: -10% -8%;
