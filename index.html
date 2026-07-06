@@ -2021,6 +2021,17 @@
     .section[data-theme="light"]::after {
       background: radial-gradient(circle at 50% 18%, rgba(255,255,255,0.16), transparent 18rem);
     }
+    /* 章ごとのオーバーレイ（テーマ別::after / シネマ別::before）を無効化。
+       セクション境界に出ていた段差・暗い帯・テクスチャの継ぎ目を完全になくし、
+       背景を1枚の統一グラデーション（body::before）だけにする。 */
+    .section[data-theme]::after,
+    .section.cinema-loss::before,
+    .section.cinema-world::before,
+    .section.cinema-return::before,
+    .section.cinema-healing::before,
+    .section.cinema-vision::before {
+      display: none !important;
+    }
 
     /* marquee */
     .ribbon {
