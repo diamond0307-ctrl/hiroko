@@ -57,16 +57,40 @@
       position: fixed; inset: 0; z-index: -3;
       pointer-events: none; content: "";
     }
+    /* 全体を1枚の大きなグラデーション背景に統一。色はスクロールに沿って
+       序盤の闇→終盤の光へ滑らかに変わる（updateBg が --bg-a/b/c を更新）。
+       各セクションの個別背景を外すことで、章ごとの継ぎはぎをなくす。 */
     body::before {
-      background: linear-gradient(165deg, var(--bg-a), var(--bg-b) 54%, var(--bg-c));
+      z-index: -4;
+      background:
+        radial-gradient(circle at 50% 6%, var(--bg-glowA, rgba(92,42,122,0.22)), transparent 40rem),
+        radial-gradient(circle at 76% 40%, rgba(240,169,189,0.10), transparent 38rem),
+        radial-gradient(circle at 24% 74%, rgba(234,211,162,0.10), transparent 40rem),
+        linear-gradient(168deg, var(--bg-a), var(--bg-b) 52%, var(--bg-c));
     }
     body::after {
-      z-index: -2; opacity: 0.32;
+      z-index: -2; opacity: 0.16;
       background-image:
         radial-gradient(circle, rgba(255,239,218,0.22) 0 1px, transparent 1.6px),
         radial-gradient(circle, rgba(255,142,191,0.10) 0 1px, transparent 1.4px);
       background-position: 0 0, 42px 76px;
       background-size: 132px 188px, 176px 244px;
+    }
+
+    /* 章ごとの個別背景を外し、統一グラデーション（body::before）を全体に通す。
+       これで章の境目に出ていた色ムラ＝継ぎはぎをなくす。
+       明るい締めゾーン(.ending-wrap)だけは自前のクリーム背景を保持する。 */
+    .stage,
+    .section,
+    .final-summary,
+    .soulmap,
+    .section.cinema-loss,
+    .section.cinema-loss[data-theme="break"],
+    .section.cinema-world,
+    .section.cinema-return,
+    .section.cinema-healing,
+    .section.cinema-vision {
+      background: transparent !important;
     }
 
     .stage {
@@ -521,6 +545,12 @@
     }
 
     /* page turn transition（扉を開くページめくり演出は廃止・非表示） */
+    #pageTurn,
+    .page-sheet {
+      display: none !important;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
     #pageTurn {
       position: fixed; inset: 0;
       z-index: 90;
@@ -2633,7 +2663,7 @@
     }
 
     @media (min-width: 760px) {
-      body { background: radial-gradient(circle at 50% 0, rgba(154,54,101,0.17), transparent 30rem), #07040a; }
+      body { background: transparent; }
       .stage { margin-block: 24px; border-radius: 34px; overflow: visible; }
       .hero-sticky { border-radius: 34px; }
       .chapter-cards {
