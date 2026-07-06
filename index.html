@@ -1008,13 +1008,15 @@
         font-size: clamp(0.9rem, 3.05vw, 1rem);
         padding-inline: 20px;
       }
-      .soulmap__layers,
-      .soulmap__light,
       .life-art__ornaments,
       .life-art__lace {
         display: none !important;
         animation: none !important;
         filter: none !important;
+      }
+      /* 走馬灯の写真は必ず表示する（モバイルでも消さない）。重い演出だけ抑える。 */
+      .soulmap__light {
+        animation: none !important;
       }
       .life-art__bg img,
       .now-return-photo img {
@@ -1071,7 +1073,10 @@
     }
 
     /* ===== SOULMAP — 人生の走馬灯（エピローグ・集大成） ===== */
-    .soulmap { position: relative; background: transparent; }
+    .soulmap {
+      position: relative;
+      background: linear-gradient(180deg, #fff9f1 0%, #f7ece4 46%, #f3ebe2 100%);
+    }
     .soulmap__stage {
       position: relative;
       height: 100svh;
@@ -1079,8 +1084,8 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      --wallB: 0.86;
-      --washo: 0.42;
+      --wallB: 0.94;
+      --washo: 0.18;
       background:
         radial-gradient(circle at 50% 44%, rgba(255,255,255,0.54), transparent 28rem),
         linear-gradient(180deg, #fff9f1 0%, #f7ece4 56%, #ead8cf 100%);
@@ -1100,7 +1105,7 @@
       will-change: opacity, transform;
     }
     .soulmap.is-memory-flow .soulmap__layers {
-      opacity: 0.68;
+      opacity: 0.95;
       transform: scale(1);
     }
     .soulmap.is-memory-fade .soulmap__layers,
@@ -1114,6 +1119,16 @@
       filter: brightness(var(--wallB)) saturate(0.92);
       will-change: transform;
     }
+    /* 走馬灯がゆっくり流れているような、スクロール非依存の緩やかなドリフト */
+    @keyframes smLayerDrift {
+      from { transform: translateY(0); }
+      to   { transform: translateY(-16px); }
+    }
+    .soulmap.is-memory-flow .smlayer {
+      animation: smLayerDrift 10s ease-in-out infinite alternate;
+    }
+    .soulmap.is-memory-flow .smlayer[data-depth="mid"]   { animation-duration: 13s; }
+    .soulmap.is-memory-flow .smlayer[data-depth="front"] { animation-duration: 16s; }
     .smph {
       position: absolute;
       border-radius: 12px;
@@ -1148,7 +1163,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      opacity: calc(var(--o, 0.7) * 0.78);
+      opacity: calc(var(--o, 0.7) * 1.05);
       filter: sepia(0.04);
       animation: none;
     }
@@ -1237,47 +1252,39 @@
       color: #33241c;
       text-shadow: 0 2px 44px rgba(255,252,246,0.96), 0 0 70px rgba(255,238,204,0.55);
     }
-    /* 締めの一文たち */
+    /* 締めの一文たち：通常フローのセクションとして縦に並べる */
     .soulmap__closing {
-      position: absolute;
-      inset: 0;
+      position: relative;
       z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
-      padding: 0 8vw;
+      padding: 4svh 8vw 8svh;
       text-align: center;
-      opacity: 0;
-      transition: opacity 1.8s ease;
-    }
-    .soulmap.is-text-phase .soulmap__closing {
-      opacity: 1;
     }
     .soulmap__closing::before {
       display: none;
     }
     .soulmap .sm-cl {
-      position: absolute;
+      position: relative;
       width: min(88vw, 760px);
       max-width: 760px;
-      padding: 0;
+      min-height: 72svh;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4svh 0;
       border: 0;
       background: transparent;
       box-shadow: none;
       font-family: var(--serif);
-      font-size: clamp(1.5rem, 4.8vw, 3.1rem);
+      font-size: clamp(1.7rem, 5.4vw, 3.3rem);
       line-height: 2.05;
       letter-spacing: 0.08em;
-      color: #332622;
-      font-weight: 650;
-      margin: 0;
-      opacity: 0;
-      transform: translateY(26px);
-      text-shadow: none;
-      transition:
-        opacity 1.8s ease,
-        transform 1.8s ease;
+      color: #2b1f19;
+      font-weight: 700;
+      /* 通常セクションとして常にはっきり表示（スクロール連動のフェードは行わない） */
+      opacity: 1;
+      transform: none;
+      text-shadow: 0 2px 30px rgba(255,251,244,0.95), 0 0 60px rgba(255,249,240,0.8);
       word-break: keep-all;
       overflow-wrap: normal;
     }
@@ -1286,12 +1293,12 @@
     }
     .soulmap .sm-cl.is-active {
       opacity: 1;
-      transform: translateY(0);
+      transform: none;
     }
     .soulmap .sm-cl[data-cl="0"] {
-      font-size: clamp(1.42rem, 5.4vw, 2.35rem);
+      font-size: clamp(1.55rem, 5.8vw, 2.5rem);
       font-weight: 700;
-      color: #33241c;
+      color: #2b1f19;
     }
     .soulmap .sm-cl--final { color: #2f2119; }
     .soulmap .sm-cl--final .accent {
@@ -1312,12 +1319,13 @@
         opacity: 0.72;
       }
       .soulmap .sm-cl {
-        width: min(90vw, 430px);
-        line-height: 2;
-        font-size: clamp(1.24rem, 5.5vw, 1.62rem);
+        width: min(92vw, 460px);
+        min-height: 66svh;
+        line-height: 2.05;
+        font-size: clamp(1.5rem, 6.6vw, 2rem);
       }
       .soulmap .sm-cl[data-cl="0"] {
-        font-size: clamp(1.32rem, 5.8vw, 1.76rem);
+        font-size: clamp(1.56rem, 6.9vw, 2.08rem);
       }
       .soulmap .sm-cl--final .accent {
         font-size: 1.08em;
@@ -1328,7 +1336,7 @@
         opacity: 0;
       }
       .soulmap.is-memory-flow .soulmap__layers {
-        opacity: 0.58;
+        opacity: 0.9;
       }
       .soulmap.is-text-phase .soulmap__layers,
       .soulmap.is-text-phase .soulmap__light,
@@ -1342,6 +1350,7 @@
     }
     @media (prefers-reduced-motion: reduce) {
       .smph img { animation: none; }
+      .soulmap.is-memory-flow .smlayer { animation: none !important; }
     }
 
     /* ===== AFTERGLOW — 余韻（走馬灯とLIFE is ARTの間の静けさ・ベージュ→闇への橋） ===== */
@@ -5263,14 +5272,15 @@
         <h2 class="sm-big sm-big--1">人は変わる必要はない。</h2>
         <h2 class="sm-big sm-big--2">思い出すだけでいい。</h2>
       </div>
+    </div>
 
-      <div class="soulmap__closing">
-        <p class="sm-cl" data-cl="0">私が探していたものは、<br />どこか遠くには<br />ありませんでした。</p>
-        <p class="sm-cl" data-cl="1">傷ついた日も、<br />泣いた日も、<br />笑った日も、</p>
-        <p class="sm-cl" data-cl="2">全部、<br />今の私になるためにあった。</p>
-        <p class="sm-cl" data-cl="3">変わることではなく、<br />思い出すこと。</p>
-        <p class="sm-cl sm-cl--final" data-cl="4">それが、<br /><span class="accent">&ldquo;生まれてきてよかった&rdquo;</span><br />へ還る旅。</p>
-      </div>
+    <!-- 締めの言葉：通常セクションと同じく、画面に入ったら表示してそのまま残す -->
+    <div class="soulmap__closing">
+      <p class="sm-cl" data-cl="0">私が探していたものは、<br />どこか遠くには<br />ありませんでした。</p>
+      <p class="sm-cl" data-cl="1">傷ついた日も、<br />泣いた日も、<br />笑った日も、</p>
+      <p class="sm-cl" data-cl="2">全部、<br />今の私になるためにあった。</p>
+      <p class="sm-cl" data-cl="3">変わることではなく、<br />思い出すこと。</p>
+      <p class="sm-cl sm-cl--final" data-cl="4">それが、<br /><span class="accent">&ldquo;生まれてきてよかった&rdquo;</span><br />へ還る旅。</p>
     </div>
   </section>
 
@@ -5738,7 +5748,7 @@
       'twenties-1.jpg','twenties-2.jpg','twenties-mirror-style.jpg',
       'travel-1.jpg','travel-2.jpg','travel-3.jpg','travel-4.jpg','travel-5.jpg','travel-6.jpg','travel-7.jpg',
       'journey-airplane.jpg','journey-family.jpg','journey-friends.jpg','journey-flowers.jpg','world-1.jpg',
-      'community-1.jpg','return-family-journey.jpg','healing-selfie.jpg','remember-selfie.jpg',
+      'community-1.jpg','return-family-journey.jpg','healing-wisdom-still.png','remember-selfie.jpg',
       'now-2.jpg','now-3.jpg','now-4.jpg','now-5.jpg','now-6.jpg','flower-1.jpg','meditation.jpg'
     ];
     // 少し混ぜて時間軸をランダムに（記憶が前後する感覚）
@@ -5754,14 +5764,14 @@
     // 奥(back) / 中間(mid) / 手前(front)
     const cfg = isSoulmapMobile
       ? [
-          { count: 6, wmin: 13, wmax: 18, blur: [0, 0], op: [0.24, 0.38] },
-          { count: 5, wmin: 17, wmax: 24, blur: [0, 0], op: [0.34, 0.50] },
-          { count: 3, wmin: 23, wmax: 31, blur: [0, 0], op: [0.44, 0.58] },
+          { count: 8, wmin: 16, wmax: 22, blur: [0, 0], op: [0.52, 0.68] },
+          { count: 6, wmin: 22, wmax: 30, blur: [0, 0], op: [0.64, 0.80] },
+          { count: 4, wmin: 30, wmax: 40, blur: [0, 0], op: [0.78, 0.94] },
         ]
       : [
-          { count: 18, wmin: 8,  wmax: 13, blur: [0, 0], op: [0.24, 0.38] },
-          { count: 12, wmin: 12, wmax: 18, blur: [0, 0], op: [0.36, 0.54] },
-          { count: 7,  wmin: 17, wmax: 25, blur: [0, 0], op: [0.48, 0.66] },
+          { count: 18, wmin: 8,  wmax: 13, blur: [0, 0], op: [0.44, 0.60] },
+          { count: 12, wmin: 12, wmax: 18, blur: [0, 0], op: [0.58, 0.76] },
+          { count: 7,  wmin: 17, wmax: 25, blur: [0, 0], op: [0.72, 0.90] },
         ];
     let p = 0;
     cfg.forEach((c, li) => {
@@ -5792,92 +5802,23 @@
       layer.appendChild(frag);
     });
 
-    // 1行目を一文字ずつ出すため分割
-    const line1 = soulmapStage.querySelector('.sm-big--1');
-    const line2 = soulmapStage.querySelector('.sm-big--2');
-    const closings = soulmapStage.querySelectorAll('.sm-cl');
-    const chars = [];
-    if (line1) {
-      const t = line1.textContent;
-      line1.textContent = '';
-      for (const ch of t) {
-        const s = document.createElement('span');
-        s.className = 'c';
-        s.textContent = ch;
-        line1.appendChild(s);
-        chars.push(s);
-      }
-    }
-
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-    function setSoulmapPhase(progress) {
-      const memoryFlow = progress < 0.58;
-      const memoryFade = progress >= 0.58 && progress < 0.72;
-      const textPhase = progress >= 0.72;
-
-      soulmapSection?.classList.toggle('is-memory-flow', memoryFlow);
-      soulmapSection?.classList.toggle('is-memory-fade', memoryFade);
-      soulmapSection?.classList.toggle('is-text-phase', textPhase);
-      soulmapSection?.classList.toggle('is-closing', textPhase);
-
-      closings.forEach((cl, i) => {
-        const start = 0.74 + i * 0.045;
-        const end = i === closings.length - 1 ? 1.01 : start + 0.09;
-        cl.classList.toggle('is-active', progress >= start && progress < end);
-      });
-    }
-
-    if (reduce || typeof gsap === 'undefined') {
-      // モーション抑制時：静的に主要コピーを見せる
-      soulmapSection?.classList.add('is-text-phase', 'is-closing');
-      gsap && gsap.set(chars, { opacity: 0 });
-      if (line2) line2.style.opacity = '0';
-      if (closings.length) closings[0].style.opacity = '1';
-      if (closings.length) closings[0].classList.add('is-active');
-      soulmapStage.style.setProperty('--lo', '0.4');
+    // スクロール連動（scrub/pin）もフェードも廃止。
+    // 締めの文は通常セクションと同じく最初からはっきり表示（CSSで opacity:1）。
+    // 走馬灯の写真だけ、ステージが見えたら一度だけ表示する（以後は消さない）。
+    if ('IntersectionObserver' in window && !reduce) {
+      const photoObs = new IntersectionObserver((entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            soulmapSection.classList.add('is-memory-flow');
+            photoObs.disconnect();
+          }
+        });
+      }, { threshold: 0.12 });
+      photoObs.observe(soulmapStage);
     } else {
-      gsap.set(chars, { opacity: 0 });
-      gsap.set(line2, { opacity: 0 });
-      gsap.set(closings, { opacity: 0, y: 26 });
-      gsap.set('.soulmap__light', { '--lo': 0.18, '--ls': 0.72 });
-      setSoulmapPhase(0);
-
-      const tl = gsap.timeline({
-        defaults: { ease: 'power1.inOut' },
-        scrollTrigger: {
-          trigger: '.soulmap',
-          start: 'top top',
-          end: isSoulmapMobile ? '+=360%' : '+=420%',
-          scrub: 1.8,
-          pin: '.soulmap__stage',
-          anticipatePin: 1,
-          onUpdate: self => setSoulmapPhase(self.progress),
-        }
-      });
-
-      // 1. 写真だけがゆっくり流れる
-      tl.fromTo(layers[0], { yPercent: 9 },  { yPercent: -5,  ease: 'none', duration: 1.8 }, 0)
-        .fromTo(layers[1], { yPercent: 14 }, { yPercent: -10, ease: 'none', duration: 1.8 }, 0)
-        .fromTo(layers[2], { yPercent: 20 }, { yPercent: -17, ease: 'none', duration: 1.8 }, 0)
-        .fromTo('.soulmap__layers', { scale: 1.04 }, { scale: 1.02, ease: 'none', duration: 1.6 }, 0)
-        .to('.soulmap__light', { '--lo': 0.24, '--ls': 0.96, ease: 'none', duration: 1.2 }, 0.1)
-        // 2. 写真を手放し、白い余白へ戻す
-        .to('.soulmap__layers', { opacity: 0, scale: 0.98, ease: 'power2.out', duration: 0.34 }, 1.78)
-        .to(soulmapStage, { '--wallB': 1.02, '--washo': 0.04, duration: 0.34 }, 1.78)
-        .to('.soulmap__light', { '--lo': 0, duration: 0.28 }, 1.82)
-        // 3. 余白の間
-        .to({}, { duration: 0.22 }, 2.12)
-        // 4. 文字だけを1文ずつ
-        .to(closings[0], { opacity: 1, y: 0, duration: 0.42, ease: 'power2.out' }, 2.36)
-        .to(closings[0], { opacity: 0, y: -18, duration: 0.28, ease: 'power1.inOut' }, 2.8)
-        .to(closings[1], { opacity: 1, y: 0, duration: 0.42, ease: 'power2.out' }, 3.0)
-        .to(closings[1], { opacity: 0, y: -18, duration: 0.28, ease: 'power1.inOut' }, 3.46)
-        .to(closings[2], { opacity: 1, y: 0, duration: 0.42, ease: 'power2.out' }, 3.68)
-        .to(closings[2], { opacity: 0, y: -18, duration: 0.28, ease: 'power1.inOut' }, 4.14)
-        .to(closings[3], { opacity: 1, y: 0, duration: 0.42, ease: 'power2.out' }, 4.36)
-        .to(closings[3], { opacity: 0, y: -18, duration: 0.28, ease: 'power1.inOut' }, 4.82)
-        .to(closings[4], { opacity: 1, y: 0, duration: 0.5, ease: 'power2.out' }, 5.04);
+      soulmapSection.classList.add('is-memory-flow');
     }
   }
 
